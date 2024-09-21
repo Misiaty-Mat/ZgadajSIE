@@ -5,7 +5,7 @@ const PasswordStep = ({ nextStep, prevStep, errors }) => {
   return (
     <>
       <label>Provide your password</label>
-      <Field name="password" />
+      <Field name="password" type="password" />
 
       {errors && <p>{errors}</p>}
 

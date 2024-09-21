@@ -33,7 +33,7 @@ const LoginForm = () => {
         }}
         validationSchema={Yup.object({
           email: Yup.string().email().required(),
-          password: Yup.string().required(),
+          password: Yup.string().required().test('length', 'Passport must have more than 8 characters', val => !val || (val && val.toString().length > 8)),
         })}
       >
         {({ values, errors }) => (

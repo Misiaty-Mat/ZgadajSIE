@@ -1,7 +1,7 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import MainPage from "./api/components/main-page/MainPage";
-import LoginForm from "./api/components/auth-form/login-form/LoginForm";
+import MainPage from "./components/main-page/MainPage";
+import LoginForm from "./components/auth-form/login-form/LoginForm";
 
 const App = () => {
   return (
