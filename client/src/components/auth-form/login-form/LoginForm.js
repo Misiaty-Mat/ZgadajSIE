@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Formik, useFormik } from "formik";
+import { Form, Formik } from "formik";
 import * as Yup from "yup";
 
 import EmailStep from "../form-steps/EmailStep";
