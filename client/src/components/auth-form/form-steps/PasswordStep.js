@@ -1,7 +1,13 @@
 import { Field } from "formik";
 import React from "react";
 
-const PasswordStep = ({ nextStep, prevStep, errors }) => {
+const PasswordStep = ({
+  nextStep,
+  prevStep,
+  submitVisable,
+  submitDisabled,
+  errors,
+}) => {
   return (
     <>
       <label>Provide your password</label>
@@ -11,6 +17,11 @@ const PasswordStep = ({ nextStep, prevStep, errors }) => {
 
       <button onClick={prevStep}>Back</button>
       {nextStep && <button onClick={nextStep}>Next</button>}
+      {submitVisable && (
+        <button type="submit" disabled={submitDisabled}>
+          Submit
+        </button>
+      )}
     </>
   );
 };

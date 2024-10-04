@@ -1,7 +1,7 @@
 import React from "react";
 import { Field } from "formik";
 
-const EmailStep = ({ nextStep, errors, nextStepDisabled }) => {
+const EmailStep = ({ nextStep, prevStep, errors, nextStepDisabled }) => {
   return (
     <>
       <label>Provide your email:</label>
@@ -9,6 +9,7 @@ const EmailStep = ({ nextStep, errors, nextStepDisabled }) => {
 
       {errors && <p>{errors}</p>}
 
+      <button onClick={prevStep}>Back</button>
       <button disabled={nextStepDisabled} onClick={nextStep}>
         Next
       </button>

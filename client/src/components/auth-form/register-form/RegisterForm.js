@@ -4,8 +4,9 @@ import * as Yup from "yup";
 
 import EmailStep from "../form-steps/EmailStep";
 import PasswordStep from "../form-steps/PasswordStep";
+import ConfirmPasswordStep from "../form-steps/ConfirmPasswordStep";
 
-const LoginForm = ({ onSubmit, onReturn }) => {
+const RegisterForm = ({ onSubmit, onReturn }) => {
   const [step, setStep] = useState(1);
 
   // Proceed to the next step
@@ -24,6 +25,7 @@ const LoginForm = ({ onSubmit, onReturn }) => {
         initialValues={{
           email: "",
           password: "",
+          confirmPassword: "",
         }}
         onSubmit={(values) => {
           alert(JSON.stringify(values));
@@ -35,9 +37,13 @@ const LoginForm = ({ onSubmit, onReturn }) => {
             .required()
             .test(
               "length",
-              "",
+              "Passport must have more than 8 characters",
               (val) => !val || (val && val.toString().length >= 8)
             ),
+          confirmPassword: Yup.string().equals(
+            [Yup.ref("password")],
+            "Passwords must match"
+          ),
         })}
       >
         {({ values, errors }) => (
@@ -55,11 +61,21 @@ const LoginForm = ({ onSubmit, onReturn }) => {
             {step === 2 && (
               <PasswordStep
                 prevStep={prevStep}
-                submitVisable={true}
-                submitDisabled={
+                nextStep={nextStep}
+                errors={errors.password}
+                nextStepDisabled={
                   values.password === "" || errors.password !== undefined
                 }
-                errors={errors.password}
+              />
+            )}
+            {step === 3 && (
+              <ConfirmPasswordStep
+                prevStep={prevStep}
+                errors={errors.confirmPassword}
+                submitDisabled={
+                  values.confirmPassword === "" ||
+                  errors.confirmPassword !== undefined
+                }
               />
             )}
           </Form>
@@ -68,4 +84,4 @@ const LoginForm = ({ onSubmit, onReturn }) => {
     </div>
   );
 };
-export default LoginForm;
+export default RegisterForm;
