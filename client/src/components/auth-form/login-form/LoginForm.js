@@ -18,6 +18,32 @@ const LoginForm = ({ onSubmit, onReturn }) => {
     setStep(step - 1);
   };
 
+  const renderSteps = (values, errors) => {
+    switch (step) {
+      case 1:
+        return (
+          <EmailStep
+            nextStep={nextStep}
+            prevStep={onReturn}
+            errors={errors.email}
+            nextStepDisabled={values.email === "" || errors.email !== undefined}
+          />
+        );
+      case 2:
+        return (
+          <PasswordStep
+            prevStep={prevStep}
+            submitVisable={true}
+            submitDisabled={
+              values.password === "" || errors.password !== undefined
+            }
+            errors={errors.password}
+          />
+        );
+      default:
+        return undefined;
+    }
+  };
   return (
     <div>
       <Formik
@@ -40,30 +66,7 @@ const LoginForm = ({ onSubmit, onReturn }) => {
             ),
         })}
       >
-        {({ values, errors }) => (
-          <Form>
-            {step === 1 && (
-              <EmailStep
-                nextStep={nextStep}
-                prevStep={onReturn}
-                errors={errors.email}
-                nextStepDisabled={
-                  values.email === "" || errors.email !== undefined
-                }
-              />
-            )}
-            {step === 2 && (
-              <PasswordStep
-                prevStep={prevStep}
-                submitVisable={true}
-                submitDisabled={
-                  values.password === "" || errors.password !== undefined
-                }
-                errors={errors.password}
-              />
-            )}
-          </Form>
-        )}
+        {({ values, errors }) => <Form>{renderSteps(values, errors)}</Form>}
       </Formik>
     </div>
   );
