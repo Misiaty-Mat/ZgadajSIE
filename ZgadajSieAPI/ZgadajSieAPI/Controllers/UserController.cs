@@ -1,4 +1,4 @@
-﻿namespace ZgadajSIE_API.Controllers
+﻿namespace ZgadajSieAPI.Controllers
 {
     public class UserController
     {

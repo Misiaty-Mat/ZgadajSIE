@@ -1,4 +1,4 @@
-﻿namespace ZgadajSIE_API.Models
+﻿namespace ZgadajSieAPI.Models
 {
     public class User
     {
