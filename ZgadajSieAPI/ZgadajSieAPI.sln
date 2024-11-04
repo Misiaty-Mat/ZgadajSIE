@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZgadajSieAPI", "ZgadajSIE_API\ZgadajSieAPI.csproj", "{39FE13ED-D6C5-42D9-A6FA-76DFF3055EE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZgadajSieAPI", "ZgadajSieAPI\ZgadajSieAPI.csproj", "{F993E3DA-4F8E-4B88-8B03-09FAA79CFDE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{39FE13ED-D6C5-42D9-A6FA-76DFF3055EE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{39FE13ED-D6C5-42D9-A6FA-76DFF3055EE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{39FE13ED-D6C5-42D9-A6FA-76DFF3055EE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{39FE13ED-D6C5-42D9-A6FA-76DFF3055EE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F993E3DA-4F8E-4B88-8B03-09FAA79CFDE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F993E3DA-4F8E-4B88-8B03-09FAA79CFDE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F993E3DA-4F8E-4B88-8B03-09FAA79CFDE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F993E3DA-4F8E-4B88-8B03-09FAA79CFDE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4E143F9C-6E48-4040-9AF1-66160CDFEF08}
+		SolutionGuid = {8E3D59CD-8A80-4E3E-91CB-0D439935A859}
 	EndGlobalSection
 EndGlobal

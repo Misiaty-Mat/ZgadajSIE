@@ -1,6 +1,8 @@
-﻿namespace ZgadajSieAPI.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace ZgadajSieAPI.Controllers
 {
-    public class UserController
+    public class UserController : ControllerBase
     {
     }
 }
