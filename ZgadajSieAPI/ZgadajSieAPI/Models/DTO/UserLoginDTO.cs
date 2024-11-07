@@ -9,7 +9,7 @@ namespace ZgadajSieAPI.Models.DTO
         public string Email { get; set; }
 
         [Required]
-        [MinLength(6)]
+        [MinLength(3)]
         public string Password { get; set; }
     }
 }

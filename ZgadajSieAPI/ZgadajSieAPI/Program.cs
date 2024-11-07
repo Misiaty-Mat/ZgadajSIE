@@ -46,6 +46,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequiredLength = 3;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
 });
 
 var app = builder.Build();

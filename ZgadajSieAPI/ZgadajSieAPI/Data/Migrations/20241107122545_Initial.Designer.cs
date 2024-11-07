@@ -12,8 +12,8 @@ using ZgadajSieAPI.Data;
 namespace ZgadajSieAPI.Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241105201951_RenameTablesFinal")]
-    partial class RenameTablesFinal
+    [Migration("20241107122545_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace ZgadajSieAPI.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("EventUser", b =>
+                {
+                    b.Property<string>("JoinedEventsEventId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RegisteredUsersId")
+                        .HasColumnType("text");
+
+                    b.HasKey("JoinedEventsEventId", "RegisteredUsersId");
+
+                    b.HasIndex("RegisteredUsersId");
+
+                    b.ToTable("EventRegistrations", (string)null);
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -157,6 +172,47 @@ namespace ZgadajSieAPI.Data.Migrations
                     b.ToTable("Tokens", (string)null);
                 });
 
+            modelBuilder.Entity("ZgadajSieAPI.Models.Event", b =>
+                {
+                    b.Property<string>("EventId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("OrganizerId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("EventId");
+
+                    b.HasIndex("OrganizerId");
+
+                    b.ToTable("Event");
+                });
+
             modelBuilder.Entity("ZgadajSieAPI.Models.Profile", b =>
                 {
                     b.Property<string>("UserId")
@@ -246,6 +302,21 @@ namespace ZgadajSieAPI.Data.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("EventUser", b =>
+                {
+                    b.HasOne("ZgadajSieAPI.Models.Event", null)
+                        .WithMany()
+                        .HasForeignKey("JoinedEventsEventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ZgadajSieAPI.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("RegisteredUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -297,6 +368,17 @@ namespace ZgadajSieAPI.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ZgadajSieAPI.Models.Event", b =>
+                {
+                    b.HasOne("ZgadajSieAPI.Models.User", "Organiser")
+                        .WithMany("OrganizedEvents")
+                        .HasForeignKey("OrganizerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Organiser");
+                });
+
             modelBuilder.Entity("ZgadajSieAPI.Models.Profile", b =>
                 {
                     b.HasOne("ZgadajSieAPI.Models.User", "User")
@@ -310,6 +392,8 @@ namespace ZgadajSieAPI.Data.Migrations
 
             modelBuilder.Entity("ZgadajSieAPI.Models.User", b =>
                 {
+                    b.Navigation("OrganizedEvents");
+
                     b.Navigation("Profile");
                 });
 #pragma warning restore 612, 618

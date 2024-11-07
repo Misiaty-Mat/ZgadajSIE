@@ -31,7 +31,12 @@ namespace ZgadajSieAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationDTO model)
         {
-            var user = new User { Email = model.Email };
+            var user = new User
+            {
+                Email = model.Email,
+                UserName = model.Email
+            };
+
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (!result.Succeeded)
