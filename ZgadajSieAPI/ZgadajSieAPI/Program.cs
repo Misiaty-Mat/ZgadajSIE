@@ -23,6 +23,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<DatabaseContext>()
     .AddDefaultTokenProviders();
 
+// Token configuration
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -41,8 +42,18 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Password configurations
+// CORS configuration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", builder =>
+    {
+        builder.WithOrigins("http://localhost:3000")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
 
+// Password configuration
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequiredLength = 3;
@@ -51,6 +62,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = false;
 });
 
+// Build app
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -62,6 +74,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 

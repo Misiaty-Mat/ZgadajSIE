@@ -34,7 +34,7 @@ namespace ZgadajSieAPI.Controllers
             var user = new User
             {
                 Email = model.Email,
-                UserName = model.Email
+                UserName = model.UserName
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -64,7 +64,20 @@ namespace ZgadajSieAPI.Controllers
 
             var token = GenerateJwtToken(user);
 
-            return Ok(new { Token = token });
+            // potencjalny materiał na funkcje
+            var userDTO = new UserWithoutSensitiveDataDTO()
+            {
+                Id = user.Id,
+                Name = user.UserName,
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                TwoFactorEnabled = user.TwoFactorEnabled,
+                Profile = user.Profile,
+                OrganizedEvents = user.OrganizedEvents,
+                JoinedEvents = user.JoinedEvents
+            };
+
+            return Ok(new { Token = token, User = userDTO });
         }
 
         private string GenerateJwtToken(User user)
