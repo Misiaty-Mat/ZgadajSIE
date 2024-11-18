@@ -2,3 +2,12 @@
 ZgadajSieAPI/.vs/
 ZgadajSieAPI/ZgadajSieAPI/bin/
 ZgadajSieAPI/ZgadajSieAPI/obj/
+
+#React Client
+client/node_modules
+client/.env
+
+#idea
+.idea/
+client/.idea/
+

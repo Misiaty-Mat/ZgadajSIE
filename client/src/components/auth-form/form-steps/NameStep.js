@@ -5,7 +5,7 @@ const NameStep = ({ nextStep, prevStep, errors, nextStepDisabled }) => {
   return (
     <>
       <label>Provide your name:</label>
-      <Field name="name" />
+      <Field name="username" />
 
       {errors && <p>{errors}</p>}
 
