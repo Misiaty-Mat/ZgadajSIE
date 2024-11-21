@@ -16,7 +16,7 @@ namespace ZgadajSieAPI.Models
         public string Status { get; set; }
 
         [ForeignKey("User")]
-        public string OrganizerId { get; set; }
+        public Guid OrganizerId { get; set; }
 
 
         public User Organiser { get; set; }

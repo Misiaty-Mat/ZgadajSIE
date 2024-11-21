@@ -7,8 +7,7 @@ namespace ZgadajSieAPI.Models
     {
         [Key]
         [ForeignKey("User")]
-        public string UserId { get; set; }
-        public string? Name { get; set; }
+        public Guid UserId { get; set; }
         public int Age { get; set; }
         public string? Gender { get; set; }
         public string? Description { get; set; }
