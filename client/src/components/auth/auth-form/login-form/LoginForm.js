@@ -4,19 +4,17 @@ import * as Yup from "yup";
 
 import EmailStep from "../form-steps/EmailStep";
 import PasswordStep from "../form-steps/PasswordStep";
-import {useAuth} from "../../../hooks/useAuth";
+import {useAuth} from "../../../../hooks/useAuth";
 
-const LoginForm = ({onSubmit, onReturn}) => {
+const LoginForm = ({onSubmitExternal, onReturn}) => {
     const [step, setStep] = useState(1);
 
     const {login} = useAuth();
 
-    // Proceed to the next step
     const nextStep = () => {
         setStep(step + 1);
     };
 
-    // Go back to the previous step
     const prevStep = () => {
         setStep(step - 1);
     };
@@ -56,7 +54,7 @@ const LoginForm = ({onSubmit, onReturn}) => {
                 }}
                 onSubmit={(values) => {
                     login(values)
-                    onSubmit();
+                    onSubmitExternal();
                 }}
                 validationSchema={Yup.object({
                     email: Yup.string().email().required(),

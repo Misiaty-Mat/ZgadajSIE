@@ -6,7 +6,7 @@ import EmailStep from "../form-steps/EmailStep";
 import PasswordStep from "../form-steps/PasswordStep";
 import ConfirmPasswordStep from "../form-steps/ConfirmPasswordStep";
 import NameStep from "../form-steps/NameStep";
-import {useAuth} from "../../../hooks/useAuth";
+import {useAuth} from "../../../../hooks/useAuth";
 
 const RegisterForm = ({onSubmitExternal, onReturn}) => {
     const [step, setStep] = useState(1);
@@ -36,8 +36,8 @@ const RegisterForm = ({onSubmitExternal, onReturn}) => {
                 return (<NameStep
                     nextStep={nextStep}
                     prevStep={prevStep}
-                    errors={errors.username}
-                    nextStepDisabled={values.username === "" || errors.username !== undefined}
+                    errors={errors.name}
+                    nextStepDisabled={values.name === "" || errors.name !== undefined}
                 />);
             case 3:
                 return (<PasswordStep
@@ -62,7 +62,7 @@ const RegisterForm = ({onSubmitExternal, onReturn}) => {
     return (<div>
         <Formik
             initialValues={{
-                email: "", username: "", password: "", confirmPassword: "",
+                email: "", name: "", password: "", confirmPassword: "",
             }}
             onSubmit={(values) => {
                 register(values)
@@ -70,7 +70,7 @@ const RegisterForm = ({onSubmitExternal, onReturn}) => {
             }}
             validationSchema={Yup.object({
                 email: Yup.string().email().required(),
-                username: Yup.string().required(),
+                name: Yup.string().required(),
                 password: Yup.string()
                     .required()
                     .test("length", "Passport must have more than 8 characters", (val) => !val || (val && val.toString().length >= 8))

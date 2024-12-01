@@ -1,19 +1,25 @@
 import {useEffect, useRef, useState} from "react";
 import {useMapsLibrary} from "@vis.gl/react-google-maps";
 
-import "./autocomplete.css"
+import "./autocomplete.css";
 
 const PlaceAutocomplete = ({onPlaceSelect}) => {
     const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
     const inputRef = useRef(null);
     const places = useMapsLibrary("places");
 
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+        }
+    };
+
     useEffect(() => {
         if (!places || !inputRef.current) return;
 
         const options = {
             fields: ["geometry", "name", "formatted_address"],
-            componentRestrictions: {country: "pl"}
+            componentRestrictions: {country: "pl"},
         };
 
         setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
@@ -29,7 +35,7 @@ const PlaceAutocomplete = ({onPlaceSelect}) => {
 
     return (
         <div className="autocomplete-container">
-            <input ref={inputRef}/>
+            <input ref={inputRef} onKeyDown={handleKeyDown}/>
         </div>
     );
 };

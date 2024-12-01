@@ -1,5 +1,5 @@
 import {useState} from "react";
-import AuthModal from "../auth-form/auth-modal/AuthModal";
+import BasicModal from "../../modal/BasicModal";
 import LoginForm from "../auth-form/login-form/LoginForm";
 import RegisterForm from "../auth-form/register-form/RegisterForm";
 
@@ -20,7 +20,7 @@ const AuthModalButton = () => {
     const renderFormByAuthType = () => {
         switch (authType) {
             case "login":
-                return <LoginForm onSubmit={toggleModal} onReturn={clearAuthType}/>;
+                return <LoginForm onSubmitExternal={toggleModal} onReturn={clearAuthType}/>;
             case "register":
                 return <RegisterForm onSubmitExternal={toggleModal} onReturn={clearAuthType}/>;
             default:
@@ -36,13 +36,13 @@ const AuthModalButton = () => {
     return (
         <>
             <button onClick={toggleModal}>Login</button>
-            <AuthModal
+            <BasicModal
                 isOpen={isModalOpen}
                 title="Authentication"
                 onClose={toggleModal}
             >
                 {renderFormByAuthType()}
-            </AuthModal>
+            </BasicModal>
         </>
     );
 };
