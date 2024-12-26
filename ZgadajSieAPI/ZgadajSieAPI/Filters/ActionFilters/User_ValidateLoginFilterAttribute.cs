@@ -48,6 +48,8 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                     Status = StatusCodes.Status401Unauthorized
                 };
                 context.Result = new UnauthorizedObjectResult(problemDetails);
+
+                return;
             }
 
             await next();
