@@ -40,7 +40,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
             var user = await db.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
 
-            if (user == null || pw.Verify(model.Password, user.PasswordHash))
+            if (user == null || !pw.Verify(model.Password, user.PasswordHash))
             {
                 context.ModelState.AddModelError("Login", "Wrong credentials.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
