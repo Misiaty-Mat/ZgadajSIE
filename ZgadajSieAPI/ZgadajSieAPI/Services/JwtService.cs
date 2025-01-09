@@ -39,5 +39,40 @@ namespace ZgadajSieAPI.Services
 
             return tokenHandler.WriteToken(token);
         }
+
+        public string? ValidateToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(config["Jwt:Key"]);
+
+            try
+            {
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidIssuer = config["Jwt:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = config["Jwt:Audience"],
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero // dla dokładniejszego sprawdzania czasu
+                };
+
+                // walidacja i pobranie użytkownika z tokena
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out _);
+
+                // pobranie userId z claimów
+                var userId = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                return userId;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
     }
+
 }

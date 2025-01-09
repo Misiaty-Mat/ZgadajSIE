@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ZgadajSieAPI.Models.DTO;
-using System.Security.Claims;
 using ZgadajSieAPI.Models;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using ZgadajSieAPI.Data;
-using Microsoft.EntityFrameworkCore;
 using ZgadajSieAPI.Filters.ActionFilters;
 using ZgadajSieAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZgadajSieAPI.Controllers
 {
@@ -62,6 +58,16 @@ namespace ZgadajSieAPI.Controllers
             var token = jwt.GenerateToken(user);
 
             return Ok(new { Token = token, User = new UserWithoutSensitiveDataDTO(user) });
+        }
+
+        [Authorize]
+        [HttpPost("autologin")]
+        [TypeFilter(typeof(User_ValidateAutologinFilterAttribute))]
+        public IActionResult Autologin([FromHeader(Name = "Authorization")] string token)
+        {
+            var user = HttpContext.Items["User"];
+
+            return Ok(user);
         }
     }
 }

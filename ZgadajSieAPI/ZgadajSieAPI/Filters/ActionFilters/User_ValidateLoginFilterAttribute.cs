@@ -52,10 +52,11 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                 return;
             }
 
+            // dodaj usera do httpcontext
+
+            context.HttpContext.Items["User"] = new UserWithoutSensitiveDataDTO(user);
+
             await next();
         }
-        // kopia z register filtra
-
-        // 
     }
 }
