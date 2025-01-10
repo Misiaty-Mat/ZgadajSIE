@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ZgadajSieAPI.Models.DTO;
-using System.Security.Claims;
 using ZgadajSieAPI.Models;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using ZgadajSieAPI.Data;
-using Microsoft.EntityFrameworkCore;
+using ZgadajSieAPI.Filters.ActionFilters;
+using ZgadajSieAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZgadajSieAPI.Controllers
 {
@@ -14,13 +12,15 @@ namespace ZgadajSieAPI.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly ZgadajsieDbContext _context;
-        private readonly IConfiguration _configuration;
+        private readonly ZgadajsieDbContext db;
+        private readonly IJwtService jwt;
+        private readonly IPasswordService pw;
 
-        public UserController(ZgadajsieDbContext context, IConfiguration configuration)
+        public UserController(ZgadajsieDbContext db, IConfiguration config, IJwtService jwt, IPasswordService pw)
         {
-            _context = context;
-            _configuration = configuration;
+            this.db = db;
+            this.jwt = jwt;
+            this.pw = pw;
         }
 
         [HttpGet]
@@ -30,94 +30,44 @@ namespace ZgadajSieAPI.Controllers
         }
 
         [HttpPost("register")]
+        [TypeFilter(typeof(User_ValidateRegisterFilterAttribute))]
         public async Task<IActionResult> Register([FromBody] UserRegistrationDTO model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Invalid model.");
-            }
-            if (await _context.Users.AnyAsync(u => u.Email == model.Email))
-            {
-                return BadRequest("Email already in use.");
-            }
-
             var user = new User
             {
                 Name = model.Name,
                 Email = model.Email,
-                PasswordHash = HashPassword(model.Password)
+                PasswordHash = pw.Hash(model.Password)
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            db.Users.Add(user);
 
-            var userDto = new UserWithoutSensitiveDataDTO(user);
+            await db.SaveChangesAsync();
 
-            var token = GenerateJwtToken(user);
+            var token = jwt.GenerateToken(user);
 
-            return Ok(new { Message = "Registartion succesful.", User = userDto, Token = token });
+            return Ok(new { Message = "Registartion succesful.", User = new UserWithoutSensitiveDataDTO(user), Token = token });
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
+        [TypeFilter(typeof(User_ValidateLoginFilterAttribute))]
+        public IActionResult Login([FromBody] UserLoginDTO model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            var user = db.Users.First(x => x.Email == model.Email);
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+            var token = jwt.GenerateToken(user);
 
-            if (user == null)
-            {
-                return Unauthorized(new { Message = "Invalid credentials" });
-            }
-
-            if (!VerifyPassword(model.Password, user.PasswordHash))
-            {
-                return Unauthorized(new { Message = "Invalid credentials" });
-            }
-
-            var token = GenerateJwtToken(user);
-
-            var userDto = new UserWithoutSensitiveDataDTO(user);
-
-            return Ok(new { Token = token, User = userDto });
+            return Ok(new { Token = token, User = new UserWithoutSensitiveDataDTO(user) });
         }
 
-        private string GenerateJwtToken(User user)
+        [Authorize]
+        [HttpPost("autologin")]
+        [TypeFilter(typeof(User_ValidateAutologinFilterAttribute))]
+        public IActionResult Autologin([FromHeader(Name = "Authorization")] string token)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
+            var user = HttpContext.Items["User"];
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email)
-                }),
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"],
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
+            return Ok(user);
         }
-
-        private string HashPassword(string password)
-        {
-            return BCrypt.Net.BCrypt.HashPassword(password);
-        }
-
-        private bool VerifyPassword(string password, string hash)
-        {
-            return BCrypt.Net.BCrypt.Verify(password, hash);
-        }
-
     }
 }
