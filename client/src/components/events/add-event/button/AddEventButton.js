@@ -18,7 +18,7 @@ const AddEventButton = () => {
         title="Stwórz wydarzenie"
         onClose={toggleModal}
       >
-        <AddEventForm onSubmitExternal={toggleModal} onReturn={toggleModal} />
+        <AddEventForm onReturn={toggleModal} />
       </BasicModal>
     </>
   );

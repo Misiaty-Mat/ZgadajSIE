@@ -14,10 +14,10 @@ const MapHandler = ({ place, marker, setLocation }) => {
     if (marker) {
       const location = place.geometry?.location;
       marker.position = location;
-      setLocation({ lat: location.lat(), lng: location.lng() });
+      const locationObj = { lat: location.lat(), lng: location.lng() };
+      setLocation(locationObj);
     }
   }, [map, place, marker, setLocation]);
-  return null;
 };
 
 export default MapHandler;

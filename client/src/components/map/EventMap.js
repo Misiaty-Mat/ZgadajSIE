@@ -6,11 +6,15 @@ import {
   MapControl,
   useAdvancedMarkerRef,
 } from "@vis.gl/react-google-maps";
+import { setDefaults, fromLatLng } from "react-geocode";
+import { toast } from "react-toastify";
+
 import useGeolocation from "../../hooks/useGeolocation";
 import EventMarkers from "./markers/event-markers";
 import { useState } from "react";
 import MapHandler from "./MapHandler";
 import PlaceAutocomplete from "./autocomplete/PlaceAutocomplete";
+import { useFormikContext } from "formik";
 
 const EventMap = ({
   width = "100%",
@@ -20,8 +24,16 @@ const EventMap = ({
 }) => {
   const currentLocation = useGeolocation();
 
+  const formik = useFormikContext();
+
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [markerRef, marker] = useAdvancedMarkerRef();
+
+  setDefaults({
+    key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    language: "pl",
+    region: "pl",
+  });
 
   const points = [
     {
@@ -32,11 +44,45 @@ const EventMap = ({
     { id: 2, lat: currentLocation.lat + 0.02, lng: currentLocation.lng + 0.02 },
   ];
 
+  const getAddress = ({ lat, lng }) => {
+    return fromLatLng(lat, lng).then(({ results }) => {
+      const addressComponents = results[0].address_components;
+
+      const city = addressComponents.find((component) =>
+        component.types.includes("locality")
+      )?.long_name;
+
+      const street = addressComponents.find((component) =>
+        component.types.includes("route")
+      )?.long_name;
+
+      const building = addressComponents.find((component) =>
+        component.types.includes("street_number")
+      )?.long_name;
+
+      if ([city, street, building].some((val) => !val)) {
+        return "";
+      } else {
+        return { city, street, building };
+      }
+    });
+  };
+
   const onMapClick = (e) => {
     if (onClickMarkerEnabled) {
       const location = e.detail.latLng;
-      marker.position = location;
-      !!onSelectLocation && onSelectLocation(location);
+      getAddress(location).then(async (address) => {
+        if (address) {
+          const { city, street, building } = address;
+          await formik.setFieldValue("city", city);
+          await formik.setFieldValue("street", street);
+          await formik.setFieldValue("building", building);
+          marker.position = location;
+          !!onSelectLocation && (await onSelectLocation(location));
+        } else {
+          toast.warning("Wybierz lokalizację, która zawiera poprawny adres!");
+        }
+      });
     }
   };
 
@@ -47,6 +93,7 @@ const EventMap = ({
         solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
       >
         <Map
+          id={process.env.REACT_APP_MAP_ID}
           center={currentLocation}
           zoom={5}
           mapId={process.env.REACT_APP_MAP_ID}
@@ -56,17 +103,19 @@ const EventMap = ({
         >
           <AdvancedMarker ref={markerRef} position={null} />
           <EventMarkers points={points} />
+          {!onClickMarkerEnabled && (
+            <MapControl position={ControlPosition.TOP}>
+              <div className="autocomplete-control">
+                <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
+              </div>
+            </MapControl>
+          )}
+          <MapHandler
+            place={selectedPlace}
+            marker={onClickMarkerEnabled && marker}
+            setLocation={onSelectLocation}
+          />
         </Map>
-        <MapControl position={ControlPosition.TOP}>
-          <div className="autocomplete-control">
-            <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
-          </div>
-        </MapControl>
-        <MapHandler
-          place={selectedPlace}
-          marker={onClickMarkerEnabled && marker}
-          setLocation={onSelectLocation}
-        />
       </APIProvider>
     </div>
   );

@@ -5,17 +5,28 @@ import EventMap from "../../../map/EventMap";
 const LocationStep = () => {
   const formik = useFormikContext();
 
-  const onMapClicked = (location) => {
-    formik.setFieldValue("locationLat", location.lat);
-    formik.setFieldValue("locationLng", location.lng);
+  const onMapClicked = async (location) => {
+    await formik.setFieldValue("lat", location.lat);
+    await formik.setFieldValue("lng", location.lng);
+  };
+
+  const getAddress = () => {
+    const { city, street, building } = formik.values;
+
+    if (city && street && building) {
+      return `${city} ul. ${street} ${building}`;
+    }
   };
 
   return (
-    <EventMap
-      height="40vh"
-      onSelectLocation={onMapClicked}
-      onClickMarkerEnabled={true}
-    />
+    <div>
+      <h1>{getAddress()}</h1>
+      <EventMap
+        height="40vh"
+        onSelectLocation={onMapClicked}
+        onClickMarkerEnabled={true}
+      />
+    </div>
   );
 };
 export default LocationStep;

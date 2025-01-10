@@ -1,28 +1,31 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import LocationStep from "../form-steps/LocationStep";
 import DateTimeStep from "../form-steps/DateTimeStep";
 
-const AddEventForm = ({ onSubmitExternal, onReturn }) => {
+const AddEventForm = ({ onReturn }) => {
+  const formikRef = useRef(null);
+
   const [step, setStep] = useState(1);
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
-
   const [shouldSubmit, setShouldSubmit] = useState(false);
 
-  const nextStep = (handleSubmit) => {
-    if (shouldSubmit) {
-      handleSubmit();
+  const nextStep = async () => {
+    if (shouldSubmit && formikRef.current) {
+      await formikRef.current?.validateForm();
+      await formikRef.current?.submitForm();
     } else {
-      setStep(step + 1);
+      setStep((prev) => prev + 1);
     }
   };
 
   const prevStep = () => {
-    setStep(step - 1);
+    setShouldSubmit(false);
+    setStep((prev) => prev - 1);
   };
 
-  const renderSteps = (values, errors) => {
+  const renderSteps = (values, errors, isSubmitting) => {
     switch (step) {
       case 1:
         setNextStepDisabled(values.title === "" || errors.title !== undefined);
@@ -35,18 +38,19 @@ const AddEventForm = ({ onSubmitExternal, onReturn }) => {
           </div>
         );
       case 2:
+        const { lat, lng, city, street, building } = values;
         setNextStepDisabled(
-          values.locationLat === null || values.locationLng === undefined
+          [lat, lng, city, street, building].some((val) => !val)
         );
         return (
           <div>
             <label>Gdzie ma się odbyć?</label>
-            <LocationStep errors={errors.location} />;
+            <LocationStep />;
           </div>
         );
       case 3:
         setNextStepDisabled(
-          values.createAt === null || errors.createAt !== undefined
+          values.beginAt === undefined || errors.beginAt !== undefined
         );
         return (
           <div>
@@ -55,7 +59,7 @@ const AddEventForm = ({ onSubmitExternal, onReturn }) => {
           </div>
         );
       case 4:
-        setNextStepDisabled(false);
+        setNextStepDisabled(isSubmitting);
         setShouldSubmit(true);
         return (
           <div>
@@ -68,17 +72,13 @@ const AddEventForm = ({ onSubmitExternal, onReturn }) => {
     }
   };
 
-  const renderForm = ({ values, errors, handleSubmit }) => (
-    <Form>
-      {renderSteps(values, errors)}
+  const renderForm = ({ values, errors, handleSubmit, isSubmitting }) => (
+    <Form onSubmit={handleSubmit}>
+      {renderSteps(values, errors, isSubmitting)}
       <button type="button" onClick={step === 1 ? onReturn : prevStep}>
         Powrót
       </button>
-      <button
-        type="button"
-        disabled={nextStepDisabled}
-        onClick={() => nextStep(handleSubmit)}
-      >
+      <button type="button" disabled={nextStepDisabled} onClick={nextStep}>
         {shouldSubmit === true ? "Stwórz wydarzenie!" : "Dalej"}
       </button>
     </Form>
@@ -87,20 +87,29 @@ const AddEventForm = ({ onSubmitExternal, onReturn }) => {
   return (
     <div>
       <Formik
+        innerRef={formikRef}
         initialValues={{
           title: "",
-          locationLat: undefined,
-          locationLng: undefined,
-          createAt: undefined,
+          lat: null,
+          lng: null,
+          beginAt: null,
+          city: "",
+          street: "",
+          building: "",
           description: "",
         }}
         onSubmit={(values) => {
-          onSubmitExternal();
+          onReturn();
           alert(JSON.stringify(values));
         }}
         validationSchema={Yup.object({
           title: Yup.string().required("Wydarzenie musi mieć nazwę!"),
-          createAt: Yup.date().required(),
+          building: Yup.string().required(
+            "Musisz wybrać miejsce gdzie odbędzie sie twoje wydarzenie!"
+          ),
+          beginAt: Yup.date().required(
+            "Musisz wybrać kiedy ma się rozpocząć wydarzenie!"
+          ),
         })}
         validateOnChange
         validateOnMount

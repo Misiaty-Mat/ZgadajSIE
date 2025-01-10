@@ -9,7 +9,7 @@ const DateTimeStep = () => {
   const formik = useFormikContext();
 
   const onChange = (value) => {
-    formik.setFieldValue("createAt", value);
+    formik.setFieldValue("beginAt", value.toISOString());
   };
 
   return (
