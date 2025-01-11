@@ -59,6 +59,37 @@ const AddEventForm = ({ onReturn }) => {
           </div>
         );
       case 4:
+        setNextStepDisabled(errors.minInvites || errors.maxInvites);
+        return (
+          <div>
+            <h3>Wybierz liczbę osób chcesz zaprosić</h3>
+            <div>
+              <label>Minimum</label>
+              <Field
+                type="number"
+                name="minInvites"
+                min="1"
+                step="1"
+                max={formikRef.current.values.maxInvites}
+              />
+              {errors.minInvites && <small>{errors.minInvites}</small>}
+            </div>
+            <div>
+              <label>Maksimum</label>
+              <Field
+                type="number"
+                name="maxInvites"
+                min={formikRef.current.values.minInvites}
+              />
+              <small>
+                {errors.maxInvites
+                  ? errors.maxInvites
+                  : "Zostaw puste jeżeli nie chcesz ustawić limitu zaproszonych osób"}
+              </small>
+            </div>
+          </div>
+        );
+      case 5:
         setNextStepDisabled(isSubmitting);
         setShouldSubmit(true);
         return (
@@ -96,11 +127,23 @@ const AddEventForm = ({ onReturn }) => {
           city: "",
           street: "",
           building: "",
+          minInvites: 1,
+          maxInvites: undefined,
           description: "",
         }}
         onSubmit={(values) => {
           onReturn();
           alert(JSON.stringify(values));
+        }}
+        validate={(values) => {
+          if (
+            values.minInvites &&
+            values.maxInvites &&
+            Number(values.minInvites) > Number(values.maxInvites)
+          ) {
+            return { maxInvites: "Maksimum nie może być mniejsze od minimum" };
+          }
+          return {};
         }}
         validationSchema={Yup.object({
           title: Yup.string().required("Wydarzenie musi mieć nazwę!"),
@@ -110,6 +153,13 @@ const AddEventForm = ({ onReturn }) => {
           beginAt: Yup.date().required(
             "Musisz wybrać kiedy ma się rozpocząć wydarzenie!"
           ),
+          minInvites: Yup.number()
+            .integer("Musisz podać liczbę całkowitą")
+            .min(1, "Zaproś przynajmniej 1 osobę")
+            .required("Musisz zaprosić przynajmniej 1 osobę"),
+          maxInvites: Yup.number()
+            .integer("Musisz podać liczbę całkowitą")
+            .nullable(),
         })}
         validateOnChange
         validateOnMount
