@@ -15,7 +15,7 @@ export const UserContextProvider = ({ children }) => {
 
   const handleAuthResponseError = (resError) => {
     if (resError.status === 401) {
-      toast.error("Wrong credentials!");
+      toast.error("Autentykacja nie powiodła się. Spróbuj jeszcze raz!");
     } else if (resError.status === 500) {
       toast.error(resError.message);
     } else if (resError.response.data.errors) {

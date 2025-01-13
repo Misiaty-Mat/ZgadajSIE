@@ -2,11 +2,20 @@ import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
 import { useEffect, useRef, useState } from "react";
 import EventMarker from "./event-marker";
+import BasicModal from "../../modal/BasicModal";
 
 const EventMarkers = ({ points }) => {
-  const map = useMap();
-  const [markers, setMarkers] = useState({});
   const clusterer = useRef(null);
+
+  const [markers, setMarkers] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const map = useMap();
+
+  const toggleModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
 
   useEffect(() => {
     if (!map) return;
@@ -34,11 +43,25 @@ const EventMarkers = ({ points }) => {
         return newMarkers;
       }
     });
-  }
+  };
+
+  const getFullEventById = (eventId) => {
+    return {
+      id: eventId,
+      title: "Wydarzenie o id: " + eventId,
+      address: "Abc ul. def",
+    };
+  };
+
+  const joinEvent = (eventId) => {
+    alert("Joined event " + eventId);
+  };
 
   const onMarkerClick = (point) => {
-    map.panTo({ lat: point.lat, lng: point.lng })
-  }
+    map.panTo({ lat: point.lat, lng: point.lng });
+    toggleModal();
+    setSelectedEvent(getFullEventById(point.id));
+  };
 
   return (
     <>
@@ -49,9 +72,20 @@ const EventMarkers = ({ points }) => {
           ref={(marker) => setMarkerRef(marker, point.id)}
           onClick={() => onMarkerClick(point)}
         >
-          <EventMarker point={point.id} />
+          <EventMarker title={point.title} />
         </AdvancedMarker>
       ))}
+
+      {selectedEvent && (
+        <BasicModal
+          isOpen={isModalOpen}
+          title={selectedEvent.title}
+          onClose={toggleModal}
+        >
+          {selectedEvent.address}
+          <button onClick={() => joinEvent(selectedEvent.id)}>Dołącz!</button>
+        </BasicModal>
+      )}
     </>
   );
 };

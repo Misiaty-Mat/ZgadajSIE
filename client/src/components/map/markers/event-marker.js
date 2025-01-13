@@ -1,11 +1,5 @@
 import "./event-marker.css";
 
-const EventMarker = ({ id }) => {
-  return (
-    <div className="marker">
-      Lorem Ipsum jest tekstem stosowanym jako przykładowy
-    </div>
-  );
-};
+const EventMarker = ({ title }) => <div className="marker">{title}</div>;
 
 export default EventMarker;

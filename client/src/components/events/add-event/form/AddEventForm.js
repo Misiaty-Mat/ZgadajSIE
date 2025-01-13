@@ -13,7 +13,6 @@ const AddEventForm = ({ onReturn }) => {
 
   const nextStep = async () => {
     if (shouldSubmit && formikRef.current) {
-      await formikRef.current?.validateForm();
       await formikRef.current?.submitForm();
     } else {
       setStep((prev) => prev + 1);
@@ -34,7 +33,7 @@ const AddEventForm = ({ onReturn }) => {
             <label>Jaką ma mieć nazwę?</label>
             <Field name="title" />
 
-            {errors.title && <p>{errors.title}</p>}
+            {errors.title && <small>{errors.title}</small>}
           </div>
         );
       case 2:

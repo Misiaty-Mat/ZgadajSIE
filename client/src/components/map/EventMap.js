@@ -38,10 +38,16 @@ const EventMap = ({
   const points = [
     {
       id: 1,
+      title: "Rowerek",
       lat: currentLocation.lat - 0.055,
       lng: currentLocation.lng - 0.055,
     },
-    { id: 2, lat: currentLocation.lat + 0.02, lng: currentLocation.lng + 0.02 },
+    {
+      id: 2,
+      title: "Wycieczka",
+      lat: currentLocation.lat + 0.02,
+      lng: currentLocation.lng + 0.02,
+    },
   ];
 
   const getAddress = ({ lat, lng }) => {
