@@ -15,10 +15,12 @@ namespace ZgadajSieAPI.Models
 
         [Required]
         public string PasswordHash { get; set; } = string.Empty;
+
         public Profile? Profile { get; set; }
 
-        public List<Event> OrganizedEvents { get; set; } = new List<Event>();
 
+        // Relations stuff
+        public List<Event> OrganizedEvents { get; set; } = new List<Event>();
         public List<Event> JoinedEvents { get; set; } = new List<Event>();
     }
 }

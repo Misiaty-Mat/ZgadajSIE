@@ -11,6 +11,7 @@ namespace ZgadajSieAPI.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<EventDetails> EventsDetails { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -23,6 +24,7 @@ namespace ZgadajSieAPI.Data
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
+
             /* Konfiguracja relacji */
 
             // One-to-one
@@ -30,6 +32,12 @@ namespace ZgadajSieAPI.Data
                 .HasOne(u => u.Profile)
                 .WithOne(p => p.User)
                 .HasForeignKey<Profile>(p => p.UserId);
+
+            // One-to-one
+            builder.Entity<Event>()
+                .HasOne(e => e.EventDetails)
+                .WithOne(ed => ed.Event)
+                .HasForeignKey<EventDetails>(ed => ed.EventId);
 
             // One-to-many
             builder.Entity<Event>() 
@@ -41,7 +49,7 @@ namespace ZgadajSieAPI.Data
             // Many-to-many
             builder.Entity<User>()
                 .HasMany(u => u.JoinedEvents)
-                .WithMany(e => e.RegisteredUsers)
+                .WithMany(e => e.Attendees)
                 .UsingEntity(t => t.ToTable("EventRegistrations")); // Tabela pośrednia wygeneruje się sama
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Security.Claims;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models.DTO;
 using ZgadajSieAPI.Services.Interfaces;
@@ -19,7 +20,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
         {
             // pusty obiekt
 
-            var userId = context.HttpContext.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var userId = context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (userId == null)
             {

@@ -57,7 +57,7 @@ namespace ZgadajSieAPI.Controllers
 
             var token = jwt.GenerateToken(user);
 
-            return Ok(new { Token = token, User = new UserWithoutSensitiveDataDTO(user) });
+            return Ok(new { Message = "Login succesful.", Token = token, User = new UserWithoutSensitiveDataDTO(user) });
         }
 
         [Authorize]
@@ -67,7 +67,7 @@ namespace ZgadajSieAPI.Controllers
         {
             var user = HttpContext.Items["User"];
 
-            return Ok(user);
+            return Ok( new { Message = "Login succesful.", User = user });
         }
     }
 }

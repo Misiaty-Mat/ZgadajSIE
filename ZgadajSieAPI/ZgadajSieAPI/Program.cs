@@ -43,6 +43,8 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 
+builder.Services.AddScoped<IEventService, EventService>();
+
 // Build app
 
 var app = builder.Build();

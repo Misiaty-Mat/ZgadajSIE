@@ -12,7 +12,7 @@ using ZgadajSieAPI.Data;
 namespace ZgadajSieAPI.Data.Migrations
 {
     [DbContext(typeof(ZgadajsieDbContext))]
-    [Migration("20241121193948_InitialPostIdentity")]
+    [Migration("20250112131044_InitialPostIdentity")]
     partial class InitialPostIdentity
     {
         /// <inheritdoc />
@@ -27,35 +27,39 @@ namespace ZgadajSieAPI.Data.Migrations
 
             modelBuilder.Entity("EventUser", b =>
                 {
-                    b.Property<string>("JoinedEventsEventId")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("RegisteredUsersId")
+                    b.Property<Guid>("AttendeesId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("JoinedEventsEventId", "RegisteredUsersId");
+                    b.Property<Guid>("JoinedEventsEventId")
+                        .HasColumnType("uuid");
 
-                    b.HasIndex("RegisteredUsersId");
+                    b.HasKey("AttendeesId", "JoinedEventsEventId");
+
+                    b.HasIndex("JoinedEventsEventId");
 
                     b.ToTable("EventRegistrations", (string)null);
                 });
 
             modelBuilder.Entity("ZgadajSieAPI.Models.Event", b =>
                 {
-                    b.Property<string>("EventId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("EventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime>("DeleteDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Location")
+                    b.Property<string>("Latitude")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Longitude")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -69,15 +73,43 @@ namespace ZgadajSieAPI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("EventId");
 
                     b.HasIndex("OrganizerId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("ZgadajSieAPI.Models.EventDetails", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("BuildingNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("City")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EventName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("MaxAttendee")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MinAttendee")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Street")
+                        .HasColumnType("text");
+
+                    b.HasKey("EventId");
+
+                    b.ToTable("EventDetails");
                 });
 
             modelBuilder.Entity("ZgadajSieAPI.Models.Profile", b =>
@@ -130,15 +162,15 @@ namespace ZgadajSieAPI.Data.Migrations
 
             modelBuilder.Entity("EventUser", b =>
                 {
-                    b.HasOne("ZgadajSieAPI.Models.Event", null)
+                    b.HasOne("ZgadajSieAPI.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("JoinedEventsEventId")
+                        .HasForeignKey("AttendeesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ZgadajSieAPI.Models.User", null)
+                    b.HasOne("ZgadajSieAPI.Models.Event", null)
                         .WithMany()
-                        .HasForeignKey("RegisteredUsersId")
+                        .HasForeignKey("JoinedEventsEventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -154,6 +186,17 @@ namespace ZgadajSieAPI.Data.Migrations
                     b.Navigation("Organiser");
                 });
 
+            modelBuilder.Entity("ZgadajSieAPI.Models.EventDetails", b =>
+                {
+                    b.HasOne("ZgadajSieAPI.Models.Event", "Event")
+                        .WithOne("EventDetails")
+                        .HasForeignKey("ZgadajSieAPI.Models.EventDetails", "EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
             modelBuilder.Entity("ZgadajSieAPI.Models.Profile", b =>
                 {
                     b.HasOne("ZgadajSieAPI.Models.User", "User")
@@ -163,6 +206,11 @@ namespace ZgadajSieAPI.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ZgadajSieAPI.Models.Event", b =>
+                {
+                    b.Navigation("EventDetails");
                 });
 
             modelBuilder.Entity("ZgadajSieAPI.Models.User", b =>
