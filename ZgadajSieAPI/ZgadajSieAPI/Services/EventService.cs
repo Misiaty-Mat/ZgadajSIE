@@ -22,7 +22,7 @@ namespace ZgadajSieAPI.Services
 
             for (int i = 0; i < events.Count; i++)
             {
-                pins[i] = new EventMapPinDTO(events[i]);
+                pins.Add(new EventMapPinDTO(events[i]));
             }
 
             return pins;
@@ -49,8 +49,8 @@ namespace ZgadajSieAPI.Services
                     City = model.City,
                     Street = model.Street,
                     BuildingNumber = model.BuildingNumber,
-                    MinAttendee = model.MinAttendee,
-                    MaxAttendee = model.MaxAttendee,
+                    MinAttendance = model.MinAttendance,
+                    MaxAttendance = model.MaxAttendance,
                 },
                 CreationDate = DateTime.UtcNow,
                 DeleteDate = DateTime.UtcNow.AddMonths(1),

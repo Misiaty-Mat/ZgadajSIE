@@ -20,12 +20,6 @@ namespace ZgadajSieAPI.Controllers
             this.es = ev;
         }
 
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok();
-        }
-
         [HttpGet("pins")]
         public IActionResult GetPins(/*userLat, userLon*/)
         {
@@ -33,6 +27,7 @@ namespace ZgadajSieAPI.Controllers
 
             return Ok(new { Pins = pins });
         }
+
         [Authorize]
         [HttpPost("create")]
         public async Task<IActionResult> CreateEvent([FromBody] EventCreateDTO model)

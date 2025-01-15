@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Filters\ExceptionFilters\" />
-    <Folder Include="Models\Validations\" />
+    <Folder Include="Models\DTO\BaseDTO\" />
   </ItemGroup>
 
 </Project>

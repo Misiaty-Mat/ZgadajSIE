@@ -10,20 +10,27 @@ namespace ZgadajSieAPI.Models
         [ForeignKey("User")]
         public Guid OrganizerId { get; set; }
 
+        [Required]
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
 
+        [Required]
         public DateTime CreationDate { get; set; }
 
+        [Required]
         public DateTime DeleteDate { get; set; }
-        
+
+        [Required]
         public string Title { get; set; }
 
+        [Required]
         public string Status { get; set; }
 
+        [Required]
         public string Latitude { get; set; }
 
+        [Required]
         public string Longitude{ get; set; }
 
         public EventDetails? EventDetails { get; set; }
@@ -31,6 +38,6 @@ namespace ZgadajSieAPI.Models
 
         // Relations stuff
         public User Organiser { get; set; }
-        public List<User> Attendees { get; set; } = new List<User>();
+        public List<User> Participants { get; set; } = new List<User>();
     }
 }

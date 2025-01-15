@@ -17,9 +17,9 @@ namespace ZgadajSieAPI.Models
 
         public string? BuildingNumber { get; set; }
 
-        public int? MinAttendee { get; set; }
+        public int? MinAttendance { get; set; }
 
-        public int? MaxAttendee { get; set; }
+        public int? MaxAttendance { get; set; }
 
 
         // Relations stuff

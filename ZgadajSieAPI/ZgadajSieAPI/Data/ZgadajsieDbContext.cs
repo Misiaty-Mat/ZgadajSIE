@@ -49,7 +49,7 @@ namespace ZgadajSieAPI.Data
             // Many-to-many
             builder.Entity<User>()
                 .HasMany(u => u.JoinedEvents)
-                .WithMany(e => e.Attendees)
+                .WithMany(e => e.Participants)
                 .UsingEntity(t => t.ToTable("EventRegistrations")); // Tabela pośrednia wygeneruje się sama
         }
     }
