@@ -11,7 +11,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
     {
         private readonly ZgadajsieDbContext db;
 
-        public User_ValidateAutologinFilterAttribute(ZgadajsieDbContext db, IJwtService jwt)
+        public User_ValidateAutologinFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }

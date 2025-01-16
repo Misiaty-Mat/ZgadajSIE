@@ -2,6 +2,7 @@
 ZgadajSieAPI/.vs/
 ZgadajSieAPI/ZgadajSieAPI/bin/
 ZgadajSieAPI/ZgadajSieAPI/obj/
+ZgadajSieAPI\ZgadajSieAPI\appsettings.Development.json
 
 #React Client
 client/node_modules

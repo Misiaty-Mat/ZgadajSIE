@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "dd2b387c-c61b-4256-96fb-3cbcccd75106",
+		"name": "ZgadajSie",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23374928"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Register a user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"User\",\r\n    \"email\": \"user01@test.pl\",\r\n    \"password\": \"user01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7272/api/user/register",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7272",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login a user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"user01@test.pl\",\r\n    \"password\": \"user01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7272/api/user/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7272",
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Autologin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4MDViYjg5MS0wNzU4LTQwZjItOWVhZC02NGZmODZlZDJiZDAiLCJlbWFpbCI6InVzZXIwMUB0ZXN0LnBsIiwibmJmIjoxNzM3MDU2Njg2LCJleHAiOjE3MzczMTU4ODYsImlhdCI6MTczNzA1NjY4NiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.gGEvYQ6yP6IGX7Z7tBadZHOt9whxHNv_WWFnuENAVaw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7272/api/user/autologin",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7272",
+							"path": [
+								"api",
+								"user",
+								"autologin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "Create an event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4MDViYjg5MS0wNzU4LTQwZjItOWVhZC02NGZmODZlZDJiZDAiLCJlbWFpbCI6InVzZXIwMUB0ZXN0LnBsIiwibmJmIjoxNzM3MDU2Njg2LCJleHAiOjE3MzczMTU4ODYsImlhdCI6MTczNzA1NjY4NiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.gGEvYQ6yP6IGX7Z7tBadZHOt9whxHNv_WWFnuENAVaw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Event Title 01\",\r\n  \"startDate\": \"2025-02-02T10:00:00Z\",\r\n  \"endDate\": \"2025-02-02T14:00:00Z\",\r\n  \"latitude\": \"51.50744705\",\r\n  \"longitude\": \"-0.12788721\",\r\n  \"description\": \"Test description 01.\",\r\n  \"city\": \"TestCity\",\r\n  \"street\": \"TestStreet\",\r\n  \"buildingNumber\": \"1001\",\r\n  \"minAttendance\": 5,\r\n  \"maxAttendance\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7272/api/event/create",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7272",
+							"path": [
+								"api",
+								"event",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read all events pins",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7272/api/event/pins",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7272",
+							"path": [
+								"api",
+								"event",
+								"pins"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read an event by ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4MDViYjg5MS0wNzU4LTQwZjItOWVhZC02NGZmODZlZDJiZDAiLCJlbWFpbCI6InVzZXIwMUB0ZXN0LnBsIiwibmJmIjoxNzM3MDU2Njg2LCJleHAiOjE3MzczMTU4ODYsImlhdCI6MTczNzA1NjY4NiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.gGEvYQ6yP6IGX7Z7tBadZHOt9whxHNv_WWFnuENAVaw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7272/api/event/84ce3288-061b-4d93-9d11-2d04b9255a88",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7272",
+							"path": [
+								"api",
+								"event",
+								"84ce3288-061b-4d93-9d11-2d04b9255a88"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using ZgadajSieAPI.Data;
+using ZgadajSieAPI.Filters.ActionFilters;
 using ZgadajSieAPI.Models;
 using ZgadajSieAPI.Models.DTO;
 using ZgadajSieAPI.Services.Interfaces;
@@ -13,19 +14,29 @@ namespace ZgadajSieAPI.Controllers
     public class EventController : ControllerBase
     {
         private readonly ZgadajsieDbContext db;
-        private readonly IEventService es;
-        public EventController(ZgadajsieDbContext db, IEventService ev)
+        private readonly IEventService e;
+        public EventController(ZgadajsieDbContext db, IEventService e)
         {
             this.db = db;
-            this.es = ev;
+            this.e = e;
         }
 
         [HttpGet("pins")]
         public IActionResult GetPins(/*userLat, userLon*/)
         {
-            var pins = es.GetEventPins();
+            var pins = e.GetEventPins();
 
             return Ok(new { Pins = pins });
+        }
+
+        [Authorize]
+        [HttpGet("{eventId}")]
+        [TypeFilter(typeof(Event_ValidateGetEventFilterAttribute))]
+        public IActionResult GetEvent([FromHeader(Name = "Authorization")] string token, [FromRoute] Guid eventId)
+        {
+            var @event = HttpContext.Items["Event"] as Event;
+
+            return Ok(new { Event = @event });
         }
 
         [Authorize]
@@ -34,7 +45,7 @@ namespace ZgadajSieAPI.Controllers
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var newEvent = es.CreateNewEvent(model, userId);
+            var newEvent = e.CreateNewEvent(model, userId);
 
             db.Events.Add(newEvent);
 
