@@ -3,6 +3,9 @@ import * as Yup from "yup";
 import React, { useRef, useState } from "react";
 import LocationStep from "../form-steps/LocationStep";
 import DateTimeStep from "../form-steps/DateTimeStep";
+import { createEvent } from "../../../../api/events/events";
+import { toast } from "react-toastify";
+import { useStores } from "../../../../contexts/event-context";
 
 const AddEventForm = ({ onReturn }) => {
   const formikRef = useRef(null);
@@ -10,6 +13,8 @@ const AddEventForm = ({ onReturn }) => {
   const [step, setStep] = useState(1);
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
   const [shouldSubmit, setShouldSubmit] = useState(false);
+
+  const { eventStore } = useStores();
 
   const nextStep = async () => {
     if (shouldSubmit && formikRef.current) {
@@ -37,9 +42,11 @@ const AddEventForm = ({ onReturn }) => {
           </div>
         );
       case 2:
-        const { lat, lng, city, street, building } = values;
+        const { latitude, longitude, city, street, buildingNumber } = values;
         setNextStepDisabled(
-          [lat, lng, city, street, building].some((val) => !val)
+          [latitude, longitude, city, street, buildingNumber].some(
+            (val) => !val
+          )
         );
         return (
           <div>
@@ -49,7 +56,7 @@ const AddEventForm = ({ onReturn }) => {
         );
       case 3:
         setNextStepDisabled(
-          values.beginAt === undefined || errors.beginAt !== undefined
+          values.startDate === undefined || errors.startDate !== undefined
         );
         return (
           <div>
@@ -58,31 +65,16 @@ const AddEventForm = ({ onReturn }) => {
           </div>
         );
       case 4:
-        setNextStepDisabled(errors.minInvites || errors.maxInvites);
+        setNextStepDisabled(errors.maxAttendance);
         return (
           <div>
             <h3>Wybierz liczbę osób chcesz zaprosić</h3>
             <div>
-              <label>Minimum</label>
-              <Field
-                type="number"
-                name="minInvites"
-                min="1"
-                step="1"
-                max={formikRef.current.values.maxInvites}
-              />
-              {errors.minInvites && <small>{errors.minInvites}</small>}
-            </div>
-            <div>
               <label>Maksimum</label>
-              <Field
-                type="number"
-                name="maxInvites"
-                min={formikRef.current.values.minInvites}
-              />
+              <Field type="number" name="maxAttendance" min="1" />
               <small>
-                {errors.maxInvites
-                  ? errors.maxInvites
+                {errors.maxAttendance
+                  ? errors.maxAttendance
                   : "Zostaw puste jeżeli nie chcesz ustawić limitu zaproszonych osób"}
               </small>
             </div>
@@ -120,43 +112,43 @@ const AddEventForm = ({ onReturn }) => {
         innerRef={formikRef}
         initialValues={{
           title: "",
-          lat: null,
-          lng: null,
-          beginAt: null,
+          latitude: null,
+          longitude: "",
+          startDate: "",
           city: "",
           street: "",
-          building: "",
-          minInvites: 1,
-          maxInvites: undefined,
+          buildingNumber: "",
+          maxAttendance: undefined,
           description: "",
         }}
         onSubmit={(values) => {
+          createEvent(values)
+            .then(() => {
+              eventStore.updateMapPins();
+              toast.success("Twoje wydarzenie zostało utworzone!");
+            })
+            .catch((error) => {
+              if (error.status === 400) {
+                Object.values(error.response.data.errors)
+                  .flatMap((arr) => arr)
+                  .forEach((errorMsg) => {
+                    toast.error(errorMsg);
+                  });
+              } else {
+                toast.error("Coś poszło nie tak... " + error.message);
+              }
+            });
           onReturn();
-          alert(JSON.stringify(values));
-        }}
-        validate={(values) => {
-          if (
-            values.minInvites &&
-            values.maxInvites &&
-            Number(values.minInvites) > Number(values.maxInvites)
-          ) {
-            return { maxInvites: "Maksimum nie może być mniejsze od minimum" };
-          }
-          return {};
         }}
         validationSchema={Yup.object({
           title: Yup.string().required("Wydarzenie musi mieć nazwę!"),
-          building: Yup.string().required(
+          buildingNumber: Yup.string().required(
             "Musisz wybrać miejsce gdzie odbędzie sie twoje wydarzenie!"
           ),
-          beginAt: Yup.date().required(
+          startDate: Yup.date().required(
             "Musisz wybrać kiedy ma się rozpocząć wydarzenie!"
           ),
-          minInvites: Yup.number()
-            .integer("Musisz podać liczbę całkowitą")
-            .min(1, "Zaproś przynajmniej 1 osobę")
-            .required("Musisz zaprosić przynajmniej 1 osobę"),
-          maxInvites: Yup.number()
+          maxAttendance: Yup.number()
             .integer("Musisz podać liczbę całkowitą")
             .nullable(),
         })}

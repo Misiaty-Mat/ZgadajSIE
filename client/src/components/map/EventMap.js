@@ -11,10 +11,11 @@ import { toast } from "react-toastify";
 
 import useGeolocation from "../../hooks/useGeolocation";
 import EventMarkers from "./markers/event-markers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MapHandler from "./MapHandler";
 import PlaceAutocomplete from "./autocomplete/PlaceAutocomplete";
 import { useFormikContext } from "formik";
+import { useStores } from "../../contexts/event-context";
 
 const EventMap = ({
   width = "100%",
@@ -22,33 +23,25 @@ const EventMap = ({
   onSelectLocation,
   onClickMarkerEnabled = false,
 }) => {
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [markerRef, marker] = useAdvancedMarkerRef();
+
   const currentLocation = useGeolocation();
 
   const formik = useFormikContext();
 
-  const [selectedPlace, setSelectedPlace] = useState(null);
-  const [markerRef, marker] = useAdvancedMarkerRef();
+  const { eventStore } = useStores();
+
+  useEffect(() => {
+    eventStore.updateMapPins();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   setDefaults({
     key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     language: "pl",
     region: "pl",
   });
-
-  const points = [
-    {
-      id: 1,
-      title: "Rowerek",
-      lat: currentLocation.lat - 0.055,
-      lng: currentLocation.lng - 0.055,
-    },
-    {
-      id: 2,
-      title: "Wycieczka",
-      lat: currentLocation.lat + 0.02,
-      lng: currentLocation.lng + 0.02,
-    },
-  ];
 
   const getAddress = ({ lat, lng }) => {
     return fromLatLng(lat, lng).then(({ results }) => {
@@ -62,14 +55,14 @@ const EventMap = ({
         component.types.includes("route")
       )?.long_name;
 
-      const building = addressComponents.find((component) =>
+      const buildingNumber = addressComponents.find((component) =>
         component.types.includes("street_number")
       )?.long_name;
 
-      if ([city, street, building].some((val) => !val)) {
+      if ([city, street, buildingNumber].some((val) => !val)) {
         return "";
       } else {
-        return { city, street, building };
+        return { city, street, buildingNumber };
       }
     });
   };
@@ -79,10 +72,10 @@ const EventMap = ({
       const location = e.detail.latLng;
       getAddress(location).then(async (address) => {
         if (address) {
-          const { city, street, building } = address;
+          const { city, street, buildingNumber } = address;
           await formik.setFieldValue("city", city);
           await formik.setFieldValue("street", street);
-          await formik.setFieldValue("building", building);
+          await formik.setFieldValue("buildingNumber", buildingNumber);
           marker.position = location;
           !!onSelectLocation && (await onSelectLocation(location));
         } else {
@@ -108,7 +101,7 @@ const EventMap = ({
           options={{ disableDefaultUI: true, clickableIcons: false }}
         >
           <AdvancedMarker ref={markerRef} position={null} />
-          <EventMarkers points={points} />
+          <EventMarkers />
           {!onClickMarkerEnabled && (
             <MapControl position={ControlPosition.TOP}>
               <div className="autocomplete-control">

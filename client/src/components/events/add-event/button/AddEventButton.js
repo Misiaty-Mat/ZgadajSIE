@@ -12,7 +12,7 @@ const AddEventButton = () => {
 
   return (
     <>
-      <button onClick={toggleModal}>Create event</button>
+      <button onClick={toggleModal}>Stwórz wydarzenie</button>
       <BasicModal
         isOpen={isModalOpen}
         title="Stwórz wydarzenie"

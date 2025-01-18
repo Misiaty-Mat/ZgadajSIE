@@ -5,10 +5,10 @@ import { toast } from "react-toastify";
 
 export const AuthContext = createContext();
 
+const getToken = () => localStorage.getItem(TOKEN_NAME);
+
 export const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
-  const getToken = () => localStorage.getItem(TOKEN_NAME);
 
   const isLoggedIn = () =>
     localStorage.getItem(TOKEN_NAME) !== null && user !== null;
@@ -54,20 +54,16 @@ export const UserContextProvider = ({ children }) => {
 
   useEffect(() => {
     const checkUserAuth = async () => {
-      const token = getToken();
-      if (!token) {
-        return;
-      }
-
-      try {
-        const response = checkToken();
-
-        if (!response.ok) throw new Error("Not authenticated");
-        const userData = await response.json();
-        setUser(userData);
-      } catch (error) {
-        console.log("No user is authenticated:", error);
-        logout();
+      if (getToken()) {
+        checkToken()
+          .then((response) => {
+            if (response.status !== 200) throw new Error("Not authenticated");
+            setUser(response.data.user);
+          })
+          .catch((error) => {
+            toast.error("Sesja wygasła. Zaloguj się jeszcze raz");
+            logout();
+          });
       }
     };
 
@@ -75,9 +71,7 @@ export const UserContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ user, isLoggedIn, login, register, logout, getToken }}
-    >
+    <AuthContext.Provider value={{ user, isLoggedIn, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

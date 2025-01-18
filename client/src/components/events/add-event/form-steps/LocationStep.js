@@ -6,15 +6,15 @@ const LocationStep = () => {
   const formik = useFormikContext();
 
   const onMapClicked = async (location) => {
-    await formik.setFieldValue("lat", location.lat);
-    await formik.setFieldValue("lng", location.lng);
+    await formik.setFieldValue("latitude", `${location.lat}`);
+    await formik.setFieldValue("longitude", `${location.lng}`);
   };
 
   const getAddress = () => {
-    const { city, street, building } = formik.values;
+    const { city, street, buildingNumber } = formik.values;
 
-    if (city && street && building) {
-      return `${city} ul. ${street} ${building}`;
+    if (city && street && buildingNumber) {
+      return `${city} ul. ${street} ${buildingNumber}`;
     }
   };
 

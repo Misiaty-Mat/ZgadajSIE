@@ -1,9 +1,13 @@
 import { API_URL, HEADERS } from "../../util/constants";
 import axios from "axios";
+import { getHeadersWithAuth } from "../utils";
 
 export const checkToken = async () => {
-  const response = await fetch(`${API_URL}/user/login`);
-  return await response.json();
+  return axios.post(
+    `${API_URL}/user/autologin`,
+    {},
+    { headers: getHeadersWithAuth() }
+  );
 };
 
 export const apiLogin = async (credentials) => {

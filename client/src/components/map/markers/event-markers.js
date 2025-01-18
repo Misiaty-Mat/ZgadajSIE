@@ -1,15 +1,19 @@
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
 import { useEffect, useRef, useState } from "react";
+import { observer } from "mobx-react-lite";
 import EventMarker from "./event-marker";
 import BasicModal from "../../modal/BasicModal";
+import { useStores } from "../../../contexts/event-context";
 
-const EventMarkers = ({ points }) => {
+const EventMarkers = observer(() => {
   const clusterer = useRef(null);
 
   const [markers, setMarkers] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const { eventStore } = useStores();
 
   const map = useMap();
 
@@ -57,22 +61,22 @@ const EventMarkers = ({ points }) => {
     alert("Joined event " + eventId);
   };
 
-  const onMarkerClick = (point) => {
-    map.panTo({ lat: point.lat, lng: point.lng });
+  const onMarkerClick = (pin) => {
+    map.panTo({ lat: Number(pin.latitude), lng: Number(pin.longitude) });
     toggleModal();
-    setSelectedEvent(getFullEventById(point.id));
+    setSelectedEvent(getFullEventById(pin.eventId));
   };
 
   return (
     <>
-      {points.map((point) => (
+      {eventStore.eventPins.map((pin) => (
         <AdvancedMarker
-          key={point.id}
-          position={{ lat: point.lat, lng: point.lng }}
-          ref={(marker) => setMarkerRef(marker, point.id)}
-          onClick={() => onMarkerClick(point)}
+          key={pin.eventId}
+          position={{ lat: Number(pin.latitude), lng: Number(pin.longitude) }}
+          ref={(marker) => setMarkerRef(marker, pin.eventId)}
+          onClick={() => onMarkerClick(pin)}
         >
-          <EventMarker title={point.title} />
+          <EventMarker title={pin.titleShorten} />
         </AdvancedMarker>
       ))}
 
@@ -88,6 +92,6 @@ const EventMarkers = ({ points }) => {
       )}
     </>
   );
-};
+});
 
 export default EventMarkers;

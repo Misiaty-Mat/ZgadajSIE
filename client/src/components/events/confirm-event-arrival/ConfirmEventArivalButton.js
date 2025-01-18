@@ -12,8 +12,12 @@ const ConfirmEventArrivalButton = () => {
 
   return (
     <>
-      <button onClick={toggleModal}>Confirm event arrival</button>
-      <BasicModal isOpen={isModalOpen} title="Add event" onClose={toggleModal}>
+      <button onClick={toggleModal}>Potwierdź przybycie</button>
+      <BasicModal
+        isOpen={isModalOpen}
+        title="Potwierdź przybycie"
+        onClose={toggleModal}
+      >
         <ConfirmEventArrivalForm />
       </BasicModal>
     </>
