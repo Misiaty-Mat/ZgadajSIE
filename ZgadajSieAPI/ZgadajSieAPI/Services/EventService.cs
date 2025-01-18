@@ -18,12 +18,21 @@ namespace ZgadajSieAPI.Services
         {
             var events = db.Events.ToList();
 
+            var titles = db.EventsDetails.Select(d => d.Title).ToList();
+
             var pins = new List<EventMapPinDTO>();
 
-            for (int i = 0; i < events.Count; i++)
+            try
             {
-                pins.Add(new EventMapPinDTO(events[i]));
+                for (int i = 0; i < events.Count; i++)
+                {
+                    pins.Add(new EventMapPinDTO(events[i], titles[i]));
+                }
             }
+
+            catch(ArgumentOutOfRangeException) { }
+
+            catch(Exception) { }
 
             return pins;
         }
@@ -38,19 +47,19 @@ namespace ZgadajSieAPI.Services
 
             var newEvent = new Event
             {
-                Title = model.Title,
+                EventId = Guid.NewGuid(),
                 StartDate = model.StartDate,
                 Latitude = model.Latitude,
                 Longitude = model.Longitude,
                 OrganizerId = parsedId,
                 EventDetails = new EventDetails
                 {
+                    Title = model.Title,
                     Description = model.Description,
                     City = model.City,
                     Street = model.Street,
                     BuildingNumber = model.BuildingNumber,
-                    MinAttendance = model.MinAttendance,
-                    MaxAttendance = model.MaxAttendance,
+                    MaxParticipation = model.MaxParticipation,
                 },
                 CreationDate = DateTime.UtcNow,
                 DeleteDate = DateTime.UtcNow.AddMonths(1),
@@ -59,6 +68,14 @@ namespace ZgadajSieAPI.Services
 
             return newEvent;
         }
-        // public Event ConfigureEvent(event)
+
+        public async void AddParticipant(Event @event, User user)
+        {
+            @event.Participants.Add(user);
+
+            await db.SaveChangesAsync();
+
+            return;
+        }
     }
 }

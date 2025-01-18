@@ -46,7 +46,7 @@ namespace ZgadajSieAPI.Controllers
 
             var token = jwt.GenerateToken(user);
 
-            return Ok(new { Message = "Registartion succesful.", User = new UserWithoutSensitiveDataDTO(user), Token = token });
+            return Ok(new { Message = "Registartion succesful.", User = new UserDTO(user), Token = token });
         }
 
         [HttpPost("login")]
@@ -57,7 +57,7 @@ namespace ZgadajSieAPI.Controllers
 
             var token = jwt.GenerateToken(user);
 
-            return Ok(new { Message = "Login succesful.", Token = token, User = new UserWithoutSensitiveDataDTO(user) });
+            return Ok(new { Message = "Login succesful.", Token = token, User = new UserDTO(user) });
         }
 
         [Authorize]
@@ -65,7 +65,7 @@ namespace ZgadajSieAPI.Controllers
         [TypeFilter(typeof(User_ValidateAutologinFilterAttribute))]
         public IActionResult Autologin([FromHeader(Name = "Authorization")] string token)
         {
-            var user = HttpContext.Items["User"];
+            var user = HttpContext.Items["User"] as UserDTO;
 
             return Ok( new { Message = "Login succesful.", User = user });
         }

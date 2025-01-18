@@ -13,16 +13,11 @@ namespace ZgadajSieAPI.Models
         [Required]
         public DateTime StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
-
         [Required]
         public DateTime CreationDate { get; set; }
 
         [Required]
         public DateTime DeleteDate { get; set; }
-
-        [Required]
-        public string Title { get; set; }
 
         [Required]
         public string Status { get; set; }

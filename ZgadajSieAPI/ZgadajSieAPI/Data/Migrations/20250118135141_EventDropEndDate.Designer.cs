@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ZgadajSieAPI.Data;
@@ -11,9 +12,11 @@ using ZgadajSieAPI.Data;
 namespace ZgadajSieAPI.Data.Migrations
 {
     [DbContext(typeof(ZgadajsieDbContext))]
-    partial class ZgadajsieDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250118135141_EventDropEndDate")]
+    partial class EventDropEndDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,6 +70,10 @@ namespace ZgadajSieAPI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("EventId");
 
                     b.HasIndex("OrganizerId");
@@ -88,14 +95,13 @@ namespace ZgadajSieAPI.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int?>("MaxParticipation")
+                    b.Property<int?>("MaxAttendance")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("MinAttendance")
                         .HasColumnType("integer");
 
                     b.Property<string>("Street")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("EventId");

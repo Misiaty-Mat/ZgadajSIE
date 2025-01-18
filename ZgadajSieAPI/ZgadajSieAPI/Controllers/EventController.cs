@@ -22,7 +22,7 @@ namespace ZgadajSieAPI.Controllers
         }
 
         [HttpGet("pins")]
-        public IActionResult GetPins(/*userLat, userLon*/)
+        public IActionResult GetPins()
         {
             var pins = e.GetEventPins();
 
@@ -31,10 +31,10 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpGet("{eventId}")]
-        [TypeFilter(typeof(Event_ValidateGetEventFilterAttribute))]
-        public IActionResult GetEvent([FromHeader(Name = "Authorization")] string token, [FromRoute] Guid eventId)
+        [TypeFilter(typeof(Event_NullCheckFilterAttribute))]
+        public IActionResult GetEventById([FromRoute] Guid eventId)
         {
-            var @event = HttpContext.Items["Event"] as Event;
+            var @event = HttpContext.Items["Event"] as EventDTO;
 
             return Ok(new { Event = @event });
         }
@@ -45,11 +45,31 @@ namespace ZgadajSieAPI.Controllers
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var newEvent = e.CreateNewEvent(model, userId);
+            var @event = e.CreateNewEvent(model, userId);
 
-            db.Events.Add(newEvent);
+            db.Events.Add(@event);
 
             await db.SaveChangesAsync();
+
+            var eventDto = new EventDTO(@event, @event.EventDetails);
+
+            return CreatedAtAction(
+                nameof(GetEventById),
+                new { eventId = eventDto.EventId },
+                new { Message = "Event created successfully.", eventDto });
+        }
+
+        [Authorize]
+        [HttpPost("join/{eventId}")]
+        [TypeFilter(typeof(Event_NullCheckFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateJoinEventFilterAttribute))]
+        public IActionResult JoinEvent([FromRoute] Guid eventId)
+        {
+            var @event = HttpContext.Items["Event"] as Event;
+
+            var @user = HttpContext.Items["User"] as User;
+
+            e.AddParticipant(@event, @user);
 
             return Ok();
         }

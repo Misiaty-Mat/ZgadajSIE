@@ -40,7 +40,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
             if (user == null)
             {
-                context.ModelState.AddModelError("Autologin", "User not found.");
+                context.ModelState.AddModelError("Autologin", $"User with id '{userId}' not found.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
                     Status = StatusCodes.Status404NotFound
@@ -52,7 +52,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
             // dodaj usera do httpcontext
 
-            context.HttpContext.Items["User"] = new UserWithoutSensitiveDataDTO(user);
+            context.HttpContext.Items["User"] = user;
 
             await next();
         }

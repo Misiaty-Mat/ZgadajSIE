@@ -3,7 +3,7 @@ using ZgadajSieAPI.Models.DTO;
 
 namespace ZgadajSieAPI.Models.Validations
 {
-    public class EventDetails_MaxAttendanceAttribute : ValidationAttribute
+    public class EventDetails_MaxParticipationAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
@@ -14,17 +14,9 @@ namespace ZgadajSieAPI.Models.Validations
                 return new ValidationResult("Event details object is empty.");
             }
 
-            if (details.MaxAttendance <= 0)
+            if (details.MaxParticipation < 2)
             {
-                return new ValidationResult("Value must be an integer greater than 0.");
-            }
-
-            if (details.MinAttendance != null)
-            {
-                if (details.MaxAttendance < details.MinAttendance)
-                {
-                    return new ValidationResult($"Value must be an integer greater than {details.MinAttendance}.");
-                }
+                return new ValidationResult("Value must be an integer greater than 2.");
             }
 
             return ValidationResult.Success;

@@ -7,19 +7,6 @@ namespace ZgadajSieAPI.Models.DTO
     {
         [Required]
         public string Title { get; set; }
-        
-        [Required]
-        [Event_StartDate]
-        public DateTime StartDate { get; set; }
-
-        [Event_OlderOrEqualToStartDate]
-        public DateTime EndDate { get; set; }
-
-        [Required]
-        public string Latitude { get; set; }
-
-        [Required]
-        public string Longitude { get; set; }
 
         public string? Description { get; set; }
 
@@ -29,10 +16,17 @@ namespace ZgadajSieAPI.Models.DTO
 
         public string? BuildingNumber { get; set; }
 
-        [EventDetails_MinAttendance]
-        public int? MinAttendance { get; set; }
+        [EventDetails_MaxParticipation]
+        public int? MaxParticipation { get; set; }
 
-        [EventDetails_MaxAttendance]
-        public int? MaxAttendance { get; set; }
+        [Required]
+        [Event_StartDate]
+        public DateTime StartDate { get; set; }
+
+        [Required]
+        public string Latitude { get; set; }
+
+        [Required]
+        public string Longitude { get; set; }
     }
 }

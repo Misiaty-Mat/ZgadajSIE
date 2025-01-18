@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ZgadajSieAPI.Models
 {
@@ -9,6 +10,9 @@ namespace ZgadajSieAPI.Models
         [ForeignKey("Event")]
         public Guid EventId { get; set; }
 
+        [Required]
+        public string Title { get; set; }
+
         public string? Description { get; set; }
 
         public string? City { get; set; }
@@ -17,9 +21,7 @@ namespace ZgadajSieAPI.Models
 
         public string? BuildingNumber { get; set; }
 
-        public int? MinAttendance { get; set; }
-
-        public int? MaxAttendance { get; set; }
+        public int? MaxParticipation { get; set; }
 
 
         // Relations stuff

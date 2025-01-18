@@ -1,6 +1,6 @@
 ﻿namespace ZgadajSieAPI.Models.DTO
 {
-    public class UserWithoutSensitiveDataDTO
+    public class UserDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -9,7 +9,7 @@
         public List<Event> OrganizedEvents { get; set; }
         public List<Event> JoinedEvents { get; set; }
 
-        public UserWithoutSensitiveDataDTO(User user)
+        public UserDTO(User user)
         {
             Id = user.Id;
             Name = user.Name;
@@ -17,6 +17,10 @@
             Profile = user.Profile;
             OrganizedEvents = user.OrganizedEvents;
             JoinedEvents = user.JoinedEvents;
+        }
+        public UserDTO()
+        {
+            
         }
     }
 }
