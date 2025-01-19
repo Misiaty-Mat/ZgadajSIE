@@ -6,9 +6,9 @@ namespace ZgadajSieAPI.Models.DTO
     {
         public Guid EventId { get; set; }
 
-        public string Latitude { get; set; }
+        public double Latitude { get; set; }
 
-        public string Longitude { get; set; }
+        public double Longitude { get; set; }
 
         [MaxLength(50)]
         public string TitleShort { get; set; }

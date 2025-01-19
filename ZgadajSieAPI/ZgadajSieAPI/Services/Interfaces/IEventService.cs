@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ZgadajSieAPI.Models;
 using ZgadajSieAPI.Models.DTO;
+using ZgadajSieAPI.Models.Other;
 
 namespace ZgadajSieAPI.Services.Interfaces
 {
@@ -9,6 +10,6 @@ namespace ZgadajSieAPI.Services.Interfaces
         List<EventMapPinDTO> FetchEventPinsToList();
         Event CreateNewEvent(EventCreateDTO model, string userId);
         void AddParticipant(Event @event, User user);
-        List<EventPanelDTO> FilterEventsToList();
+        List<EventPanelDTO> FilterEventsToList(EventFilterRequest request);
     }
 }

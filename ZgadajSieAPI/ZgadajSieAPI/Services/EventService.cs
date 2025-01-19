@@ -1,6 +1,7 @@
 ﻿using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models;
 using ZgadajSieAPI.Models.DTO;
+using ZgadajSieAPI.Models.Other;
 using ZgadajSieAPI.Services.Interfaces;
 
 namespace ZgadajSieAPI.Services
@@ -78,8 +79,12 @@ namespace ZgadajSieAPI.Services
             return;
         }
 
-        public List<EventPanelDTO> FilterEventsToList()
+        public List<EventPanelDTO> FilterEventsToList(EventFilterRequest request)
         {
+            // może będzie trzeba dodać interfejs czy coś jak nie pyknie
+
+            var query = db.Events.AsQueryable();
+
             return new List<EventPanelDTO>();
         }
     }

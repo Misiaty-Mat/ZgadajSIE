@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ZgadajSieAPI.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialPostIdentity : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,12 +32,11 @@ namespace ZgadajSieAPI.Data.Migrations
                     EventId = table.Column<Guid>(type: "uuid", nullable: false),
                     OrganizerId = table.Column<Guid>(type: "uuid", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeleteDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Status = table.Column<string>(type: "text", nullable: false),
-                    Latitude = table.Column<string>(type: "text", nullable: false),
-                    Longitude = table.Column<string>(type: "text", nullable: false)
+                    Latitude = table.Column<double>(type: "double precision", nullable: false),
+                    Longitude = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -72,39 +71,15 @@ namespace ZgadajSieAPI.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventDetails",
-                columns: table => new
-                {
-                    EventId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EventName = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    City = table.Column<string>(type: "text", nullable: true),
-                    Street = table.Column<string>(type: "text", nullable: true),
-                    BuildingNumber = table.Column<string>(type: "text", nullable: true),
-                    MinAttendee = table.Column<int>(type: "integer", nullable: true),
-                    MaxAttendee = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventDetails", x => x.EventId);
-                    table.ForeignKey(
-                        name: "FK_EventDetails_Events_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "EventId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EventRegistrations",
                 columns: table => new
                 {
-                    AttendeesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    JoinedEventsEventId = table.Column<Guid>(type: "uuid", nullable: false)
+                    JoinedEventsEventId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ParticipantsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EventRegistrations", x => new { x.AttendeesId, x.JoinedEventsEventId });
+                    table.PrimaryKey("PK_EventRegistrations", x => new { x.JoinedEventsEventId, x.ParticipantsId });
                     table.ForeignKey(
                         name: "FK_EventRegistrations_Events_JoinedEventsEventId",
                         column: x => x.JoinedEventsEventId,
@@ -112,17 +87,40 @@ namespace ZgadajSieAPI.Data.Migrations
                         principalColumn: "EventId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EventRegistrations_Users_AttendeesId",
-                        column: x => x.AttendeesId,
+                        name: "FK_EventRegistrations_Users_ParticipantsId",
+                        column: x => x.ParticipantsId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EventsDetails",
+                columns: table => new
+                {
+                    EventId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    City = table.Column<string>(type: "text", nullable: true),
+                    Street = table.Column<string>(type: "text", nullable: true),
+                    BuildingNumber = table.Column<string>(type: "text", nullable: true),
+                    MaxParticipation = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventsDetails", x => x.EventId);
+                    table.ForeignKey(
+                        name: "FK_EventsDetails_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "EventId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_EventRegistrations_JoinedEventsEventId",
+                name: "IX_EventRegistrations_ParticipantsId",
                 table: "EventRegistrations",
-                column: "JoinedEventsEventId");
+                column: "ParticipantsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_OrganizerId",
@@ -140,10 +138,10 @@ namespace ZgadajSieAPI.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EventDetails");
+                name: "EventRegistrations");
 
             migrationBuilder.DropTable(
-                name: "EventRegistrations");
+                name: "EventsDetails");
 
             migrationBuilder.DropTable(
                 name: "Profiles");

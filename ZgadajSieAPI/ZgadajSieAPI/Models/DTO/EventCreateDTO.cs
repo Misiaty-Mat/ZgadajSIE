@@ -24,9 +24,11 @@ namespace ZgadajSieAPI.Models.DTO
         public DateTime StartDate { get; set; }
 
         [Required]
-        public string Latitude { get; set; }
+        [Event_Latitude]
+        public double Latitude { get; set; }
 
         [Required]
-        public string Longitude { get; set; }
+        [Event_Longitude]
+        public double Longitude { get; set; }
     }
 }

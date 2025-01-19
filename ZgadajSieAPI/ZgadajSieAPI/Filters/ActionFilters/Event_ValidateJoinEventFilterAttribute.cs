@@ -44,7 +44,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                     .Collection(e => e.Participants)
                     .LoadAsync();
 
-            if (@event.EventDetails.MaxParticipation > @event.Participants.Count)
+            if (@event.Participants.Count > @event.EventDetails.MaxParticipation)
             {
                 context.ModelState.AddModelError("Event", $"Event has reached its participants limit: {@event.EventDetails.MaxParticipation}.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)

@@ -5,6 +5,7 @@ using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Filters.ActionFilters;
 using ZgadajSieAPI.Models;
 using ZgadajSieAPI.Models.DTO;
+using ZgadajSieAPI.Models.Other;
 using ZgadajSieAPI.Services.Interfaces;
 
 namespace ZgadajSieAPI.Controllers
@@ -35,12 +36,13 @@ namespace ZgadajSieAPI.Controllers
         //    return Ok();
         //}
 
-        //[HttpGet]
-        //public IActionResult GetEvents(int range, string[] tags, string filter, bool defaultSortingOn, int page)
-        //{
-        //    var events = e.FilterEventsToList();
-        //    return Ok(new { Event = events });
-        //}
+        [HttpPost]
+        public IActionResult GetFilteredEvents([FromBody] EventFilterRequest request)
+        {
+            var events = e.FilterEventsToList(request);
+
+            return Ok(new { Event = events });
+        }
 
         [Authorize]
         [HttpGet("{eventId}")]

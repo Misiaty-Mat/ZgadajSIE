@@ -3,7 +3,7 @@ using ZgadajSieAPI.Models.DTO;
 
 namespace ZgadajSieAPI.Models.Validations
 {
-    public class EventDetails_MaxParticipationAttribute : ValidationAttribute
+    public class Event_LatitudeAttribute : ValidationAttribute
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
@@ -14,9 +14,16 @@ namespace ZgadajSieAPI.Models.Validations
                 return new ValidationResult("Event details object is empty.");
             }
 
-            if (@event.MaxParticipation < 2)
+            var lat = @event.Latitude;
+
+            if (Math.Round(lat, 6) != lat)
             {
-                return new ValidationResult("Value must be an integer greater than 2.");
+                return new ValidationResult("Latitude must have at most 6 decimal places.");
+            }
+
+            if (lat < -90 || lat > 90)
+            {
+                return new ValidationResult("Latitude must be between -90 and 90.");
             }
 
             return ValidationResult.Success;

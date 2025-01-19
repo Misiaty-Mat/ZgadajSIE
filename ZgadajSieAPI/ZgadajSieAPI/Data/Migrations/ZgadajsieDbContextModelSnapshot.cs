@@ -49,13 +49,11 @@ namespace ZgadajSieAPI.Data.Migrations
                     b.Property<DateTime>("DeleteDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Latitude")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double>("Latitude")
+                        .HasColumnType("double precision");
 
-                    b.Property<string>("Longitude")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double>("Longitude")
+                        .HasColumnType("double precision");
 
                     b.Property<Guid>("OrganizerId")
                         .HasColumnType("uuid");

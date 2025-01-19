@@ -12,8 +12,8 @@ using ZgadajSieAPI.Data;
 namespace ZgadajSieAPI.Data.Migrations
 {
     [DbContext(typeof(ZgadajsieDbContext))]
-    [Migration("20250118135141_EventDropEndDate")]
-    partial class EventDropEndDate
+    [Migration("20250119163830_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,13 +52,11 @@ namespace ZgadajSieAPI.Data.Migrations
                     b.Property<DateTime>("DeleteDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Latitude")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double>("Latitude")
+                        .HasColumnType("double precision");
 
-                    b.Property<string>("Longitude")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double>("Longitude")
+                        .HasColumnType("double precision");
 
                     b.Property<Guid>("OrganizerId")
                         .HasColumnType("uuid");
@@ -67,10 +65,6 @@ namespace ZgadajSieAPI.Data.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -95,13 +89,14 @@ namespace ZgadajSieAPI.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int?>("MaxAttendance")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("MinAttendance")
+                    b.Property<int?>("MaxParticipation")
                         .HasColumnType("integer");
 
                     b.Property<string>("Street")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("EventId");
