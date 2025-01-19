@@ -10,8 +10,7 @@ const getToken = () => localStorage.getItem(TOKEN_NAME);
 export const UserContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const isLoggedIn = () =>
-    localStorage.getItem(TOKEN_NAME) !== null && user !== null;
+  const isLoggedIn = localStorage.getItem(TOKEN_NAME) !== null && user !== null;
 
   const handleAuthResponseError = (resError) => {
     if (resError.status === 401) {

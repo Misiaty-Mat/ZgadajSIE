@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { debounce } from "lodash";
 import EventMarker from "./event-marker";
-import BasicModal from "../../modal/BasicModal";
 import { useStores } from "../../../contexts/event-context";
+import { fetchEventById } from "../../../api/events/events";
+import { handleError } from "../../../api/utils";
+import EventModal from "./event-modal/EventModal";
 
 const EventMarkers = observer(() => {
   const clusterer = useRef(null);
@@ -50,22 +52,16 @@ const EventMarkers = observer(() => {
     });
   }, 100);
 
-  const getFullEventById = (eventId) => {
-    return {
-      id: eventId,
-      title: "Wydarzenie o id: " + eventId,
-      address: "Abc ul. def",
-    };
-  };
-
-  const joinEvent = (eventId) => {
-    alert("Joined event " + eventId);
-  };
-
   const onMarkerClick = (pin) => {
     map.panTo({ lat: Number(pin.latitude), lng: Number(pin.longitude) });
+    fetchEventById(pin.eventId)
+      .then((response) => {
+        setSelectedEvent(response.data.event);
+      })
+      .catch((error) => {
+        handleError(error);
+      });
     toggleModal();
-    setSelectedEvent(getFullEventById(pin.eventId));
   };
 
   return (
@@ -82,14 +78,11 @@ const EventMarkers = observer(() => {
       ))}
 
       {selectedEvent && (
-        <BasicModal
-          isOpen={isModalOpen}
-          title={selectedEvent.title}
-          onClose={toggleModal}
-        >
-          {selectedEvent.address}
-          <button onClick={() => joinEvent(selectedEvent.id)}>Dołącz!</button>
-        </BasicModal>
+        <EventModal
+          selectedEvent={selectedEvent}
+          isModalOpen={isModalOpen}
+          toggleModal={toggleModal}
+        />
       )}
     </>
   );

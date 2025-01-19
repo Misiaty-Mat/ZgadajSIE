@@ -6,6 +6,7 @@ import DateTimeStep from "../form-steps/DateTimeStep";
 import { createEvent } from "../../../../api/events/events";
 import { toast } from "react-toastify";
 import { useStores } from "../../../../contexts/event-context";
+import { handleError } from "../../../../api/utils";
 
 const AddEventForm = ({ onReturn }) => {
   const formikRef = useRef(null);
@@ -128,15 +129,7 @@ const AddEventForm = ({ onReturn }) => {
               toast.success("Twoje wydarzenie zostało utworzone!");
             })
             .catch((error) => {
-              if (error.status === 400) {
-                Object.values(error.response.data.errors)
-                  .flatMap((arr) => arr)
-                  .forEach((errorMsg) => {
-                    toast.error(errorMsg);
-                  });
-              } else {
-                toast.error("Coś poszło nie tak... " + error.message);
-              }
+              handleError(error);
             });
           onReturn();
         }}
