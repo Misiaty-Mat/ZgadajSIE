@@ -65,9 +65,9 @@ namespace ZgadajSieAPI.Controllers
         [TypeFilter(typeof(User_ValidateAutologinFilterAttribute))]
         public IActionResult Autologin([FromHeader(Name = "Authorization")] string token)
         {
-            var user = HttpContext.Items["User"] as UserDTO;
+            var user = HttpContext.Items["User"] as User;
 
-            return Ok( new { Message = "Login succesful.", User = user });
+            return Ok( new { Message = "Login succesful.", User = new UserDTO(user) });
         }
     }
 }

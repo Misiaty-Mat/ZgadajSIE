@@ -29,6 +29,18 @@ namespace ZgadajSieAPI.Controllers
             return Ok(new { Pins = pins });
         }
 
+        [HttpGet]
+        public IActionResult GetEvents()
+        {
+            return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult GetEvents([FromRoute] string filter, string[] tags)
+        {
+            return Ok();
+        }
+
         [Authorize]
         [HttpGet("{eventId}")]
         [TypeFilter(typeof(Event_NullCheckFilterAttribute))]
