@@ -2,6 +2,7 @@ import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
 import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react-lite";
+import { debounce } from "lodash";
 import EventMarker from "./event-marker";
 import BasicModal from "../../modal/BasicModal";
 import { useStores } from "../../../contexts/event-context";
@@ -34,7 +35,7 @@ const EventMarkers = observer(() => {
     clusterer.current?.addMarkers(Object.values(markers));
   }, [markers]);
 
-  const setMarkerRef = (marker, id) => {
+  const setMarkerRef = debounce((marker, id) => {
     if (marker && markers[id]) return;
     if (!marker && !markers[id]) return;
 
@@ -47,7 +48,7 @@ const EventMarkers = observer(() => {
         return newMarkers;
       }
     });
-  };
+  }, 100);
 
   const getFullEventById = (eventId) => {
     return {
@@ -76,7 +77,7 @@ const EventMarkers = observer(() => {
           ref={(marker) => setMarkerRef(marker, pin.eventId)}
           onClick={() => onMarkerClick(pin)}
         >
-          <EventMarker title={pin.titleShorten} />
+          <EventMarker title={pin.titleShort} />
         </AdvancedMarker>
       ))}
 
