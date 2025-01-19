@@ -114,7 +114,7 @@ const AddEventForm = ({ onReturn }) => {
         initialValues={{
           title: "",
           latitude: null,
-          longitude: "",
+          longitude: null,
           startDate: "",
           city: "",
           street: "",

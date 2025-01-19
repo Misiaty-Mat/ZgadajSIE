@@ -53,7 +53,7 @@ const EventMarkers = observer(() => {
   }, 100);
 
   const onMarkerClick = (pin) => {
-    map.panTo({ lat: Number(pin.latitude), lng: Number(pin.longitude) });
+    map.panTo({ lat: pin.latitude, lng: pin.longitude });
     fetchEventById(pin.eventId)
       .then((response) => {
         setSelectedEvent(response.data.event);
@@ -69,7 +69,7 @@ const EventMarkers = observer(() => {
       {eventStore.eventPins.map((pin) => (
         <AdvancedMarker
           key={pin.eventId}
-          position={{ lat: Number(pin.latitude), lng: Number(pin.longitude) }}
+          position={{ lat: pin.latitude, lng: pin.longitude }}
           ref={(marker) => setMarkerRef(marker, pin.eventId)}
           onClick={() => onMarkerClick(pin)}
         >
