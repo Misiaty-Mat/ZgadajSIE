@@ -24,31 +24,32 @@ namespace ZgadajSieAPI.Controllers
         [HttpGet("pins")]
         public IActionResult GetPins()
         {
-            var pins = e.GetEventPins();
+            var pins = e.FetchEventPinsToList();
 
             return Ok(new { Pins = pins });
         }
 
-        [HttpGet]
-        public IActionResult GetEvents()
-        {
-            return Ok();
-        }
+        //[HttpGet]
+        //public IActionResult GetEvents()
+        //{
+        //    return Ok();
+        //}
 
-        [HttpGet]
-        public IActionResult GetEvents([FromRoute] string filter, string[] tags)
-        {
-            return Ok();
-        }
+        //[HttpGet]
+        //public IActionResult GetEvents(int range, string[] tags, string filter, bool defaultSortingOn, int page)
+        //{
+        //    var events = e.FilterEventsToList();
+        //    return Ok(new { Event = events });
+        //}
 
         [Authorize]
         [HttpGet("{eventId}")]
         [TypeFilter(typeof(Event_NullCheckFilterAttribute))]
         public IActionResult GetEventById([FromRoute] Guid eventId)
         {
-            var @event = HttpContext.Items["Event"] as EventDTO;
+            var @event = HttpContext.Items["Event"] as Event;
 
-            return Ok(new { Event = @event });
+            return Ok(new { Event = new EventDTO(@event, @event.EventDetails) });
         }
 
         [Authorize]

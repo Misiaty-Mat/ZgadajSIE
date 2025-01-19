@@ -6,8 +6,9 @@ namespace ZgadajSieAPI.Services.Interfaces
 {
     public interface IEventService
     {
-        List<EventMapPinDTO> GetEventPins();
+        List<EventMapPinDTO> FetchEventPinsToList();
         Event CreateNewEvent(EventCreateDTO model, string userId);
         void AddParticipant(Event @event, User user);
+        List<EventPanelDTO> FilterEventsToList();
     }
 }

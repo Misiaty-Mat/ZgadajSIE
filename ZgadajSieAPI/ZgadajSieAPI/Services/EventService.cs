@@ -14,7 +14,7 @@ namespace ZgadajSieAPI.Services
             this.db = db;
         }
 
-        public List<EventMapPinDTO> GetEventPins()
+        public List<EventMapPinDTO> FetchEventPinsToList()
         {
             var events = db.Events.ToList();
 
@@ -76,6 +76,11 @@ namespace ZgadajSieAPI.Services
             await db.SaveChangesAsync();
 
             return;
+        }
+
+        public List<EventPanelDTO> FilterEventsToList()
+        {
+            return new List<EventPanelDTO>();
         }
     }
 }
