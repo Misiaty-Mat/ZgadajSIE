@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
 using ZgadajSieAPI.Data;
+using ZgadajSieAPI.Data.Migrations;
 using ZgadajSieAPI.Models;
 using ZgadajSieAPI.Models.DTO;
 
@@ -17,45 +19,15 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            // pusty obiekt
-
-            var eventId = context.ActionArguments["eventId"] as Guid?;
-
-            if (eventId == null)
-            {
-                context.ModelState.AddModelError("EventId", "Id not found.");
-                var problemDetails = new ValidationProblemDetails(context.ModelState)
-                {
-                    Status = StatusCodes.Status404NotFound
-                };
-                context.Result = new NotFoundObjectResult(problemDetails);
-
-                return;
-            }
-
-            // nie znaleziono wydarzenia
-
-            var @event = await db.Events.FindAsync(eventId);
-
-            if (@event == null)
-            {
-                context.ModelState.AddModelError("Event", $"Event with id '{eventId}' not found.");
-                var problemDetails = new ValidationProblemDetails(context.ModelState)
-                {
-                    Status = StatusCodes.Status404NotFound
-                };
-                context.Result = new NotFoundObjectResult(problemDetails);
-
-                return;
-            }
+            var @event = context.HttpContext.Items["Event"] as Event;
 
             // nie pobrano szczegółów wydarzenia
 
-            var eventDetails = await db.EventsDetails.FindAsync(eventId);
+            var eventDetails = await db.EventsDetails.FindAsync(@event.EventId);
 
             if (eventDetails == null)
             {
-                context.ModelState.AddModelError("EventDetails", $"Event details with id '{eventId}' not found.");
+                context.ModelState.AddModelError("EventDetails", $"Event details with id '{@event.EventId}' not found.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
                     Status = StatusCodes.Status404NotFound
@@ -65,7 +37,16 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                 return;
             }
 
+            // pobranie tagów wydarzenia
+
+            var tags = await db.Events
+                .Where(e => e.EventId == @event.EventId)
+                .SelectMany(e => e.Tags)
+                .ToListAsync();
+
             // dodaj event do httpcontext
+
+            @event.Tags = tags;
 
             @event.EventDetails = eventDetails;
 

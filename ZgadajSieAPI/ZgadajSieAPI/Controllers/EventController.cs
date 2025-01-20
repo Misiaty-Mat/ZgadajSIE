@@ -44,8 +44,8 @@ namespace ZgadajSieAPI.Controllers
             return Ok(new { Event = events });
         }
 
-        [Authorize]
         [HttpGet("{eventId}")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
         [TypeFilter(typeof(Event_NullCheckFilterAttribute))]
         public IActionResult GetEventById([FromRoute] Guid eventId)
         {
@@ -56,11 +56,14 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPost("create")]
+        [TypeFilter(typeof(Event_CreateEventFilterAttribute))]
         public async Task<IActionResult> CreateEvent([FromBody] EventCreateDTO model)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var @event = e.CreateNewEvent(model, userId);
+            var tags = HttpContext.Items["tags"] as List<Tag>;
+
+            var @event = e.CreateNewEvent(model, userId, tags);
 
             db.Events.Add(@event);
 
@@ -76,6 +79,7 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPost("join/{eventId}")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
         [TypeFilter(typeof(Event_NullCheckFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateJoinEventFilterAttribute))]
         public IActionResult JoinEvent([FromRoute] Guid eventId)
@@ -85,6 +89,23 @@ namespace ZgadajSieAPI.Controllers
             var @user = HttpContext.Items["User"] as User;
 
             e.AddParticipant(@event, @user);
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPost("{eventId}/attach")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateTagIdsFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
+        //[TypeFilter(typeof(Event_ValidateTagsDuplicationFilterAttribute))]
+        public async Task<IActionResult> AttachTagsToEvent([FromRoute] Guid eventId, [FromBody] TagIdsDTO tagIds)
+        {
+            var tags = HttpContext.Items["Tags"] as List<Tag>;
+
+            var @event = HttpContext.Items["Event"] as Event;
+
+            e.AttachTagsToEvent(@event, tags);
 
             return Ok();
         }

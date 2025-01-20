@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZgadajSieAPI.Models.DTO
 {
@@ -22,6 +23,8 @@ namespace ZgadajSieAPI.Models.DTO
 
         public int? MaxParticipation { get; set; }
 
+        public List<string> TagNames { get; set; }
+
         public EventDTO(Event e, EventDetails d)
         {
             // event
@@ -35,6 +38,16 @@ namespace ZgadajSieAPI.Models.DTO
             Street = d.Street;
             BuildingNumber = d.BuildingNumber;
             MaxParticipation = d.MaxParticipation;
+            // tags
+            if (e.Tags != null)
+            {
+                TagNames = new List<string>();
+
+                for ( int i = 0; i < e.Tags.Count; i++)
+                {
+                    TagNames.Add(e.Tags[i].Name);
+                }
+            }
         }
     }
 }

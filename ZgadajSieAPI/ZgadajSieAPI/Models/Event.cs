@@ -33,6 +33,7 @@ namespace ZgadajSieAPI.Models
 
         // Relations stuff
         public User Organiser { get; set; }
+        public List<Tag> Tags { get; set; }
         public List<User> Participants { get; set; } = new List<User>();
     }
 }

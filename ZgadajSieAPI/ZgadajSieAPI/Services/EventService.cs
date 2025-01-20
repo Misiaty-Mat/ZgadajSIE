@@ -31,14 +31,14 @@ namespace ZgadajSieAPI.Services
                 }
             }
 
-            catch(ArgumentOutOfRangeException) { }
+            catch (ArgumentOutOfRangeException) { }
 
-            catch(Exception) { }
+            catch (Exception) { }
 
             return pins;
         }
 
-        public Event CreateNewEvent(EventCreateDTO model, string userId)
+        public Event CreateNewEvent(EventCreateDTO model, string userId, List<Tag>? tags)
         {
             // parse id
 
@@ -62,6 +62,7 @@ namespace ZgadajSieAPI.Services
                     BuildingNumber = model.BuildingNumber,
                     MaxParticipation = model.MaxParticipation,
                 },
+                Tags = tags,
                 CreationDate = DateTime.UtcNow,
                 DeleteDate = DateTime.UtcNow.AddMonths(1),
                 Status = "created"
@@ -86,6 +87,17 @@ namespace ZgadajSieAPI.Services
             var query = db.Events.AsQueryable();
 
             return new List<EventPanelDTO>();
+        }
+
+        public async void AttachTagsToEvent(Event @event, List<Tag> tags)
+        {
+            for (int i = 0; i < tags.Count; i++)
+            {
+                @event.Tags.Add(tags[i]);
+            }
+            await db.SaveChangesAsync();
+
+            return;
         }
     }
 }
