@@ -45,6 +45,8 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                 };
                 context.Result = new BadRequestObjectResult(problemDetails);
             }
+
+            await next();
         }
     }
 }

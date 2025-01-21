@@ -1,4 +1,6 @@
-﻿using ZgadajSieAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models;
 using ZgadajSieAPI.Models.DTO;
 using ZgadajSieAPI.Models.Other;
@@ -71,7 +73,7 @@ namespace ZgadajSieAPI.Services
             return newEvent;
         }
 
-        public async void AddParticipant(Event @event, User user)
+        public async Task AddParticipant(Event @event, User user)
         {
             @event.Participants.Add(user);
 
@@ -89,15 +91,33 @@ namespace ZgadajSieAPI.Services
             return new List<EventPanelDTO>();
         }
 
-        public async void AttachTagsToEvent(Event @event, List<Tag> tags)
+        public async Task<List<Guid>> AttachTagsToEvent(Event @event, List<Tag> tags)
         {
-            for (int i = 0; i < tags.Count; i++)
+            var addedTagIds = new List<Guid>();
+
+            @event.Tags = new List<Tag>();
+
+            foreach (var tag in tags)
             {
-                @event.Tags.Add(tags[i]);
+                @event.Tags.Add(tag);
+                addedTagIds.Add(tag.Id);
             }
             await db.SaveChangesAsync();
 
-            return;
+            return addedTagIds;
+        }
+
+        public async Task<List<Guid>> DetachTagsToEvent(Event @event, List<Tag> tags)
+        {
+            var deletedTags = new List<Tag>();
+
+            List<Guid> tagIdsToRemove = tags.Select(t => t.Id).ToList();
+
+            @event.Tags.RemoveAll(tag => tagIdsToRemove.Contains(tag.Id));
+
+            await db.SaveChangesAsync();
+
+            return tagIdsToRemove;
         }
     }
 }

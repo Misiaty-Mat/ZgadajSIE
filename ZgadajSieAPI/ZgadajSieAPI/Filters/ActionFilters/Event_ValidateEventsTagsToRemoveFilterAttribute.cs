@@ -1,37 +1,34 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models;
+using ZgadajSieAPI.Models.DTO;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class Event_ValidateTagsDuplicationFilterAttribute : ActionFilterAttribute
+    public class Event_ValidateEventsTagsToRemoveFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public Event_ValidateTagsDuplicationFilterAttribute(ZgadajsieDbContext db)
+        public Event_ValidateEventsTagsToRemoveFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            var tagsToRemove = context.HttpContext.Items["Tags"] as List<Tag>;
+
             var @event = context.HttpContext.Items["Event"] as Event;
 
-            var tags = context.HttpContext.Items["Tags"] as List<Tag>;
+            var tags = @event.Tags;
 
-            // wyrzuć powrótki
-
-            var attachedTags = await db.Events
-            .Where(e => e.EventId == @event.EventId)
-            .SelectMany(e => e.Tags)
-            .ToListAsync();
+            // wykluczenie tagów
 
             for (int i = 0; i < tags.Count; i++)
             {
-                for (int j = 0; j < attachedTags.Count; j++)
+                for (int j = 0; j < tagsToRemove.Count; j++)
                 {
-                    if (tags[i].Id == attachedTags[j].Id)
+                    if (tags[i].Id != tagsToRemove[j].Id)
                     {
                         tags.Remove(tags[i]);
                     }
@@ -42,7 +39,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
             if (tags.Count == 0)
             {
-                context.ModelState.AddModelError("Tag", $"Given tags are already attached to the event.");
+                context.ModelState.AddModelError("Tag", $"None of given tags is attached to the event.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
                     Status = StatusCodes.Status400BadRequest
@@ -51,10 +48,6 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
                 return;
             }
-
-            // dodaj tagi do httpcontexu
-
-            context.HttpContext.Items["Tags"] = tags;
 
             await next();
         }

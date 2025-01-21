@@ -6,21 +6,21 @@ using ZgadajSieAPI.Models;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class Event_ValidateTagIdsFilterAttribute : ActionFilterAttribute
+    public class Event_ValidateSentTagIdsFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public Event_ValidateTagIdsFilterAttribute(ZgadajsieDbContext db)
+        public Event_ValidateSentTagIdsFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            // nieistniejace tagi
+            // pusty obiekt
 
-            var tagIds = context.ActionArguments["request"] as List<Guid>;
+            var dto = context.ActionArguments["tagIds"] as TagIdsDTO;
 
-            if (tagIds == null)
+            if (dto == null)
             {
                 context.ModelState.AddModelError("Tag", $"No tag id sent.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
@@ -31,6 +31,10 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
                 return;
             }
+
+            // brak tagów
+
+            var tagIds = dto.TagIds;
 
             List<Tag> tags = new List<Tag>();
 
