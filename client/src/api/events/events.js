@@ -14,6 +14,12 @@ export const fetchPins = async () => {
   });
 };
 
+export const fetchEventList = async (request) => {
+  return axios.post(`${API_URL}/event`, request, {
+    headers: HEADERS,
+  });
+};
+
 export const joinEventPost = async (eventId) => {
   return axios.post(
     `${API_URL}/event/join/${eventId}`,

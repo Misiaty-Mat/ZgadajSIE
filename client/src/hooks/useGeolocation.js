@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const useGeolocation = () => {
-  const [location, setLocation] = useState({ lat: 52.0693, lng: 19.4803 });
+  const [location, setLocation] = useState({ lat: 0, lng: 0 });
 
   useEffect(() => {
     if (navigator.geolocation) {

@@ -9,6 +9,7 @@ import LogoutButton from "../auth/logout-button/LogoutButton";
 import AuthModalButton from "../auth/auth-modal-button/AuthModalButton";
 import AddEventButton from "../events/add-event/button/AddEventButton";
 import ConfirmEventArrivalButton from "../events/confirm-event-arrival/ConfirmEventArivalButton";
+import EventList from "../events/event-list/EventList";
 
 const MainPage = () => {
   const { user } = useAuth();
@@ -30,7 +31,7 @@ const MainPage = () => {
       {getAuthButton()}
       <AddEventButton />
       <ConfirmEventArrivalButton />
-      {/* <EventList /> */}
+      <EventList />
       <EventMap />
       <ToastContainer />
     </div>
