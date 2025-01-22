@@ -5,3 +5,5 @@ export const HEADERS = {
   "Content-Type": "application/json",
   Accept: "*/*",
 };
+
+export const DISTANCE_STEPS = [1, 5, 25, 50, 100, 250, 500, null]; //null - infinite distance

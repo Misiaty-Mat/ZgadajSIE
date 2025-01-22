@@ -33,7 +33,7 @@ const EventMap = ({
   const { eventStore } = useStores();
 
   useEffect(() => {
-    eventStore.updateMapPins();
+    eventStore.fetchEvents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -90,6 +90,7 @@ const EventMap = ({
       <APIProvider
         apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
         solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
+        libraries={["geometry", "places"]}
       >
         <Map
           id={process.env.REACT_APP_MAP_ID}

@@ -125,7 +125,7 @@ const AddEventForm = ({ onReturn }) => {
         onSubmit={(values) => {
           createEvent(values)
             .then(() => {
-              eventStore.updateMapPins();
+              eventStore.fetchEvents();
               toast.success("Twoje wydarzenie zostało utworzone!");
             })
             .catch((error) => {
