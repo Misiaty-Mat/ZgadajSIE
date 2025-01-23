@@ -8,6 +8,7 @@ import {
 } from "@vis.gl/react-google-maps";
 import { setDefaults, fromLatLng } from "react-geocode";
 import { toast } from "react-toastify";
+import "./event-map.css";
 
 import useGeolocation from "../../hooks/useGeolocation";
 import EventMarkers from "./markers/event-markers";
@@ -86,7 +87,7 @@ const EventMap = ({
   };
 
   return (
-    <div style={{ height: height, width: width }}>
+    <div className="main-page-sectionRight-map">
       <APIProvider
         apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
         solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"
