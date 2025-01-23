@@ -1,71 +1,70 @@
 import { useEffect, useState } from "react";
-import { fetchEventList } from "../../../api/events/events";
 import useGeolocation from "../../../hooks/useGeolocation";
 import Event from "../event/Event";
-import { handleError } from "../../../api/utils";
-import { EVENT_LIST_MOCK } from "../../../util/mocks";
+import { useStores } from "../../../contexts/event-context";
+import { useFormik } from "formik";
+import { DISTANCE_STEPS } from "../../../util/constants";
+import { observer } from "mobx-react-lite";
 
-const EventList = () => {
+const EventList = observer(() => {
   const [page, setPage] = useState(0);
-  const [range, setRange] = useState(10);
-  const [events, setEvents] = useState([]);
+  const [searchedTitle, setSearchedTitle] = useState("");
+  const [range, setRange] = useState(DISTANCE_STEPS.length - 1);
+  const [sortBy, setSortBy] = useState("distance");
 
-  const { lat, lng } = useGeolocation();
-
-  const fetchEvents = (request) => {
-    fetchEventList(request)
-      .then((response) => {
-        setEvents(response.data.events || EVENT_LIST_MOCK);
-      })
-      .catch((error) => handleError(error));
-  };
+  const { eventStore } = useStores();
 
   useEffect(() => {
-    const request = {
-      latitude: lat,
-      longitude: lng,
-      tagIds: [],
-      sortingOption: "",
-      range,
-      page,
-    };
-    fetchEvents(request);
-  }, [lat, lng, setEvents]);
+    eventStore.fiterEvents(
+      {
+        title: searchedTitle,
+        range: DISTANCE_STEPS[range],
+      },
+      sortBy
+    );
+  }, [eventStore, range, searchedTitle, sortBy]);
 
   return (
     <div>
-      <label for="title">Szukaj</label>
-      <input name="title" />
+      <label htmlFor="title">Szukaj</label>
+      <input
+        name="title"
+        value={searchedTitle}
+        onChange={(e) => setSearchedTitle(e.target.value)}
+      />
 
-      <label for="filters">Filtry</label>
+      <label htmlFor="filters">Filtry</label>
       <select name="filters">
         <option>-</option>
         <option>idk</option>
         <option>idk2</option>
       </select>
 
-      <label for="range">Zasięg</label>
+      <label htmlFor="range">Zasięg</label>
       <input
         type="range"
         name="range"
-        min="1"
-        max="500"
+        min="0"
+        max={DISTANCE_STEPS.length - 1}
         value={range}
-        onChange={(e) => setRange(e.target.value)}
+        onInput={(e) => setRange(e.target.value)}
       />
-      {range + "km"}
+      {(DISTANCE_STEPS[range] || "∞") + " km"}
 
-      <label for="sortBy">Sortuj</label>
-      <select name="sortBy">
-        <option>Dystans</option>
-        <option>Tytuł</option>
-        <option>Czas startu</option>
+      <label htmlFor="sortBy">Sortuj</label>
+      <select name="sortBy" onChange={(e) => setSortBy(e.target.value)}>
+        <option value="distance" selected>
+          Dystans
+        </option>
+        <option value="title">Alfabetycznie</option>
+        <option value="beginDateSoon">Od najwcześniejszych</option>
+        <option value="beginDateLate">Od najpóźniejszych</option>
       </select>
-      {events.map((event) => (
+      {eventStore.filteredEvents.map((event) => (
         <Event key={event.id} event={event} />
       ))}
     </div>
   );
-};
+});
 
 export default EventList;

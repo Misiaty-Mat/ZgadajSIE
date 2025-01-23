@@ -66,14 +66,14 @@ const EventMarkers = observer(() => {
 
   return (
     <>
-      {eventStore.eventPins.map((pin) => (
+      {eventStore.filteredEvents.map((pin) => (
         <AdvancedMarker
           key={pin.eventId}
           position={{ lat: pin.latitude, lng: pin.longitude }}
           ref={(marker) => setMarkerRef(marker, pin.eventId)}
           onClick={() => onMarkerClick(pin)}
         >
-          <EventMarker title={pin.titleShort} />
+          <EventMarker title={pin.title} />
         </AdvancedMarker>
       ))}
 

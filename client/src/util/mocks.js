@@ -8,6 +8,8 @@ export const EVENT_LIST_MOCK = [
     startDate: moment().add(3, "d").toISOString(),
     participation: 6,
     maxParticipation: 10,
+    latitude: 52.02001,
+    longitude: 16.540001,
   },
   {
     id: "2",
@@ -16,6 +18,8 @@ export const EVENT_LIST_MOCK = [
     startDate: moment().add(1, "d").toISOString(),
     participation: 5,
     maxParticipation: null,
+    latitude: 51.02001,
+    longitude: 15.540001,
   },
   {
     id: "3",
@@ -24,6 +28,8 @@ export const EVENT_LIST_MOCK = [
     startDate: moment().add(6, "d").toISOString(),
     participation: 2,
     maxParticipation: 4,
+    latitude: 53.02001,
+    longitude: 16.540001,
   },
   {
     id: "4",
@@ -32,5 +38,17 @@ export const EVENT_LIST_MOCK = [
     startDate: moment().add(5, "d").toISOString(),
     participation: 176,
     maxParticipation: null,
+    latitude: 52.02001,
+    longitude: 15.540001,
+  },
+  {
+    id: "5",
+    title: "Polowanie na foki",
+    city: "Poznań",
+    startDate: moment().add(9, "d").toISOString(),
+    participation: 3,
+    maxParticipation: null,
+    latitude: 80.02001,
+    longitude: -80.540001,
   },
 ];
