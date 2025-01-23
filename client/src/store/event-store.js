@@ -65,6 +65,18 @@ class EventStore {
       )
       .filter(
         (event) => !filters.range || event.distance <= filters.range * 1000
+      )
+      .filter(
+        (event) =>
+          !filters.dateRangeStart ||
+          moment(event.startDate).isAfter(moment(filters.dateRangeStart))
+      )
+      .filter(
+        (event) =>
+          !filters.dateRangeEnd ||
+          moment(event.startDate).isBefore(
+            moment(filters.dateRangeEnd).add(1, "d")
+          )
       );
 
     if (sortBy === "distance") {
