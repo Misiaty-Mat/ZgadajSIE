@@ -1,14 +1,16 @@
-import { makeAutoObservable, reaction } from "mobx";
-import { fetchPins } from "../api/events/events";
+import { makeAutoObservable } from "mobx";
 import { toast } from "react-toastify";
 import { EVENT_LIST_MOCK } from "../util/mocks";
 import moment from "moment";
+import { EVENTS_PER_PAGE } from "../util/constants";
 
 class EventStore {
   eventPins = [];
   events = [];
   filteredEvents = [];
   userLocation = null;
+  page = 1;
+  isLastPage = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -28,6 +30,11 @@ class EventStore {
   }
 
   assignDistancesToEvents() {
+    if (!this.userLocation) {
+      console.error("Cannot assign distances: user location is not set.");
+      return;
+    }
+
     this.events = this.events.map((event) => {
       const distance = this.getDistance(this.userLocation, event);
       return { ...event, distance };
@@ -47,7 +54,9 @@ class EventStore {
     this.assignDistancesToEvents();
   }
 
-  fiterEvents(filters, sortBy) {
+  filterEvents(filters, sortBy) {
+    this.page = 1;
+    this.isLastPage = false;
     this.filteredEvents = this.events
       .filter(
         (event) =>
@@ -71,18 +80,28 @@ class EventStore {
         moment(b.startDate).diff(moment(a.startDate))
       );
     }
+
+    if (this.filteredEvents.length <= EVENTS_PER_PAGE) {
+      this.isLastPage = true;
+    }
   }
 
-  updateMapPins() {
-    fetchPins()
-      .then((response) => {
-        if (this.eventPins.length !== response.data.pins.length) {
-          this.eventPins = response.data.pins;
-        }
-      })
-      .catch((error) => {
-        toast.error("Wystąpił błąd: " + error.message);
-      });
+  incrementPage = () => {
+    this.page = this.page + 1;
+
+    const filteredEventAmount = this.filteredEvents.length;
+    const loadEventCount = EVENTS_PER_PAGE * this.page;
+    if (loadEventCount > filteredEventAmount) {
+      this.isLastPage = true;
+    }
+  };
+
+  get paginatedEvents() {
+    if (this.isLastPage) {
+      return this.filteredEvents;
+    } else {
+      return this.filteredEvents.slice(0, EVENTS_PER_PAGE * this.page);
+    }
   }
 
   rad(x) {

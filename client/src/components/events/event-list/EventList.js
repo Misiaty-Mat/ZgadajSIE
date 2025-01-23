@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import useGeolocation from "../../../hooks/useGeolocation";
 import Event from "../event/Event";
 import { useStores } from "../../../contexts/event-context";
-import { useFormik } from "formik";
 import { DISTANCE_STEPS } from "../../../util/constants";
 import { observer } from "mobx-react-lite";
 
 const EventList = observer(() => {
-  const [page, setPage] = useState(0);
   const [searchedTitle, setSearchedTitle] = useState("");
   const [range, setRange] = useState(DISTANCE_STEPS.length - 1);
   const [sortBy, setSortBy] = useState("distance");
@@ -15,7 +12,7 @@ const EventList = observer(() => {
   const { eventStore } = useStores();
 
   useEffect(() => {
-    eventStore.fiterEvents(
+    eventStore.filterEvents(
       {
         title: searchedTitle,
         range: DISTANCE_STEPS[range],
@@ -60,9 +57,15 @@ const EventList = observer(() => {
         <option value="beginDateSoon">Od najwcześniejszych</option>
         <option value="beginDateLate">Od najpóźniejszych</option>
       </select>
-      {eventStore.filteredEvents.map((event) => (
+      {eventStore.paginatedEvents.map((event) => (
         <Event key={event.id} event={event} />
       ))}
+      <button
+        disabled={eventStore.isLastPage}
+        onClick={eventStore.incrementPage}
+      >
+        ...
+      </button>
     </div>
   );
 });
