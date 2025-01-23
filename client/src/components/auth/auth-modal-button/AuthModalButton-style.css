@@ -1,0 +1,36 @@
+.Modal-logOrRegister {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  gap: 100px;
+}
+.Modal-logOrRegister-Log {
+  padding: 0 50px 50px 50px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+.Modal-logOrRegister-Register {
+  padding: 0 50px 50px 70px;
+  max-width: 500px;
+  border-left: solid 1px #000;
+  margin: 0 auto;
+}
+.Modal-logOrRegister-Text {
+  font-size: 30px;
+  padding: 20px;
+}
+
+.Modal-logOrRegister-button {
+  font-size: 20px;
+  color: #fff;
+  font-weight: 300;
+  background-color: #0067b8;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.Modal-logOrRegister-button:hover {
+  background-color: #053f6c;
+}

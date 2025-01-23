@@ -7,3 +7,4 @@ export const HEADERS = {
 };
 
 export const DISTANCE_STEPS = [1, 5, 25, 50, 100, 250, 500, null]; //null - infinite distance
+export const EVENTS_PER_PAGE = 4;
