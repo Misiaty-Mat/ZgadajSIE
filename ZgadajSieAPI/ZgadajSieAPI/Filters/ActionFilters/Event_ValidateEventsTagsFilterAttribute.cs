@@ -19,15 +19,9 @@ namespace ZgadajSieAPI.Filters.ActionFilters
         {
             var @event = context.HttpContext.Items["Event"] as Event;
 
-            // pobranie tagów wydarzenia
+            // pobranie tagów wydarzenia (i powiązanie z EF)
 
-            //var tags = await db.Events
-            //    .Where(e => e.EventId == @event.EventId)
-            //    .SelectMany(e => e.Tags)
-            //    .ToListAsync();
-            // Oznacz obiekt jako śledzony przez EF Core
             db.Entry(@event).Collection(e => e.Tags).Load();
-
 
             // brak tagów na wydarzeniu
 

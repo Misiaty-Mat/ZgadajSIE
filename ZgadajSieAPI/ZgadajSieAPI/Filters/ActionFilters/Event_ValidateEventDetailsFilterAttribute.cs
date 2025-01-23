@@ -8,11 +8,11 @@ using ZgadajSieAPI.Models.DTO;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class Event_NullCheckFilterAttribute : ActionFilterAttribute
+    public class Event_ValidateEventDetailsFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public Event_NullCheckFilterAttribute(ZgadajsieDbContext db)
+        public Event_ValidateEventDetailsFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }
@@ -37,16 +37,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                 return;
             }
 
-            // pobranie tagów wydarzenia
-
-            var tags = await db.Events
-                .Where(e => e.EventId == @event.EventId)
-                .SelectMany(e => e.Tags)
-                .ToListAsync();
-
             // dodaj event do httpcontext
-
-            @event.Tags = tags;
 
             @event.EventDetails = eventDetails;
 

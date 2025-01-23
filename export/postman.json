@@ -320,6 +320,14 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Read all events",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
 						}
 					]
 				}

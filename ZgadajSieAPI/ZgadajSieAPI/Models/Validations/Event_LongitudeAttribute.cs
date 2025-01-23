@@ -7,21 +7,22 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var @event = validationContext.ObjectInstance as EventCreateDTO;
-
-            if (@event == null)
+            if (value == null)
             {
-                return new ValidationResult("Event details object is empty.");
+                return new ValidationResult("Latitude value is required.");
             }
 
-            var lng = @event.Longitude;
+            if (!double.TryParse(value.ToString(), out var longitude))
+            {
+                return new ValidationResult("Latitude must be a valid number.");
+            }
 
-            if (Math.Round(lng, 6) != lng)
+            if (Math.Round(longitude, 6) != longitude)
             {
                 return new ValidationResult("Latitude must have at most 6 decimal places.");
             }
 
-            if (lng < -180 || lng > 0)
+            if (longitude < -180 || longitude > 0)
             {
                 return new ValidationResult("Longitude must be between -180 and 180.");
             }

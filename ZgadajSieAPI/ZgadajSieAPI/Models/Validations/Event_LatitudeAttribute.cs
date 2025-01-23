@@ -9,19 +9,22 @@ namespace ZgadajSieAPI.Models.Validations
         {
             var @event = validationContext.ObjectInstance as EventCreateDTO;
 
-            if (@event == null)
+            if (value == null)
             {
-                return new ValidationResult("Event details object is empty.");
+                return new ValidationResult("Latitude value is required.");
             }
 
-            var lat = @event.Latitude;
+            if (!double.TryParse(value.ToString(), out var latitude))
+            {
+                return new ValidationResult("Latitude must be a valid number.");
+            }
 
-            if (Math.Round(lat, 6) != lat)
+            if (Math.Round(latitude, 6) != latitude)
             {
                 return new ValidationResult("Latitude must have at most 6 decimal places.");
             }
 
-            if (lat < -90 || lat > 90)
+            if (latitude < -90 || latitude > 90)
             {
                 return new ValidationResult("Latitude must be between -90 and 90.");
             }

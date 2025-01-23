@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Filters.ActionFilters;
@@ -30,17 +31,40 @@ namespace ZgadajSieAPI.Controllers
             return Ok(new { Pins = pins });
         }
 
-        [HttpPost]
-        public IActionResult GetFilteredEvents([FromBody] EventFilterRequest request)
+        [HttpPost("all")]
+        public async Task<IActionResult> GetEvents([FromBody] Coordinates userCoords)
         {
-            var events = e.FilterEventsToList(request);
+            var events = await db.Events
+                .Include(e => e.EventDetails)
+                .Include(e => e.Tags)
+                .Select(e => new EventTileDTO
+                {
+                    EventId = e.EventId,
+                    StartDate = e.StartDate,
+                    Latitude = e.Latitude,
+                    Longitude = e.Longitude,
+                    Title = e.EventDetails.Title,
+                    City = e.EventDetails.City,
+                    Street = e.EventDetails.Street,
+                    BuildingNumber = e.EventDetails.BuildingNumber,
+                    TagNames = e.Tags.Select(t => t.Name).ToList()
+                }).ToListAsync();
+
+            foreach (var @event in events)
+            {
+                @event.Distance = e.CalculateDistance(
+                    userCoords,
+                    @event.Latitude,
+                    @event.Longitude);
+            }
 
             return Ok(new { Event = events });
         }
 
         [HttpGet("{eventId}")]
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_NullCheckFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateEventsTagsFilterAttribute))]
         public IActionResult GetEventById([FromRoute] Guid eventId)
         {
             var @event = HttpContext.Items["Event"] as Event;
@@ -50,7 +74,7 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPost("create")]
-        [TypeFilter(typeof(Event_CreateEventFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateModelDataFilterAttribute))]
         public async Task<IActionResult> CreateEvent([FromBody] EventCreateDTO model)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -74,7 +98,7 @@ namespace ZgadajSieAPI.Controllers
         [Authorize]
         [HttpPost("join/{eventId}")]
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_NullCheckFilterAttribute))] // zmień na ValidEventDetails i usuń część z tagami, dodaj filter na pobranie tagów do GetEventById
+        [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))] // zmień na ValidEventDetails i usuń część z tagami, dodaj filter na pobranie tagów do GetEventById
         [TypeFilter(typeof(Event_ValidateJoinEventFilterAttribute))]
         public async Task<IActionResult> JoinEvent([FromRoute] Guid eventId)
         {
