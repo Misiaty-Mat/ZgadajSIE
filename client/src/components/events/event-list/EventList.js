@@ -1,29 +1,33 @@
 import { useEffect, useState } from "react";
-import useGeolocation from "../../../hooks/useGeolocation";
+import { observer } from "mobx-react-lite";
+// import DatePicker from "react-datepicker";
+// import { pl } from "date-fns/locale";
 import Event from "../event/Event";
 import { useStores } from "../../../contexts/event-context";
-import { useFormik } from "formik";
 import { DISTANCE_STEPS } from "../../../util/constants";
-import { observer } from "mobx-react-lite";
+// import { observer } from "mobx-react-lite";
 import AddEventButton from "../add-event/button/AddEventButton";
 
 const EventList = observer(() => {
-  const [page, setPage] = useState(0);
   const [searchedTitle, setSearchedTitle] = useState("");
   const [range, setRange] = useState(DISTANCE_STEPS.length - 1);
   const [sortBy, setSortBy] = useState("distance");
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [dateRangeStart, dateRangeEnd] = dateRange;
 
   const { eventStore } = useStores();
 
   useEffect(() => {
-    eventStore.fiterEvents(
+    eventStore.filterEvents(
       {
         title: searchedTitle,
         range: DISTANCE_STEPS[range],
+        dateRangeStart,
+        dateRangeEnd,
       },
       sortBy
     );
-  }, [eventStore, range, searchedTitle, sortBy]);
+  }, [dateRangeEnd, dateRangeStart, eventStore, range, searchedTitle, sortBy]);
 
   return (
     <>
