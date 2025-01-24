@@ -30,5 +30,7 @@ namespace ZgadajSieAPI.Models.DTO
         [Required]
         [Event_Longitude]
         public double Longitude { get; set; }
+
+        public List<Guid>? TagIds { get; set; }
     }
 }

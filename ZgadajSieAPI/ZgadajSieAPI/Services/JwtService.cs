@@ -31,7 +31,7 @@ namespace ZgadajSieAPI.Services
                 }),
                 Issuer = config["Jwt:Issuer"],
                 Audience = config["Jwt:Audience"],
-                Expires = DateTime.UtcNow.AddHours(72),
+                Expires = DateTime.UtcNow.AddHours(480),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
             };
 

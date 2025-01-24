@@ -56,6 +56,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
 
     app.UseSwaggerUI();
+
+    // Seedowanie danych
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+
+        var context = services.GetRequiredService<ZgadajsieDbContext>();
+
+        ZgadajsieDbSeeder.Seed(context);
+    }
 }
 
 app.UseHttpsRedirection();

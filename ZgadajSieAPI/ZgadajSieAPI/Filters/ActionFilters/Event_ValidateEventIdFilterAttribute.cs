@@ -2,19 +2,17 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models;
-using ZgadajSieAPI.Models.DTO;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class Event_NullCheckFilterAttribute : ActionFilterAttribute
+    public class Event_ValidateEventIdFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public Event_NullCheckFilterAttribute(ZgadajsieDbContext db)
+        public Event_ValidateEventIdFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }
-
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             // pusty obiekt
@@ -49,25 +47,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                 return;
             }
 
-            // nie pobrano szczegółów wydarzenia
-
-            var eventDetails = await db.EventsDetails.FindAsync(eventId);
-
-            if (eventDetails == null)
-            {
-                context.ModelState.AddModelError("EventDetails", $"Event details with id '{eventId}' not found.");
-                var problemDetails = new ValidationProblemDetails(context.ModelState)
-                {
-                    Status = StatusCodes.Status404NotFound
-                };
-                context.Result = new NotFoundObjectResult(problemDetails);
-
-                return;
-            }
-
             // dodaj event do httpcontext
-
-            @event.EventDetails = eventDetails;
 
             context.HttpContext.Items["Event"] = @event;
 
