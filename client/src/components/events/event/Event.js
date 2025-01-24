@@ -1,4 +1,5 @@
 import moment from "moment";
+import "./eventList-style.css";
 
 const Event = ({ event }) => {
   const showEvent = () => {
@@ -6,14 +7,20 @@ const Event = ({ event }) => {
   };
 
   return (
-    <div>
-      <h5>{event.title}</h5>
-      <p>{event.city}</p>
-      <p>
-        {event.participation}
-        {event.maxParticipation ? "/" + event.maxParticipation : null}
-      </p>
-      <p>{moment(event.startDate).format("DD.MM.YYYY hh:mm")}</p>
+    <div className="eventList">
+      <div className="eventList-itemDiv">
+        <h5 className="eventList-title">{event.title}</h5>
+        <div className="eventList-itemDiv2">
+          <p className="eventList-city">{event.city}</p>
+          <p className="eventList-people">
+            {event.participation}
+            {event.maxParticipation ? "/" + event.maxParticipation : null}
+          </p>
+          <p className="eventList-Date">
+            {moment(event.startDate).format("DD.MM.YYYY hh:mm")}
+          </p>
+        </div>
+      </div>
       <button onClick={showEvent}>Szczegóły</button>
     </div>
   );

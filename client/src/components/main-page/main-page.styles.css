@@ -93,6 +93,13 @@ input[type="range"] {
   pointer-events: none; /* Strzałka nie blokuje kliknięcia */
 }
 .addEventDiv-button {
+  background-color: #00000000;
+  border: none;
+  font-size: 30px;
+  font-weight: 100;
+}
+.addEventDiv-button:hover {
+  background-color: #00000000;
 }
 .main-page-sectionRight {
 }

@@ -1,0 +1,35 @@
+.eventList {
+  display: flex;
+  background-color: #0078d7;
+  margin: 5px;
+  box-sizing: border-box;
+  padding: 10px;
+  color: #fff;
+  border-radius: 15px;
+}
+.eventList-itemDiv {
+  box-sizing: border-box;
+  padding: 2px;
+}
+.eventList-itemDiv2 {
+  box-sizing: border-box;
+  padding: 2px;
+  display: flex;
+  width: 30vw;
+  gap: 20px;
+  border-top: 1px solid #fff;
+}
+.eventList-title {
+  font-size: 30px;
+  margin: 10px 0;
+}
+.eventList-city {
+  border-right: 1px solid #fff;
+  padding-right: 20px;
+}
+.eventList-people {
+  border-right: 1px solid #fff;
+  padding-right: 20px;
+}
+.eventList-Date {
+}
