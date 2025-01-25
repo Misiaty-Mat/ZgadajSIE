@@ -8,9 +8,9 @@ namespace ZgadajSieAPI.Services.Interfaces
 {
     public interface IEventService
     {
-        List<EventMapPinDTO> FetchEventPinsToList();
         Event CreateNewEvent(EventCreateDTO model, string userId, List<Tag>? tags);
         Task AddParticipant(Event @event, User user);
+        Task TakeParticipant(Event @event, Guid userId);
         double CalculateDistance(Coordinates userCoords, double eventLat, double eventLng);
         Task<List<Guid>> AttachTagsToEvent(Event @event, List<Tag> tags);
         Task<List<Guid>> DetachTagsToEvent(Event @event, List<Tag> tags);

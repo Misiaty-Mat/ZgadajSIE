@@ -11,34 +11,11 @@ namespace ZgadajSieAPI.Services
     public class EventService : IEventService
     {
         private readonly ZgadajsieDbContext db;
-
         public EventService(ZgadajsieDbContext db)
         {
             this.db = db;
         }
 
-        public List<EventMapPinDTO> FetchEventPinsToList()
-        {
-            var events = db.Events.ToList();
-
-            var titles = db.EventsDetails.Select(d => d.Title).ToList();
-
-            var pins = new List<EventMapPinDTO>();
-
-            try
-            {
-                for (int i = 0; i < events.Count; i++)
-                {
-                    pins.Add(new EventMapPinDTO(events[i], titles[i]));
-                }
-            }
-
-            catch (ArgumentOutOfRangeException) { }
-
-            catch (Exception) { }
-
-            return pins;
-        }
 
         public Event CreateNewEvent(EventCreateDTO model, string userId, List<Tag>? tags)
         {
@@ -73,6 +50,7 @@ namespace ZgadajSieAPI.Services
             return newEvent;
         }
 
+
         public async Task AddParticipant(Event @event, User user)
         {
             @event.Participants.Add(user);
@@ -82,14 +60,18 @@ namespace ZgadajSieAPI.Services
             return;
         }
 
-        public List<EventTileDTO> FilterEventsToList(Coordinates request)
+
+        public async Task TakeParticipant(Event @event, Guid userId)
         {
-            // może będzie trzeba dodać interfejs czy coś jak nie pyknie
+            var userToRemove = @event.Participants.FirstOrDefault(u => u.Id == userId);
 
-            var query = db.Events.AsQueryable();
+            @event.Participants.Remove(userToRemove);
 
-            return new List<EventTileDTO>();
+            await db.SaveChangesAsync();
+
+            return;
         }
+
 
         public async Task<List<Guid>> AttachTagsToEvent(Event @event, List<Tag> tags)
         {
@@ -107,6 +89,7 @@ namespace ZgadajSieAPI.Services
             return addedTagIds;
         }
 
+
         public async Task<List<Guid>> DetachTagsToEvent(Event @event, List<Tag> tags)
         {
             var deletedTags = new List<Tag>();
@@ -119,6 +102,7 @@ namespace ZgadajSieAPI.Services
 
             return tagIdsToRemove;
         }
+
 
         public double CalculateDistance(Coordinates userCoords, double eventLat, double eventLng)
         {

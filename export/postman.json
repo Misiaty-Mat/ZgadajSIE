@@ -162,7 +162,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3MzExMjI1LCJleHAiOjE3Mzc1NzA0MjUsImlhdCI6MTczNzMxMTIyNSwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.CC_ZaW5gE2CBLSd6hkgmVf57x6jYGdbDWcmm_S6nAUU",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3NDgwNDc3LCJleHAiOjE3MzkyMDg0NzcsImlhdCI6MTczNzQ4MDQ3NywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.27WswvaQCLMWLz0OlEDW00aaouuYbqP3WtdxaPuxZQw",
 											"type": "string"
 										}
 									]
@@ -180,6 +180,38 @@
 										"api",
 										"event",
 										"join",
+										"64f78534-0fa6-4694-9f6b-bc7db0b85c42"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Leave an event",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3NDgwNDc3LCJleHAiOjE3MzkyMDg0NzcsImlhdCI6MTczNzQ4MDQ3NywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.27WswvaQCLMWLz0OlEDW00aaouuYbqP3WtdxaPuxZQw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7272/api/event/leave/64f78534-0fa6-4694-9f6b-bc7db0b85c42",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"event",
+										"leave",
 										"64f78534-0fa6-4694-9f6b-bc7db0b85c42"
 									]
 								}
@@ -274,30 +306,6 @@
 					"name": "Without authorization",
 					"item": [
 						{
-							"name": "Read all events pins",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "https://localhost:7272/api/event/pins",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "7272",
-									"path": [
-										"api",
-										"event",
-										"pins"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "Read an event by ID",
 							"request": {
 								"auth": {
@@ -306,7 +314,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:7272/api/event/64f78534-0fa6-4694-9f6b-bc7db0b85c42",
+									"raw": "https://localhost:7272/api/event/d40b0e3c-8726-4c13-8f5f-9a94aa592d77",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -315,7 +323,7 @@
 									"path": [
 										"api",
 										"event",
-										"64f78534-0fa6-4694-9f6b-bc7db0b85c42"
+										"d40b0e3c-8726-4c13-8f5f-9a94aa592d77"
 									]
 								}
 							},
@@ -324,8 +332,30 @@
 						{
 							"name": "Read all events",
 							"request": {
-								"method": "GET",
-								"header": []
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"latitude\": 51.123123,\r\n    \"longitude\": -5.321320\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:7272/api/event/all",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"event",
+										"all"
+									]
+								}
 							},
 							"response": []
 						}

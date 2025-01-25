@@ -23,13 +23,6 @@ namespace ZgadajSieAPI.Controllers
             this.e = e;
         }
 
-        [HttpGet("pins")]
-        public IActionResult GetPins()
-        {
-            var pins = e.FetchEventPinsToList();
-
-            return Ok(new { Pins = pins });
-        }
 
         [HttpPost("all")]
         public async Task<IActionResult> GetEvents([FromBody] Coordinates userCoords)
@@ -61,6 +54,7 @@ namespace ZgadajSieAPI.Controllers
             return Ok(new { Event = events });
         }
 
+
         [HttpGet("{eventId}")]
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
@@ -71,6 +65,7 @@ namespace ZgadajSieAPI.Controllers
 
             return Ok(new { Event = new EventDTO(@event, @event.EventDetails) });
         }
+
 
         [Authorize]
         [HttpPost("create")]
@@ -95,10 +90,11 @@ namespace ZgadajSieAPI.Controllers
                 new { Message = "Event created successfully.", eventDto });
         }
 
+
         [Authorize]
         [HttpPost("join/{eventId}")]
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))] // zmień na ValidEventDetails i usuń część z tagami, dodaj filter na pobranie tagów do GetEventById
+        [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateJoinEventFilterAttribute))]
         public async Task<IActionResult> JoinEvent([FromRoute] Guid eventId)
         {
@@ -108,8 +104,25 @@ namespace ZgadajSieAPI.Controllers
 
             await e.AddParticipant(@event, @user);
 
-            return Ok();
+            return Ok((new { Message = "Event joined." }));
         }
+
+
+        [Authorize]
+        [HttpPost("leave/{eventId}")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateLeaveEventFilterAttribute))]
+        public async Task<IActionResult> LeaveEvent([FromRoute] Guid eventId)
+        {
+            var @event = HttpContext.Items["Event"] as Event;
+
+            var @user = HttpContext.Items["User"] as User;
+
+            await e.TakeParticipant(@event, @user.Id);
+
+            return Ok((new { Message = "Event left." }));
+        }
+
 
         [Authorize]
         [HttpPost("{eventId}/attach")]
@@ -125,8 +138,9 @@ namespace ZgadajSieAPI.Controllers
 
             var addedTags = await e.AttachTagsToEvent(@event, tags);
 
-            return Ok(new { Message = "Tags deleted.", Tags = addedTags });
+            return Ok(new { Message = "Tags attached.", Tags = addedTags });
         }
+
 
         [Authorize]
         [HttpPost("{eventId}/detach")]
@@ -143,7 +157,7 @@ namespace ZgadajSieAPI.Controllers
 
             var deletedTags = await e.DetachTagsToEvent(@event, tags);
 
-            return Ok( new {Message = "Tags deleted.", Tags = deletedTags });
+            return Ok( new {Message = "Tags detached.", Tags = deletedTags });
         }
     }
 }
