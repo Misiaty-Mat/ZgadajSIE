@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormikContext } from "formik";
 import EventMap from "../../../map/EventMap";
+import "./LocationStep-style.css";
 
 const LocationStep = () => {
   const formik = useFormikContext();
@@ -19,13 +20,9 @@ const LocationStep = () => {
   };
 
   return (
-    <div>
+    <div className="">
       <h1>{getAddress()}</h1>
-      <EventMap
-        height="40vh"
-        onSelectLocation={onMapClicked}
-        onClickMarkerEnabled={true}
-      />
+      <EventMap onSelectLocation={onMapClicked} onClickMarkerEnabled={true} />
     </div>
   );
 };

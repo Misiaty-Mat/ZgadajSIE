@@ -30,6 +30,7 @@
   padding: 10px 20px;
   border-radius: 15px;
   cursor: pointer;
+  margin: 20px 10px;
 }
 .Modal-logOrRegister-button:hover {
   background-color: #053f6c;

@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import "./LoginForm-style.css";
 
 import { useAuth } from "../../../../hooks/useAuth";
 
@@ -31,9 +32,9 @@ const LoginForm = ({ onSubmitExternal, onReturn }) => {
       case 1:
         setNextStepDisabled(values.email === "" || errors.email !== undefined);
         return (
-          <div>
-            <label>Podaj swój email:</label>
-            <Field name="email" />
+          <div className="loginEmail">
+            <label>Podaj swój email</label>
+            <Field name="email" className="fieldForm" />
             {errors.email && <small>{errors.email}</small>}
           </div>
         );
@@ -43,9 +44,9 @@ const LoginForm = ({ onSubmitExternal, onReturn }) => {
           values.password === "" || errors.password !== undefined
         );
         return (
-          <div>
-            <label>Podaj swoje hasło:</label>
-            <Field name="password" />
+          <div className="loginEmail">
+            <label>Podaj swoje hasło</label>
+            <Field name="password" className="fieldForm" />
             {errors.password && <small>{errors.password}</small>}
           </div>
         );
@@ -83,13 +84,18 @@ const LoginForm = ({ onSubmitExternal, onReturn }) => {
         {({ values, errors }) => (
           <Form>
             {renderSteps(values, errors)}
-            <button type="button" onClick={step === 1 ? onReturn : prevStep}>
+            <button
+              className="Modal-logOrRegister-button marginModalButton"
+              type="button"
+              onClick={step === 1 ? onReturn : prevStep}
+            >
               Powrót
             </button>
             <button
               type="button"
               disabled={nextStepDisabled}
               onClick={nextStep}
+              className="Modal-logOrRegister-button marginModalButton"
             >
               {shouldSubmit === true ? "Zaloguj się!" : "Dalej"}
             </button>

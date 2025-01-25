@@ -17,3 +17,8 @@ button:hover {
   transition: transform 0.1s linear;
   transform: scale(1.12);
 }
+
+small {
+  color: red;
+  font-weight: 300;
+}

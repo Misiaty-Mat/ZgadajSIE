@@ -31,18 +31,18 @@ const RegisterForm = ({ onSubmitExternal, onReturn }) => {
       case 1:
         setNextStepDisabled(values.email === "" || errors.email !== undefined);
         return (
-          <div>
+          <div className="loginEmail">
             <label>Podaj swój email:</label>
-            <Field name="email" />
+            <Field className="fieldForm" name="email" />
             {errors.email && <small>{errors.email}</small>}
           </div>
         );
       case 2:
         setNextStepDisabled(values.name === "" || errors.name !== undefined);
         return (
-          <div>
+          <div className="loginEmail">
             <label>Jak chcesz się nazywać?</label>
-            <Field name="name" />
+            <Field className="fieldForm" name="name" />
             {errors.name && <small>{errors.name}</small>}
           </div>
         );
@@ -56,14 +56,18 @@ const RegisterForm = ({ onSubmitExternal, onReturn }) => {
         );
         return (
           <div>
-            <div>
+            <div className="loginEmail">
               <label>Podaj swoje hasło:</label>
-              <Field name="password" type="password" />
+              <Field className="fieldForm" name="password" type="password" />
               {errors.password && <small>{errors.password}</small>}
             </div>
-            <div>
+            <div className="loginEmail">
               <label>Potwierdź swoje hasło</label>
-              <Field name="confirmPassword" type="password" />
+              <Field
+                className="fieldForm"
+                name="confirmPassword"
+                type="password"
+              />
 
               {errors.confirmPassword && (
                 <small>{errors.confirmPassword}</small>
@@ -117,13 +121,18 @@ const RegisterForm = ({ onSubmitExternal, onReturn }) => {
         {({ values, errors }) => (
           <Form>
             {renderSteps(values, errors)}
-            <button type="button" onClick={step === 1 ? onReturn : prevStep}>
+            <button
+              className="Modal-logOrRegister-button"
+              type="button"
+              onClick={step === 1 ? onReturn : prevStep}
+            >
               Powrót
             </button>
             <button
               type="button"
               disabled={nextStepDisabled}
               onClick={nextStep}
+              className="Modal-logOrRegister-button"
             >
               {shouldSubmit === true ? "Zarejestruj się!" : "Dalej"}
             </button>

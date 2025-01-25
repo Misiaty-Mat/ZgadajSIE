@@ -7,6 +7,7 @@ import { createEvent } from "../../../../api/events/events";
 import { toast } from "react-toastify";
 import { useStores } from "../../../../contexts/event-context";
 import { handleError } from "../../../../api/utils";
+import "./AddEventForm-style.css";
 
 const AddEventForm = ({ onReturn }) => {
   const formikRef = useRef(null);
@@ -35,9 +36,9 @@ const AddEventForm = ({ onReturn }) => {
       case 1:
         setNextStepDisabled(values.title === "" || errors.title !== undefined);
         return (
-          <div>
+          <div className="loginEmail">
             <label>Jaką ma mieć nazwę?</label>
-            <Field name="title" />
+            <Field className="fieldForm" name="title" />
 
             {errors.title && <small>{errors.title}</small>}
           </div>
@@ -50,9 +51,11 @@ const AddEventForm = ({ onReturn }) => {
           )
         );
         return (
-          <div>
+          <div className="addEventModal">
             <label>Gdzie ma się odbyć?</label>
-            <LocationStep />;
+            <div className="mapInModal">
+              <LocationStep />
+            </div>
           </div>
         );
       case 3:
@@ -60,7 +63,7 @@ const AddEventForm = ({ onReturn }) => {
           values.startDate === undefined || errors.startDate !== undefined
         );
         return (
-          <div>
+          <div className="loginEmail">
             <label>Kiedy ma się odbyć?</label>
             <DateTimeStep />
           </div>
@@ -70,9 +73,14 @@ const AddEventForm = ({ onReturn }) => {
         return (
           <div>
             <h3>Wybierz liczbę osób chcesz zaprosić</h3>
-            <div>
+            <div className="loginEmail">
               <label>Maksimum</label>
-              <Field type="number" name="maxAttendance" min="1" />
+              <Field
+                className="fieldForm"
+                type="number"
+                name="maxAttendance"
+                min="1"
+              />
               <small>
                 {errors.maxAttendance
                   ? errors.maxAttendance
@@ -85,9 +93,9 @@ const AddEventForm = ({ onReturn }) => {
         setNextStepDisabled(isSubmitting);
         setShouldSubmit(true);
         return (
-          <div>
+          <div className="loginEmail">
             <label>Dodaj opis do swojego wydarzenia (opcjonalne):</label>
-            <Field as="textarea" name="description" />
+            <Field className="fieldForm" as="textarea" name="description" />
           </div>
         );
       default:
@@ -98,10 +106,19 @@ const AddEventForm = ({ onReturn }) => {
   const renderForm = ({ values, errors, handleSubmit, isSubmitting }) => (
     <Form onSubmit={handleSubmit}>
       {renderSteps(values, errors, isSubmitting)}
-      <button type="button" onClick={step === 1 ? onReturn : prevStep}>
+      <button
+        className="Modal-logOrRegister-button"
+        type="button"
+        onClick={step === 1 ? onReturn : prevStep}
+      >
         Powrót
       </button>
-      <button type="button" disabled={nextStepDisabled} onClick={nextStep}>
+      <button
+        className="Modal-logOrRegister-button"
+        type="button"
+        disabled={nextStepDisabled}
+        onClick={nextStep}
+      >
         {shouldSubmit === true ? "Stwórz wydarzenie!" : "Dalej"}
       </button>
     </Form>

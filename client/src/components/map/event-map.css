@@ -12,3 +12,7 @@
   width: 56vw;
   height: 90vh;
 }
+
+.eventMapModal {
+  display: block;
+}

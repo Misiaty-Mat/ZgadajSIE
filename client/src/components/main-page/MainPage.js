@@ -43,7 +43,7 @@ const MainPage = () => {
         <div className="main-page-sectionRight">
           <ToastContainer />
         </div>
-        <EventMap />
+        <EventMap className="test" />
       </div>
     </>
   );

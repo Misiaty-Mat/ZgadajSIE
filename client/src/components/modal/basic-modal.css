@@ -17,6 +17,12 @@
 }
 
 .modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 25vw;
+  min-height: 25vh;
+  padding: 20px;
   width: fit-content;
   block-size: fit-content;
   background: white;
