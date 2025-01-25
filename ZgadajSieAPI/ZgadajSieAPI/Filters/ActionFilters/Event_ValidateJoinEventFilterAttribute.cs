@@ -18,31 +18,12 @@ namespace ZgadajSieAPI.Filters.ActionFilters
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            // nie znaleziono użytkownika
-
-            var userId = context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var user = await db.Users.FindAsync(Guid.Parse(userId));
-
-            if (user == null)
-            {
-                context.ModelState.AddModelError("User", $"User with id '{userId}' not found.");
-                var problemDetails = new ValidationProblemDetails(context.ModelState)
-                {
-                    Status = StatusCodes.Status404NotFound
-                };
-                context.Result = new NotFoundObjectResult(problemDetails);
-
-                return;
-            }
 
             // limit uczestników 
 
             var @event = context.HttpContext.Items["Event"] as Event;
 
-            await db.Entry(@event)
-                    .Collection(e => e.Participants)
-                    .LoadAsync();
+            await db.Entry(@event).Collection(e => e.Participants).LoadAsync();
 
             if (@event.Participants.Count > @event.EventDetails.MaxParticipation)
             {
@@ -57,6 +38,8 @@ namespace ZgadajSieAPI.Filters.ActionFilters
             }
 
             // już jest uczestnikiem
+
+            var @user = context.HttpContext.Items["User"] as User;
 
             for (int i = 0; i < @event.Participants.Count; i++)
             {
@@ -87,9 +70,9 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                 return;
             }
 
-            // dodaj usera do httpcontext
+            // uaktualnij event o uczestników w httpcontext
 
-            context.HttpContext.Items["User"] = user;
+            context.HttpContext.Items["Event"] = @event;
 
             await next();
         }

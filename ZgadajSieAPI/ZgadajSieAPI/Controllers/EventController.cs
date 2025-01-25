@@ -95,6 +95,7 @@ namespace ZgadajSieAPI.Controllers
         [HttpPost("join/{eventId}")]
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateCurrentUserFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateJoinEventFilterAttribute))]
         public async Task<IActionResult> JoinEvent([FromRoute] Guid eventId)
         {
@@ -111,6 +112,7 @@ namespace ZgadajSieAPI.Controllers
         [Authorize]
         [HttpPost("leave/{eventId}")]
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateCurrentUserFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateLeaveEventFilterAttribute))]
         public async Task<IActionResult> LeaveEvent([FromRoute] Guid eventId)
         {
@@ -158,6 +160,17 @@ namespace ZgadajSieAPI.Controllers
             var deletedTags = await e.DetachTagsToEvent(@event, tags);
 
             return Ok( new {Message = "Tags detached.", Tags = deletedTags });
+        }
+
+
+        [HttpGet("{eventId}/participants")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateParticipantsFilterAttribute))]
+        public IActionResult GetEventParticipants([FromRoute] Guid eventId)
+        {
+            var participants = HttpContext.Items["Participants"] as List<Guid>;
+
+            return Ok( new { Participants = participants });
         }
     }
 }

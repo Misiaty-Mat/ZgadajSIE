@@ -5,6 +5,9 @@ using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Filters.ActionFilters;
 using ZgadajSieAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.Extensions.Logging;
 
 namespace ZgadajSieAPI.Controllers
 {
@@ -23,11 +26,6 @@ namespace ZgadajSieAPI.Controllers
             this.pw = pw;
         }
 
-        [HttpGet]
-        public IActionResult Test()
-        {
-            return Ok();
-        }
 
         [HttpPost("register")]
         [TypeFilter(typeof(User_ValidateRegisterFilterAttribute))]
@@ -49,6 +47,7 @@ namespace ZgadajSieAPI.Controllers
             return Ok(new { Message = "Registartion succesful.", User = new UserDTO(user), Token = token });
         }
 
+
         [HttpPost("login")]
         [TypeFilter(typeof(User_ValidateLoginFilterAttribute))]
         public IActionResult Login([FromBody] UserLoginDTO model)
@@ -60,6 +59,7 @@ namespace ZgadajSieAPI.Controllers
             return Ok(new { Message = "Login succesful.", Token = token, User = new UserDTO(user) });
         }
 
+
         [Authorize]
         [HttpPost("autologin")]
         [TypeFilter(typeof(User_ValidateAutologinFilterAttribute))]
@@ -67,7 +67,55 @@ namespace ZgadajSieAPI.Controllers
         {
             var user = HttpContext.Items["User"] as User;
 
-            return Ok( new { Message = "Login succesful.", User = new UserDTO(user) });
+            return Ok(new { Message = "Login succesful.", User = new UserDTO(user) });
+        }
+
+
+        [Authorize]
+        [HttpGet("joined")]
+        public async Task<IActionResult> GetJoinedEvents()
+        {
+            var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var joinedEvents = await db.Events
+                .Where(e => e.Participants.Any(p => p.Id == userId)) 
+                .Select(e => new EventPersonalDTO 
+                {
+                    EventId = e.EventId,
+                    StartDate = e.StartDate,
+                    Title = e.EventDetails.Title,
+                    City = e.EventDetails.City,
+                    Street = e.EventDetails.Street,
+                    BuildingNumber = e.EventDetails.BuildingNumber,
+                    TagNames = e.Tags.Select(t => t.Name).ToList()
+                })
+                .ToListAsync();
+
+            return Ok( new { JoinedEvents = joinedEvents });
+        }
+
+
+        [Authorize]
+        [HttpGet("created")]
+        public async Task<IActionResult> GetCreatedEvents()
+        {
+            var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            var createdEvents = await db.Events
+                .Where(e => e.OrganizerId == userId)
+                .Select(e => new EventPersonalDTO
+                {
+                    EventId = e.EventId,
+                    StartDate = e.StartDate,
+                    Title = e.EventDetails.Title,
+                    City = e.EventDetails.City,
+                    Street = e.EventDetails.Street,
+                    BuildingNumber = e.EventDetails.BuildingNumber,
+                    TagNames = e.Tags.Select(t => t.Name).ToList()
+                })
+                .ToListAsync();
+
+            return Ok(new { CreatedEvents = createdEvents });
         }
     }
 }
