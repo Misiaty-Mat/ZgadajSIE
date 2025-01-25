@@ -10,101 +10,173 @@
 			"name": "Users",
 			"item": [
 				{
-					"name": "Register a user",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"User\",\r\n    \"email\": \"user02@test.pl\",\r\n    \"password\": \"password\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Authorized",
+					"item": [
+						{
+							"name": "Autologin",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJiMGFmNTA2YS03YmFmLTRkNmUtOWJhZi05NzMxNjEwNmRhNWQiLCJlbWFpbCI6InVzZXIwMUB0ZXN0LnBsIiwibmJmIjoxNzM3MzA2ODAxLCJleHAiOjE3Mzc1NjYwMDEsImlhdCI6MTczNzMwNjgwMSwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.777XO9cx3orlGug2JcBmhMPP-ctN7zUZBOWkd2-BdXs",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7272/api/user/autologin",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"user",
+										"autologin"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "https://localhost:7272/api/user/register",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "7272",
-							"path": [
-								"api",
-								"user",
-								"register"
-							]
+						{
+							"name": "Read all events joined by user",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3NDgwNDc3LCJleHAiOjE3MzkyMDg0NzcsImlhdCI6MTczNzQ4MDQ3NywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.27WswvaQCLMWLz0OlEDW00aaouuYbqP3WtdxaPuxZQw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7272/api/user/joined",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"user",
+										"joined"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read all events created by user",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3NDgwNDc3LCJleHAiOjE3MzkyMDg0NzcsImlhdCI6MTczNzQ4MDQ3NywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.27WswvaQCLMWLz0OlEDW00aaouuYbqP3WtdxaPuxZQw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7272/api/user/created",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"user",
+										"created"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Login a user",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"user02@test.pl\",\r\n    \"password\": \"password\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Unauthorized",
+					"item": [
+						{
+							"name": "Login a user",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"user02@test.pl\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:7272/api/user/login",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"user",
+										"login"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "https://localhost:7272/api/user/login",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "7272",
-							"path": [
-								"api",
-								"user",
-								"login"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Autologin [auth]",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJiMGFmNTA2YS03YmFmLTRkNmUtOWJhZi05NzMxNjEwNmRhNWQiLCJlbWFpbCI6InVzZXIwMUB0ZXN0LnBsIiwibmJmIjoxNzM3MzA2ODAxLCJleHAiOjE3Mzc1NjYwMDEsImlhdCI6MTczNzMwNjgwMSwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.777XO9cx3orlGug2JcBmhMPP-ctN7zUZBOWkd2-BdXs",
-									"type": "string"
+						{
+							"name": "Register a user",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"User\",\r\n    \"email\": \"user02@test.pl\",\r\n    \"password\": \"password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:7272/api/user/register",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"user",
+										"register"
+									]
 								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "https://localhost:7272/api/user/autologin",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "7272",
-							"path": [
-								"api",
-								"user",
-								"autologin"
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -112,7 +184,7 @@
 			"name": "Events",
 			"item": [
 				{
-					"name": "With authorization",
+					"name": "Authorized",
 					"item": [
 						{
 							"name": "Create an event",
@@ -303,10 +375,34 @@
 					]
 				},
 				{
-					"name": "Without authorization",
+					"name": "Unauthorized",
 					"item": [
 						{
 							"name": "Read an event by ID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7272/api/event/d40b0e3c-8726-4c13-8f5f-9a94aa592d77",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"event",
+										"d40b0e3c-8726-4c13-8f5f-9a94aa592d77"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read all event's participants",
 							"request": {
 								"auth": {
 									"type": "noauth"

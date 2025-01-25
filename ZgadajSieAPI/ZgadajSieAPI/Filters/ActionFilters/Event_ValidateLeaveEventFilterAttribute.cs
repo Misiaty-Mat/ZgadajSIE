@@ -16,25 +16,9 @@ namespace ZgadajSieAPI.Filters.ActionFilters
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            // nie znaleziono użytkownika
-
-            var userId = context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var user = await db.Users.FindAsync(Guid.Parse(userId));
-
-            if (user == null)
-            {
-                context.ModelState.AddModelError("User", $"User with id '{userId}' not found.");
-                var userProblem = new ValidationProblemDetails(context.ModelState)
-                {
-                    Status = StatusCodes.Status404NotFound
-                };
-                context.Result = new NotFoundObjectResult(userProblem);
-
-                return;
-            }
-
             // jest organizatorem
+
+            var @user = context.HttpContext.Items["User"] as User;
 
             var @event = context.HttpContext.Items["Event"] as Event;
 
@@ -52,17 +36,15 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
             // doładuj uczestników
 
-            await db.Entry(@event)
-                .Collection(e => e.Participants)
-                .LoadAsync();
+            await db.Entry(@event).Collection(e => e.Participants).LoadAsync();
 
             for (int i = 0; i < @event.Participants.Count; i++)
             {
                 if (user.Id == @event.Participants[i].Id)
                 {
-                    // dodaj usera do httpcontext
+                    // uaktualnij event o uczestników w httpcontext
 
-                    context.HttpContext.Items["User"] = user;
+                    context.HttpContext.Items["Event"] = @event;
 
                     await next();   // sukces
                 }
