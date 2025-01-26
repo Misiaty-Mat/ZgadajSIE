@@ -29,8 +29,8 @@ namespace ZgadajSieAPI.Services
             {
                 EventId = Guid.NewGuid(),
                 StartDate = model.StartDate,
-                Latitude = model.Latitude,
-                Longitude = model.Longitude,
+                Latitude = model.Latitude.Value,
+                Longitude = model.Longitude.Value,
                 OrganizerId = parsedId,
                 EventDetails = new EventDetails
                 {
@@ -48,6 +48,22 @@ namespace ZgadajSieAPI.Services
             };
 
             return newEvent;
+        }
+
+
+        public Event UpdateEvent(Event e, EventUpdateDTO model)
+        {
+            e.StartDate = model.StartDate;
+            e.Latitude = model.Latitude;
+            e.Longitude = model.Longitude;
+            e.EventDetails.Title = model.Title;
+            e.EventDetails.Description = model.Description;
+            e.EventDetails.City = model.City;
+            e.EventDetails.Street = model.Street;
+            e.EventDetails.BuildingNumber = model.BuildingNumber;
+            e.EventDetails.MaxParticipation = model.MaxParticipation;
+
+            return e;
         }
 
 

@@ -95,6 +95,24 @@ namespace ZgadajSieAPI.Controllers
 
 
         [Authorize]
+        [HttpPut("update/{eventId}")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateMaxParticipationFilterAttribute))]
+        public async Task<IActionResult> UpdateEvent([FromRoute] Guid eventId, [FromBody] EventUpdateDTO model)
+        {
+            var @event = HttpContext.Items["Event"] as Event;
+
+            @event = e.UpdateEvent(@event, model);
+
+            await db.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
+        [Authorize]
         [HttpPost("join/{eventId}")]
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
@@ -184,7 +202,7 @@ namespace ZgadajSieAPI.Controllers
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateParticipantFilterAttribute))]
         [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
-        public async Task<IActionResult> GetEventParticipants([FromRoute] Guid eventId, [FromRoute] Guid participantId)
+        public async Task<IActionResult> GetEventParticipantById([FromRoute] Guid eventId, [FromRoute] Guid participantId)
         {
             var user = HttpContext.Items["User"] as User;
 

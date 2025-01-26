@@ -6,19 +6,12 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var profile = validationContext.ObjectInstance as Profile;
-
-            if (profile == null)
+            if (!int.TryParse(value.ToString(), out var age))
             {
-                return new ValidationResult("Profile object is empty.");
+                return new ValidationResult("Age must be a valid integer.");
             }
 
-            if (profile.Age == null) // nie wymagane
-            {
-                return ValidationResult.Success;
-            }
-
-            if (profile.Age < 18)
+            if (age < 18)
             {
                 return new ValidationResult("Age value must be 18 or more.");
             }

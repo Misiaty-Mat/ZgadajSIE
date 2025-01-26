@@ -6,20 +6,15 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var profile = validationContext.ObjectInstance as Profile;
+            var gender = value.ToString();
 
-            if (profile == null)
-            {
-                return new ValidationResult("Profile object is empty.");
-            }
-
-            if (profile.Gender == null) // nie wymagane
+            if (gender == null) // nie wymagane
             {
                 return ValidationResult.Success;
             }
 
-            if (profile.Gender.Equals("male", StringComparison.OrdinalIgnoreCase) ||
-                profile.Gender.Equals("female", StringComparison.OrdinalIgnoreCase))
+            if (gender.Equals("male", StringComparison.OrdinalIgnoreCase) ||
+                gender.Equals("female", StringComparison.OrdinalIgnoreCase))
             {
                 return ValidationResult.Success;
             }

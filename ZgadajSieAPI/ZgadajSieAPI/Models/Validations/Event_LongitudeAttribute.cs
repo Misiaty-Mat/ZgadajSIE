@@ -9,12 +9,12 @@ namespace ZgadajSieAPI.Models.Validations
         {
             if (value == null)
             {
-                return new ValidationResult("Latitude value is required.");
+                return new ValidationResult("Longitude value is required.");
             }
 
             if (!double.TryParse(value.ToString(), out var longitude))
             {
-                return new ValidationResult("Latitude must be a valid number.");
+                return new ValidationResult("Longitude must be a valid number.");
             }
 
             if (longitude < -180 || longitude > 180)

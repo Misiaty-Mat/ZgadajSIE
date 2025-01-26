@@ -30,6 +30,8 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                     Status = StatusCodes.Status404NotFound
                 };
                 context.Result = new NotFoundObjectResult(problemDetails);
+
+                return;
             }
 
             // user nie jest organizatorem
@@ -44,6 +46,8 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                     Status = StatusCodes.Status400BadRequest
                 };
                 context.Result = new BadRequestObjectResult(problemDetails);
+
+                return;
             }
 
             await next();

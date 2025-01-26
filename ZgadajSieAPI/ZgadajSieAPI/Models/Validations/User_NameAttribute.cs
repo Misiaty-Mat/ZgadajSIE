@@ -8,11 +8,11 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var user = validationContext.ObjectInstance as UserRegistrationDTO;
+            var name = value.ToString();
 
-            if (user == null || string.IsNullOrWhiteSpace(user.Name))
+            if (string.IsNullOrWhiteSpace(name))
             {
-                return new ValidationResult("User object is empty.");
+                return new ValidationResult("Name is required.");
             }
 
             // Legenda:
@@ -21,7 +21,7 @@ namespace ZgadajSieAPI.Models.Validations
             // [a-z]*     - Dowolna liczba małych liter
             // $     - Koniec ciągu
 
-            bool wrongName = !Regex.IsMatch(user.Name, @"^[A-Z][a-z]*$");
+            bool wrongName = !Regex.IsMatch(name, @"^[A-Z][a-z]*$");
 
             if (wrongName)
             {

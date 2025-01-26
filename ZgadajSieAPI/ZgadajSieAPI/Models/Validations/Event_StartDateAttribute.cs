@@ -8,14 +8,17 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var @event = validationContext.ObjectInstance as EventCreateDTO;
-
-            if (@event == null || @event.StartDate == null)
+            if (value == null || value.ToString() == "01.01.0001 00:00:00")
             {
-                return new ValidationResult("Event object or start date is empty.");
+                return new ValidationResult("Start date is required.");
             }
 
-            if (@event.StartDate.Date < DateTime.Now.Date)
+            if (!DateTime.TryParse(value.ToString(), out var startDate))
+            {
+                return new ValidationResult("Start date must be a valid date.");
+            }
+
+            if (startDate.Date < DateTime.Now.Date)
             {
                 return new ValidationResult("Date must be present or future.");
             }

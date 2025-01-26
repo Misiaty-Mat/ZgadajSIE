@@ -3,9 +3,17 @@ using ZgadajSieAPI.Models.Validations;
 
 namespace ZgadajSieAPI.Models.DTO
 {
-    public class EventCreateDTO
+    public class EventUpdateDTO
     {
-        [Required]
+        [Event_StartDate]
+        public DateTime StartDate { get; set; }
+
+        [Event_Latitude]
+        public double Latitude { get; set; }
+
+        [Event_Longitude]
+        public double Longitude { get; set; }
+
         public string Title { get; set; }
 
         public string? Description { get; set; }
@@ -18,16 +26,5 @@ namespace ZgadajSieAPI.Models.DTO
 
         [EventDetails_MaxParticipation]
         public int? MaxParticipation { get; set; }
-
-        [Event_StartDate]
-        public DateTime StartDate { get; set; }
-
-        [Event_Latitude]
-        public double? Latitude { get; set; }
-
-        [Event_Longitude]
-        public double? Longitude { get; set; }
-
-        public List<Guid>? TagIds { get; set; }
     }
 }

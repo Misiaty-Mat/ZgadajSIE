@@ -7,18 +7,15 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var @event = validationContext.ObjectInstance as EventCreateDTO;
-
             if (value == null)
             {
-                return new ValidationResult("Latitude value is required.");
+                return new ValidationResult("Latitude is required.");
             }
 
             if (!double.TryParse(value.ToString(), out var latitude))
             {
                 return new ValidationResult("Latitude must be a valid number.");
             }
-
 
             if (latitude < -90 || latitude > 90)
             {

@@ -5,7 +5,6 @@ namespace ZgadajSieAPI.Models.DTO
 {
     public class UserRegistrationDTO
     {
-        [Required]
         [User_Name]
         public string Name { get; set; }
 

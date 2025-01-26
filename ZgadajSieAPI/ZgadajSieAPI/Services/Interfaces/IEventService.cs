@@ -9,6 +9,7 @@ namespace ZgadajSieAPI.Services.Interfaces
     public interface IEventService
     {
         Event CreateNewEvent(EventCreateDTO model, string userId, List<Tag>? tags);
+        Event UpdateEvent(Event @event, EventUpdateDTO model);
         Task AddParticipant(Event @event, User user);
         Task TakeParticipant(Event @event, Guid userId);
         double CalculateDistance(Coordinates userCoords, double eventLat, double eventLng);

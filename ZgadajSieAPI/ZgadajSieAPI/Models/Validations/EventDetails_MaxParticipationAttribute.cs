@@ -7,16 +7,14 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var @event = validationContext.ObjectInstance as EventCreateDTO;
-
-            if (@event == null)
+            if (!int.TryParse(value.ToString(), out var maxParticipation))
             {
-                return new ValidationResult("Event details object is empty.");
+                return new ValidationResult("Max participation must be a valid integer.");
             }
 
-            if (@event.MaxParticipation < 2)
+            if (maxParticipation <= 0)
             {
-                return new ValidationResult("Value must be an integer greater than 2.");
+                return new ValidationResult("Value must be an integer greater than 0.");
             }
 
             return ValidationResult.Success;
