@@ -3,7 +3,9 @@ import "./event-marker.css";
 import { useCallback } from "react";
 
 const EventMarker = ({ event, onClick, setMarkerRef }) => {
-  const handleClick = useCallback(() => onClick(event), [onClick, event]);
+  const handleClick = useCallback(() => {
+    onClick(event);
+  }, [onClick, event]);
   const ref = useCallback(
     (marker) => setMarkerRef(marker, event.eventId),
     [setMarkerRef, event.eventId]

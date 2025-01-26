@@ -1,9 +1,13 @@
 import moment from "moment";
 import "./eventList-style.css";
+import { useStores } from "../../../contexts/event-context";
+import { observer } from "mobx-react-lite";
 
-const Event = ({ event }) => {
-  const showEvent = () => {
-    alert("Mock eventu: " + event.title);
+const Event = observer(({ event }) => {
+  const { eventStore } = useStores();
+
+  const selectEvent = () => {
+    eventStore.setSelectedEvent(event);
   };
 
   return (
@@ -11,7 +15,9 @@ const Event = ({ event }) => {
       <div className="eventList-itemDiv">
         <h5 className="eventList-title">{event.title}</h5>
         <div className="eventList-itemDiv2">
-          <p className="eventList-city">{event.city}</p>
+          <p className="eventList-city">
+            {event.city} {event.street} {event.buildingNumber}
+          </p>
           <p className="eventList-Date">
             {moment(event.startDate).format("DD.MM.YYYY hh:mm")}
           </p>
@@ -22,9 +28,9 @@ const Event = ({ event }) => {
           </div>
         </div>
       </div>
-      <button onClick={showEvent}>Szczegóły</button>
+      <button onClick={selectEvent}>Szczegóły</button>
     </div>
   );
-};
+});
 
 export default Event;

@@ -7,8 +7,10 @@ import { handleError } from "../api/utils";
 class EventStore {
   events = [];
   filteredEvents = [];
+  selectedEvent = undefined;
   page = 1;
   isLastPage = false;
+  eventModalOpened = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -64,6 +66,11 @@ class EventStore {
     }
   }
 
+  setSelectedEvent = (event) => {
+    this.selectedEvent = event;
+    this.toggleEventModal();
+  };
+
   incrementPage = () => {
     this.page = this.page + 1;
 
@@ -81,6 +88,10 @@ class EventStore {
       return this.filteredEvents.slice(0, EVENTS_PER_PAGE * this.page);
     }
   }
+
+  toggleEventModal = () => {
+    this.eventModalOpened = !this.eventModalOpened;
+  };
 }
 
 const eventStore = new EventStore();

@@ -2,16 +2,13 @@ import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { useMap } from "@vis.gl/react-google-maps";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
-import EventMarker from "./event-marker";
+import EventMarker from "./EventMarker";
 import { useStores } from "../../../contexts/event-context";
 import { fetchEventById } from "../../../api/events/events";
 import { handleError } from "../../../api/utils";
-import EventModal from "./event-modal/EventModal";
 
 const EventMarkers = observer(() => {
   const [markers, setMarkers] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const { eventStore } = useStores();
 
@@ -45,20 +42,15 @@ const EventMarkers = observer(() => {
     });
   }, []);
 
-  const toggleModal = () => {
-    setIsModalOpen((prev) => !prev);
-  };
-
   const onMarkerClick = (event) => {
     map.panTo({ lat: event.latitude, lng: event.longitude });
     fetchEventById(event.eventId)
       .then((response) => {
-        setSelectedEvent(response.data.event);
+        eventStore.setSelectedEvent(response.data.event);
       })
       .catch((error) => {
         handleError(error);
       });
-    toggleModal();
   };
 
   return (
@@ -71,14 +63,6 @@ const EventMarkers = observer(() => {
           setMarkerRef={setMarkerRef}
         />
       ))}
-
-      {selectedEvent && (
-        <EventModal
-          selectedEvent={selectedEvent}
-          isModalOpen={isModalOpen}
-          toggleModal={toggleModal}
-        />
-      )}
     </>
   );
 });

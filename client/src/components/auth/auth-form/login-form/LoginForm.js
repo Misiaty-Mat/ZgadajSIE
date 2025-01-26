@@ -46,7 +46,7 @@ const LoginForm = ({ onSubmitExternal, onReturn }) => {
         return (
           <div className="loginEmail">
             <label>Podaj swoje hasło</label>
-            <Field name="password" className="fieldForm" />
+            <Field name="password" type="password" className="fieldForm" />
             {errors.password && <small>{errors.password}</small>}
           </div>
         );

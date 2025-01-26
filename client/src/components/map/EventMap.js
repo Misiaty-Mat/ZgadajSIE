@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import "./event-map.css";
 
 import useGeolocation from "../../hooks/useGeolocation";
-import EventMarkers from "./markers/event-markers";
+import EventMarkers from "./markers/EventMarkers";
 import { useState } from "react";
 import MapHandler from "./MapHandler";
 import PlaceAutocomplete from "./autocomplete/PlaceAutocomplete";

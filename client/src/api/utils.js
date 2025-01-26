@@ -13,7 +13,7 @@ export const getHeadersWithAuth = () => {
 };
 
 export const handleError = (error) => {
-  if (error.status === 400) {
+  if (error.status >= 400 && error.status < 500) {
     Object.values(error.response.data.errors)
       .flatMap((arr) => arr)
       .forEach((errorMsg) => {
