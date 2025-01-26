@@ -17,12 +17,7 @@ namespace ZgadajSieAPI.Models.Validations
                 return new ValidationResult("Latitude must be a valid number.");
             }
 
-            if (Math.Round(longitude, 6) != longitude)
-            {
-                return new ValidationResult("Latitude must have at most 6 decimal places.");
-            }
-
-            if (longitude < -180 || longitude > 0)
+            if (longitude < -180 || longitude > 180)
             {
                 return new ValidationResult("Longitude must be between -180 and 180.");
             }

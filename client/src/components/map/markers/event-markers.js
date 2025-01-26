@@ -1,8 +1,7 @@
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
-import { AdvancedMarker, useMap } from "@vis.gl/react-google-maps";
-import { useEffect, useRef, useState } from "react";
+import { useMap } from "@vis.gl/react-google-maps";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { debounce } from "lodash";
 import EventMarker from "./event-marker";
 import { useStores } from "../../../contexts/event-context";
 import { fetchEventById } from "../../../api/events/events";
@@ -10,8 +9,6 @@ import { handleError } from "../../../api/utils";
 import EventModal from "./event-modal/EventModal";
 
 const EventMarkers = observer(() => {
-  const clusterer = useRef(null);
-
   const [markers, setMarkers] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -20,41 +17,41 @@ const EventMarkers = observer(() => {
 
   const map = useMap();
 
+  const clusterer = useMemo(() => {
+    if (!map) return null;
+
+    return new MarkerClusterer({ map });
+  }, [map]);
+
+  useEffect(() => {
+    if (!clusterer) return;
+
+    clusterer.clearMarkers();
+    clusterer.addMarkers(Object.values(markers));
+  }, [clusterer, markers]);
+
+  const setMarkerRef = useCallback((marker, key) => {
+    setMarkers((markers) => {
+      if ((marker && markers[key]) || (!marker && !markers[key]))
+        return markers;
+
+      if (marker) {
+        return { ...markers, [key]: marker };
+      } else {
+        const { [key]: _, ...newMarkers } = markers;
+
+        return newMarkers;
+      }
+    });
+  }, []);
+
   const toggleModal = () => {
     setIsModalOpen((prev) => !prev);
   };
 
-  useEffect(() => {
-    if (!map) return;
-
-    if (!clusterer.current) {
-      clusterer.current = new MarkerClusterer({ map });
-    }
-  }, [map]);
-
-  useEffect(() => {
-    clusterer.current?.clearMarkers();
-    clusterer.current?.addMarkers(Object.values(markers));
-  }, [markers]);
-
-  const setMarkerRef = debounce((marker, id) => {
-    if (marker && markers[id]) return;
-    if (!marker && !markers[id]) return;
-
-    setMarkers((prev) => {
-      if (marker) {
-        return { ...prev, [id]: marker };
-      } else {
-        const newMarkers = { ...prev };
-        delete newMarkers[id];
-        return newMarkers;
-      }
-    });
-  }, 100);
-
-  const onMarkerClick = (pin) => {
-    map.panTo({ lat: pin.latitude, lng: pin.longitude });
-    fetchEventById(pin.eventId)
+  const onMarkerClick = (event) => {
+    map.panTo({ lat: event.latitude, lng: event.longitude });
+    fetchEventById(event.eventId)
       .then((response) => {
         setSelectedEvent(response.data.event);
       })
@@ -66,15 +63,13 @@ const EventMarkers = observer(() => {
 
   return (
     <>
-      {eventStore.filteredEvents.map((pin) => (
-        <AdvancedMarker
-          key={pin.eventId}
-          position={{ lat: pin.latitude, lng: pin.longitude }}
-          ref={(marker) => setMarkerRef(marker, pin.eventId)}
-          onClick={() => onMarkerClick(pin)}
-        >
-          <EventMarker title={pin.title} />
-        </AdvancedMarker>
+      {eventStore.filteredEvents.map((event) => (
+        <EventMarker
+          key={event.eventId}
+          event={event}
+          onClick={onMarkerClick}
+          setMarkerRef={setMarkerRef}
+        />
       ))}
 
       {selectedEvent && (

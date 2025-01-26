@@ -1,20 +1,25 @@
 import { useState, useEffect } from "react";
 
 const useGeolocation = () => {
-  const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  const [location, setLocation] = useState({
+    latitude: 52.190987,
+    longitude: 19.355406,
+  });
+  const [isDefault, setIsDefault] = useState(true);
 
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         setLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
         });
+        setIsDefault(false);
       });
     }
   }, []);
 
-  return location;
+  return { isDefault, location };
 };
 
 export default useGeolocation;

@@ -9,11 +9,19 @@ import LogoutButton from "../auth/logout-button/LogoutButton";
 import AuthModalButton from "../auth/auth-modal-button/AuthModalButton";
 import ConfirmEventArrivalButton from "../events/confirm-event-arrival/ConfirmEventArivalButton";
 import EventList from "../events/event-list/EventList";
+import { useStores } from "../../contexts/event-context";
+import useGeolocation from "../../hooks/useGeolocation";
 
 const MainPage = () => {
-  const { user } = useAuth();
-
   const [name, setName] = useState();
+
+  const { user } = useAuth();
+  const { eventStore } = useStores();
+  const { location } = useGeolocation();
+
+  useEffect(() => {
+    eventStore.fetchEvents(location);
+  }, [eventStore, location]);
 
   useEffect(() => {
     setName(user?.name);
@@ -29,7 +37,7 @@ const MainPage = () => {
       <div className="nav">
         <div class="nav-userLabel">
           {getAuthButton()}{" "}
-          <img className="nav-userLabel-img" src="./user.png"></img>
+          <img className="nav-userLabel-img" src="./user.png" alt=""></img>
           <span className="nav-userLabel-arrow">&#129171;</span>
         </div>
       </div>

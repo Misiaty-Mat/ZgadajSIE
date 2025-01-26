@@ -12,31 +12,18 @@ import "./event-map.css";
 
 import useGeolocation from "../../hooks/useGeolocation";
 import EventMarkers from "./markers/event-markers";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MapHandler from "./MapHandler";
 import PlaceAutocomplete from "./autocomplete/PlaceAutocomplete";
 import { useFormikContext } from "formik";
-import { useStores } from "../../contexts/event-context";
 
-const EventMap = ({
-  width = "100%",
-  height = "80vh",
-  onSelectLocation,
-  onClickMarkerEnabled = false,
-}) => {
+const EventMap = ({ onSelectLocation, onClickMarkerEnabled = false }) => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [markerRef, marker] = useAdvancedMarkerRef();
 
-  const currentLocation = useGeolocation();
+  const { location } = useGeolocation();
 
   const formik = useFormikContext();
-
-  const { eventStore } = useStores();
-
-  useEffect(() => {
-    eventStore.fetchEvents();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   setDefaults({
     key: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -95,7 +82,7 @@ const EventMap = ({
       >
         <Map
           id={process.env.REACT_APP_MAP_ID}
-          center={currentLocation}
+          center={{ lat: location.latitude, lng: location.longitude }}
           zoom={5}
           mapId={process.env.REACT_APP_MAP_ID}
           gestureHandling={"greedy"}
