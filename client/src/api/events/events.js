@@ -8,14 +8,8 @@ export const fetchEventById = async (eventId) => {
   });
 };
 
-export const fetchPins = async () => {
-  return axios.get(`${API_URL}/event/pins`, {
-    headers: HEADERS,
-  });
-};
-
-export const fetchEventList = async (request) => {
-  return axios.post(`${API_URL}/event`, request, {
+export const fetchAllEvents = async (request) => {
+  return axios.post(`${API_URL}/event/all`, request, {
     headers: HEADERS,
   });
 };

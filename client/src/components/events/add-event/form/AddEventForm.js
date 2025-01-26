@@ -7,6 +7,7 @@ import { createEvent } from "../../../../api/events/events";
 import { toast } from "react-toastify";
 import { useStores } from "../../../../contexts/event-context";
 import { handleError } from "../../../../api/utils";
+import useGeolocation from "../../../../hooks/useGeolocation";
 import "./AddEventForm-style.css";
 
 const AddEventForm = ({ onReturn }) => {
@@ -17,6 +18,7 @@ const AddEventForm = ({ onReturn }) => {
   const [shouldSubmit, setShouldSubmit] = useState(false);
 
   const { eventStore } = useStores();
+  const { location } = useGeolocation();
 
   const nextStep = async () => {
     if (shouldSubmit && formikRef.current) {
@@ -51,7 +53,7 @@ const AddEventForm = ({ onReturn }) => {
           )
         );
         return (
-          <div className="addEventModal">
+          <div className="addEventModal ">
             <label>Gdzie ma się odbyć?</label>
             <div className="mapInModal">
               <LocationStep />
@@ -138,11 +140,12 @@ const AddEventForm = ({ onReturn }) => {
           buildingNumber: "",
           maxAttendance: undefined,
           description: "",
+          tagIds: [],
         }}
         onSubmit={(values) => {
           createEvent(values)
             .then(() => {
-              eventStore.fetchEvents();
+              eventStore.fetchEvents(location);
               toast.success("Twoje wydarzenie zostało utworzone!");
             })
             .catch((error) => {
