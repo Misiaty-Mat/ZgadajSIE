@@ -35,3 +35,36 @@
 .Modal-logOrRegister-button:hover {
   background-color: #053f6c;
 }
+
+@media (max-width: 500px) {
+  .Modal-logOrRegister {
+    flex-direction: column;
+    width: 450px;
+    gap: 0;
+  }
+  .Modal-logOrRegister-Register {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-left: none;
+    margin: 0;
+    width: 50vw;
+    font-size: 10px;
+    padding: 0;
+  }
+  .Modal-logOrRegister-Log {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    width: 50vw;
+    font-size: 10px;
+    padding: 0;
+  }
+  .Modal-logOrRegister-Text {
+    padding: 0;
+    width: 60vw;
+  }
+}

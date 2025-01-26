@@ -7,6 +7,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #cdd7d6;
   font-family: Roboto;
+  height: 100vh;
 }
 
 button {

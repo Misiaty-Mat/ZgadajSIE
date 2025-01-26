@@ -16,3 +16,13 @@
 .eventMapModal {
   display: block;
 }
+
+@media (max-width: 500px) {
+  .main-page-sectionRight-map {
+    position: absolute;
+    bottom: 0;
+    height: 50vh;
+    width: 100vw;
+    margin-bottom: -40vh;
+  }
+}
