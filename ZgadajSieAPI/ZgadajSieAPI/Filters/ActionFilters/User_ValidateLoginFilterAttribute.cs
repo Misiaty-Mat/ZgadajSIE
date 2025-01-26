@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using ZgadajSieAPI.Data;
+using ZgadajSieAPI.Models;
 using ZgadajSieAPI.Models.DTO;
 using ZgadajSieAPI.Services.Interfaces;
 
@@ -51,6 +52,10 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
                 return;
             }
+
+            // dodaj usera do httpcontext
+
+            context.HttpContext.Items["User"] = user;
 
             await next();
         }

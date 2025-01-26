@@ -14,5 +14,6 @@ namespace ZgadajSieAPI.Services.Interfaces
         double CalculateDistance(Coordinates userCoords, double eventLat, double eventLng);
         Task<List<Guid>> AttachTagsToEvent(Event @event, List<Tag> tags);
         Task<List<Guid>> DetachTagsToEvent(Event @event, List<Tag> tags);
+        string FetchOrganizerName(Guid organizerId);
     }
 }

@@ -27,7 +27,8 @@ namespace ZgadajSieAPI.Services
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email)
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Name, user.Name)
                 }),
                 Issuer = config["Jwt:Issuer"],
                 Audience = config["Jwt:Audience"],

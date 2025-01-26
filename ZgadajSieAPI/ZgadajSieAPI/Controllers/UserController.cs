@@ -35,7 +35,8 @@ namespace ZgadajSieAPI.Controllers
             {
                 Name = model.Name,
                 Email = model.Email,
-                PasswordHash = pw.Hash(model.Password)
+                PasswordHash = pw.Hash(model.Password),
+                Profile = new Profile()
             };
 
             db.Users.Add(user);
@@ -50,9 +51,10 @@ namespace ZgadajSieAPI.Controllers
 
         [HttpPost("login")]
         [TypeFilter(typeof(User_ValidateLoginFilterAttribute))]
+        [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
         public IActionResult Login([FromBody] UserLoginDTO model)
         {
-            var user = db.Users.First(x => x.Email == model.Email);
+            var user = HttpContext.Items["User"] as User;
 
             var token = jwt.GenerateToken(user);
 
@@ -63,6 +65,7 @@ namespace ZgadajSieAPI.Controllers
         [Authorize]
         [HttpPost("autologin")]
         [TypeFilter(typeof(User_ValidateAutologinFilterAttribute))]
+        [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
         public IActionResult Autologin([FromHeader(Name = "Authorization")] string token)
         {
             var user = HttpContext.Items["User"] as User;
@@ -79,16 +82,7 @@ namespace ZgadajSieAPI.Controllers
 
             var joinedEvents = await db.Events
                 .Where(e => e.Participants.Any(p => p.Id == userId)) 
-                .Select(e => new EventPersonalDTO 
-                {
-                    EventId = e.EventId,
-                    StartDate = e.StartDate,
-                    Title = e.EventDetails.Title,
-                    City = e.EventDetails.City,
-                    Street = e.EventDetails.Street,
-                    BuildingNumber = e.EventDetails.BuildingNumber,
-                    TagNames = e.Tags.Select(t => t.Name).ToList()
-                })
+                .Select(e => new EventPersonalDTO(e))
                 .ToListAsync();
 
             return Ok( new { JoinedEvents = joinedEvents });
@@ -103,16 +97,7 @@ namespace ZgadajSieAPI.Controllers
 
             var createdEvents = await db.Events
                 .Where(e => e.OrganizerId == userId)
-                .Select(e => new EventPersonalDTO
-                {
-                    EventId = e.EventId,
-                    StartDate = e.StartDate,
-                    Title = e.EventDetails.Title,
-                    City = e.EventDetails.City,
-                    Street = e.EventDetails.Street,
-                    BuildingNumber = e.EventDetails.BuildingNumber,
-                    TagNames = e.Tags.Select(t => t.Name).ToList()
-                })
+                .Select(e => new EventPersonalDTO(e))
                 .ToListAsync();
 
             return Ok(new { CreatedEvents = createdEvents });

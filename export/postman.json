@@ -20,7 +20,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJiMGFmNTA2YS03YmFmLTRkNmUtOWJhZi05NzMxNjEwNmRhNWQiLCJlbWFpbCI6InVzZXIwMUB0ZXN0LnBsIiwibmJmIjoxNzM3MzA2ODAxLCJleHAiOjE3Mzc1NjYwMDEsImlhdCI6MTczNzMwNjgwMSwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.777XO9cx3orlGug2JcBmhMPP-ctN7zUZBOWkd2-BdXs",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3NDgwNDc3LCJleHAiOjE3MzkyMDg0NzcsImlhdCI6MTczNzQ4MDQ3NywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.27WswvaQCLMWLz0OlEDW00aaouuYbqP3WtdxaPuxZQw",
 											"type": "string"
 										}
 									]
@@ -153,7 +153,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"User\",\r\n    \"email\": \"user02@test.pl\",\r\n    \"password\": \"password\"\r\n}",
+									"raw": "{\r\n    \"name\": \"User\",\r\n    \"email\": \"user04@test.pl\",\r\n    \"password\": \"password\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -194,7 +194,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3MzExMjI1LCJleHAiOjE3Mzc1NzA0MjUsImlhdCI6MTczNzMxMTIyNSwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.CC_ZaW5gE2CBLSd6hkgmVf57x6jYGdbDWcmm_S6nAUU",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3NDgwNDc3LCJleHAiOjE3MzkyMDg0NzcsImlhdCI6MTczNzQ4MDQ3NywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.27WswvaQCLMWLz0OlEDW00aaouuYbqP3WtdxaPuxZQw",
 											"type": "string"
 										}
 									]
@@ -410,7 +410,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:7272/api/event/d40b0e3c-8726-4c13-8f5f-9a94aa592d77",
+									"raw": "https://localhost:7272/api/event/64f78534-0fa6-4694-9f6b-bc7db0b85c42/participants",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -419,7 +419,34 @@
 									"path": [
 										"api",
 										"event",
-										"d40b0e3c-8726-4c13-8f5f-9a94aa592d77"
+										"64f78534-0fa6-4694-9f6b-bc7db0b85c42",
+										"participants"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Read event's participant by ID",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7272/api/event/64f78534-0fa6-4694-9f6b-bc7db0b85c42/participants/033432c8-737b-4e9f-a497-9f98b7c6e241",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"event",
+										"64f78534-0fa6-4694-9f6b-bc7db0b85c42",
+										"participants",
+										"033432c8-737b-4e9f-a497-9f98b7c6e241"
 									]
 								}
 							},
@@ -456,6 +483,35 @@
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Tags",
+			"item": [
+				{
+					"name": "Read all tags",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7272/api/tag/all",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7272",
+							"path": [
+								"api",
+								"tag",
+								"all"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

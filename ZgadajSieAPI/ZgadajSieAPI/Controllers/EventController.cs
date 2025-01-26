@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Filters.ActionFilters;
@@ -63,7 +64,9 @@ namespace ZgadajSieAPI.Controllers
         {
             var @event = HttpContext.Items["Event"] as Event;
 
-            return Ok(new { Event = new EventDTO(@event, @event.EventDetails) });
+            var dto = new EventDTO(@event, e.FetchOrganizerName(@event.OrganizerId));
+
+            return Ok(new { Event = dto });
         }
 
 
@@ -82,7 +85,7 @@ namespace ZgadajSieAPI.Controllers
 
             await db.SaveChangesAsync();
 
-            var eventDto = new EventDTO(@event, @event.EventDetails);
+            var eventDto = new EventDTO(@event, e.FetchOrganizerName(@event.OrganizerId));
 
             return CreatedAtAction(
                 nameof(GetEventById),
@@ -159,18 +162,33 @@ namespace ZgadajSieAPI.Controllers
 
             var deletedTags = await e.DetachTagsToEvent(@event, tags);
 
-            return Ok( new {Message = "Tags detached.", Tags = deletedTags });
+            return Ok(new { Message = "Tags detached.", Tags = deletedTags });
         }
 
 
         [HttpGet("{eventId}/participants")]
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateParticipantsFilterAttribute))]
-        public IActionResult GetEventParticipants([FromRoute] Guid eventId)
+        public async Task<IActionResult> GetEventParticipants([FromRoute] Guid eventId)
         {
-            var participants = HttpContext.Items["Participants"] as List<Guid>;
+            var @event = HttpContext.Items["Event"] as Event;
 
-            return Ok( new { Participants = participants });
+            await db.Entry(@event).Collection(e => e.Participants).LoadAsync();
+
+            var participantIds = @event.Participants.Select(p => p.Id).ToList();
+
+            return Ok(new { ParticipantIds = participantIds });
+        }
+
+
+        [HttpGet("{eventId}/participants/{participantId}")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateParticipantFilterAttribute))]
+        [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
+        public async Task<IActionResult> GetEventParticipants([FromRoute] Guid eventId, [FromRoute] Guid participantId)
+        {
+            var user = HttpContext.Items["User"] as User;
+
+            return Ok(new { User = new UserParticipantDTO(user) });
         }
     }
 }

@@ -9,5 +9,16 @@
         public string Street { get; set; }
         public string BuildingNumber { get; set; }
         public List<string> TagNames { get; set; }
+
+        public EventPersonalDTO(Event e)
+        {
+            EventId = e.EventId;
+            StartDate = e.StartDate;
+            Title = e.EventDetails.Title;
+            City = e.EventDetails.City;
+            Street = e.EventDetails.Street;
+            BuildingNumber = e.EventDetails.BuildingNumber;
+            TagNames = e.Tags.Select(t => t.Name).ToList();
+        }
     }
 }

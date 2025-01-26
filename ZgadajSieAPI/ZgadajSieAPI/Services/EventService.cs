@@ -107,7 +107,7 @@ namespace ZgadajSieAPI.Services
         public double CalculateDistance(Coordinates userCoords, double eventLat, double eventLng)
         {
             // Promień Ziemi w metrach
-            const double R = 6378137; 
+            const double R = 6378137;
 
             // Funkcja pomocnicza do konwersji stopni na radiany
             double ToRadians(double degrees) => (Math.PI / 180) * degrees;
@@ -130,7 +130,21 @@ namespace ZgadajSieAPI.Services
             // Konwersja na km
             distance /= 1000;
 
-            return distance; // Zwraca dystans w metrach
+            return distance;
+        }
+        public string FetchOrganizerName(Guid organizerId)
+        {
+            var name = db.Users
+                .Where(u => u.Id == organizerId)
+                .Select(u => u.Name)
+                .FirstOrDefault();
+
+            if (name == null)
+            {
+                throw new Exception();
+            }
+
+            return name;
         }
     }
 }

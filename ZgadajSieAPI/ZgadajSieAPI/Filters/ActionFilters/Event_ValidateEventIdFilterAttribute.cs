@@ -15,7 +15,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            // pusty obiekt
+            // pusty guid
 
             var eventId = context.ActionArguments["eventId"] as Guid?;
 
