@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.Extensions.Logging;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models;
 using ZgadajSieAPI.Models.DTO;
@@ -51,7 +52,7 @@ namespace ZgadajSieAPI.Services
         }
 
 
-        public Event UpdateEvent(Event e, EventUpdateDTO model)
+        public Event UpdateEvent(Event e, EventUpdateDTO model, List<Tag>? tags)
         {
             e.StartDate = model.StartDate;
             e.Latitude = model.Latitude;
@@ -62,6 +63,13 @@ namespace ZgadajSieAPI.Services
             e.EventDetails.Street = model.Street;
             e.EventDetails.BuildingNumber = model.BuildingNumber;
             e.EventDetails.MaxParticipation = model.MaxParticipation;
+
+            e.Tags.Clear();
+
+            foreach(var tag in tags)
+            {
+                e.Tags.Add(tag);
+            }
 
             return e;
         }
@@ -86,37 +94,6 @@ namespace ZgadajSieAPI.Services
             await db.SaveChangesAsync();
 
             return;
-        }
-
-
-        public async Task<List<Guid>> AttachTagsToEvent(Event @event, List<Tag> tags)
-        {
-            var addedTagIds = new List<Guid>();
-
-            @event.Tags = new List<Tag>();
-
-            foreach (var tag in tags)
-            {
-                @event.Tags.Add(tag);
-                addedTagIds.Add(tag.Id);
-            }
-            await db.SaveChangesAsync();
-
-            return addedTagIds;
-        }
-
-
-        public async Task<List<Guid>> DetachTagsToEvent(Event @event, List<Tag> tags)
-        {
-            var deletedTags = new List<Tag>();
-
-            List<Guid> tagIdsToRemove = tags.Select(t => t.Id).ToList();
-
-            @event.Tags.RemoveAll(tag => tagIdsToRemove.Contains(tag.Id));
-
-            await db.SaveChangesAsync();
-
-            return tagIdsToRemove;
         }
 
 
@@ -148,6 +125,8 @@ namespace ZgadajSieAPI.Services
 
             return distance;
         }
+
+
         public string FetchOrganizerName(Guid organizerId)
         {
             var name = db.Users
