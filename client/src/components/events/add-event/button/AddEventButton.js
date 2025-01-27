@@ -13,9 +13,8 @@ const AddEventButton = () => {
   return (
     <>
       <div className="addEventDiv">
-        <p>Dodaj Wydarzenie</p>
         <button className="addEventDiv-button" onClick={toggleModal}>
-          +
+          Dodaj Wydarzenie +
         </button>
       </div>
       <BasicModal

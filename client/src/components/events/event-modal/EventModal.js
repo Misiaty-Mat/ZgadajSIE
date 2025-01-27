@@ -3,19 +3,19 @@ import { Tooltip } from "react-tooltip";
 import { toast } from "react-toastify";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-import BasicModal from "../modal/BasicModal";
-import { useAuth } from "../../hooks/useAuth";
+import BasicModal from "../../modal/BasicModal";
+import { useAuth } from "../../../hooks/useAuth";
 import {
   fetchParticipants,
   joinEventPost,
   leaveEventPost,
-} from "../../api/events/events";
-import { handleError } from "../../api/utils";
+} from "../../../api/events/events";
+import { handleError } from "../../../api/utils";
 import { useCallback, useEffect, useState } from "react";
-import { useStores } from "../../contexts/event-context";
+import { useStores } from "../../../contexts/stores-context";
 
 const EventModal = observer(() => {
-  const [participants, setParticipants] = useState([]);
+  const [participantIds, setParticipantIds] = useState([]);
 
   const navigate = useNavigate();
   const { isLoggedIn, user } = useAuth();
@@ -27,11 +27,11 @@ const EventModal = observer(() => {
   const getParticipants = useCallback(async () => {
     fetchParticipants(selectedEvent.eventId)
       .then((response) => {
-        setParticipants(response.data.participants);
+        setParticipantIds(response.data.participantIds);
       })
       .catch((error) => {
         handleError(error);
-        setParticipants([]);
+        setParticipantIds([]);
       });
   }, [selectedEvent.eventId]);
 
@@ -40,7 +40,7 @@ const EventModal = observer(() => {
   };
 
   const isFull = () => {
-    return selectedEvent.maxParticipation === participants.length;
+    return selectedEvent.maxParticipation === participantIds.length;
   };
 
   useEffect(() => {
@@ -64,19 +64,20 @@ const EventModal = observer(() => {
   };
 
   const getTooltipMessage = () => {
-    if (isOrganizer()) {
+    if (!isLoggedIn) {
+      return "Zaloguj się by dołączyć do tego wydarzenia!";
+    } else if (isOrganizer()) {
       return "Jesteś twórcą tego wydarzenia!";
     } else if (isFull()) {
-    } else if (!isLoggedIn) {
-      return "Zaloguj się by dołączyć do tego wydarzenia!";
+      return "Niestety, ale do wydarzenia dołączyła już maksymalna ilość osób";
     }
   };
 
   const getEventDetailsButton = () => {
     const isParticipant =
       isLoggedIn &&
-      participants &&
-      participants.some((participantId) => {
+      participantIds &&
+      participantIds.some((participantId) => {
         return participantId === user.id;
       });
 
@@ -116,7 +117,7 @@ const EventModal = observer(() => {
       <p>Opis: {selectedEvent.description}</p>
 
       <p>
-        Uczestnicy: {participants.length}
+        Uczestnicy: {participantIds.length}
         {selectedEvent.maxParticipation &&
           " / " + selectedEvent.maxParticipation}
       </p>

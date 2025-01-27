@@ -37,7 +37,7 @@ const NavBar = () => {
 
   return (
     <div className="nav">
-      <div class="nav-userLabel">
+      <div className="nav-userLabel">
         {getAvailableButtons()} <h2>{name}</h2>
         <img className="nav-userLabel-img" src="./user.png" alt=""></img>
         <span className="nav-userLabel-arrow">&#129171;</span>

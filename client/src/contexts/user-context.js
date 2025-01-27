@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { apiLogin, apiRegister, checkToken } from "../api/user/auth";
 import { TOKEN_NAME } from "../util/constants";
 import { toast } from "react-toastify";
+import { handleError } from "../api/utils";
 
 export const AuthContext = createContext();
 
@@ -12,18 +13,6 @@ export const UserContextProvider = ({ children }) => {
 
   const isLoggedIn = localStorage.getItem(TOKEN_NAME) !== null && user !== null;
 
-  const handleAuthResponseError = (resError) => {
-    if (resError.status === 401) {
-      toast.error("Autentykacja nie powiodła się. Spróbuj jeszcze raz!");
-    } else if (resError.status === 500) {
-      toast.error(resError.message);
-    } else if (resError.response.data.errors) {
-      resError.response.data.errors.forEach((err) =>
-        toast.error(err.description)
-      );
-    }
-  };
-
   const login = (credentials) => {
     apiLogin(credentials)
       .then((userData) => {
@@ -31,7 +20,7 @@ export const UserContextProvider = ({ children }) => {
         setUser(userData.data.user);
       })
       .catch((error) => {
-        handleAuthResponseError(error);
+        handleError(error);
       });
   };
 
@@ -42,7 +31,7 @@ export const UserContextProvider = ({ children }) => {
         setUser(userData.data.user);
       })
       .catch((error) => {
-        handleAuthResponseError(error);
+        handleError(error);
       });
   };
 

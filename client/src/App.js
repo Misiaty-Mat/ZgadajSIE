@@ -3,9 +3,10 @@ import MainPage from "./components/pages/main-page/MainPage";
 import { UserContextProvider } from "./contexts/user-context";
 import CreatedEvents from "./components/pages/my-events/CreatedEvents";
 import JoinedEvents from "./components/pages/joined-events/JoinedEvents";
-import { useStores } from "./contexts/event-context";
-import EventModal from "./components/event-modal/EventModal";
+import { useStores } from "./contexts/stores-context";
+import EventModal from "./components/events/event-modal/EventModal";
 import { observer } from "mobx-react-lite";
+import { ToastContainer } from "react-toastify";
 
 const App = observer(() => {
   const { eventStore } = useStores();
@@ -19,6 +20,7 @@ const App = observer(() => {
       </Routes>
 
       {eventStore.selectedEvent && <EventModal />}
+      <ToastContainer />
     </UserContextProvider>
   );
 });

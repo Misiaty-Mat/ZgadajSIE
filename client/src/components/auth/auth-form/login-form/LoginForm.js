@@ -73,7 +73,7 @@ const LoginForm = ({ onSubmitExternal, onReturn }) => {
             .email("Musisz podać poprawny email")
             .required("Email jest wymaganym polem"),
           password: Yup.string()
-            .required()
+            .required("Musisz podać swoje hasło")
             .test(
               "length",
               "Hasło powinno zawierać przynajmniej 8 znaków",

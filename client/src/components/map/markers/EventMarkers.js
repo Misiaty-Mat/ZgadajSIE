@@ -3,7 +3,7 @@ import { useMap } from "@vis.gl/react-google-maps";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
 import EventMarker from "./EventMarker";
-import { useStores } from "../../../contexts/event-context";
+import { useStores } from "../../../contexts/stores-context";
 import { fetchEventById } from "../../../api/events/events";
 import { handleError } from "../../../api/utils";
 

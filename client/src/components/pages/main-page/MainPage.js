@@ -5,17 +5,16 @@ import "react-toastify/dist/ReactToastify.css";
 import "./main-page.styles.css";
 import { ToastContainer } from "react-toastify";
 import EventList from "../../events/event-list/EventList";
-import { useStores } from "../../../contexts/event-context";
-import useGeolocation from "../../../hooks/useGeolocation";
+import { useStores } from "../../../contexts/stores-context";
 import NavBar from "../../nav-bar/NavBar";
+import EventFilters from "../../events/event-list/event-filters/EventFilters";
 
 const MainPage = () => {
-  const { eventStore } = useStores();
-  const { location } = useGeolocation();
+  const { tagStore } = useStores();
 
   useEffect(() => {
-    eventStore.fetchEvents(location);
-  }, [eventStore, location]);
+    tagStore.fetchTags();
+  }, [tagStore]);
 
   return (
     <>
@@ -23,6 +22,7 @@ const MainPage = () => {
       <div className="main-page">
         <div className="main-page-sectionLeft">
           <h1>Strona główna</h1>
+          <EventFilters />
           <EventList />
         </div>
         <div className="main-page-sectionRight">

@@ -17,9 +17,12 @@ class EventStore {
   }
 
   fetchEvents(userPosition) {
+    this.page = 1;
+    this.isLastPage = false;
     fetchAllEvents(userPosition)
       .then((response) => {
         this.events = response.data.event;
+        this.filteredEvents = this.events;
       })
       .catch((error) => handleError(error));
   }
@@ -45,7 +48,13 @@ class EventStore {
           moment(event.startDate).isBefore(
             moment(filters.dateRangeEnd).add(1, "d")
           )
-      );
+      )
+      .filter((event) => {
+        return (
+          filters.tagNames.length === 0 ||
+          event.tagNames.some((eventTag) => filters.tagNames.includes(eventTag))
+        );
+      });
 
     if (sortBy === "distance") {
       this.filteredEvents.sort((a, b) => a.distance - b.distance);

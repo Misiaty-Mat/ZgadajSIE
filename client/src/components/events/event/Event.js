@@ -1,6 +1,6 @@
 import moment from "moment";
 import "./eventList-style.css";
-import { useStores } from "../../../contexts/event-context";
+import { useStores } from "../../../contexts/stores-context";
 import { observer } from "mobx-react-lite";
 
 const Event = observer(({ event }) => {
@@ -11,7 +11,7 @@ const Event = observer(({ event }) => {
   };
 
   return (
-    <div className="eventList">
+    <div className="eventList" onClick={selectEvent}>
       <div className="eventList-itemDiv">
         <h5 className="eventList-title">{event.title}</h5>
         <div className="eventList-itemDiv2">

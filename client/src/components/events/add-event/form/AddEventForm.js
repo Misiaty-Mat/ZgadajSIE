@@ -1,11 +1,12 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import React, { useRef, useState } from "react";
+import Select from "react-select";
 import LocationStep from "../form-steps/LocationStep";
 import DateTimeStep from "../form-steps/DateTimeStep";
 import { createEvent } from "../../../../api/events/events";
 import { toast } from "react-toastify";
-import { useStores } from "../../../../contexts/event-context";
+import { useStores } from "../../../../contexts/stores-context";
 import { handleError } from "../../../../api/utils";
 import useGeolocation from "../../../../hooks/useGeolocation";
 import "./AddEventForm-style.css";
@@ -17,7 +18,7 @@ const AddEventForm = ({ onReturn }) => {
   const [nextStepDisabled, setNextStepDisabled] = useState(false);
   const [shouldSubmit, setShouldSubmit] = useState(false);
 
-  const { eventStore } = useStores();
+  const { eventStore, tagStore } = useStores();
   const { location } = useGeolocation();
 
   const nextStep = async () => {
@@ -31,6 +32,20 @@ const AddEventForm = ({ onReturn }) => {
   const prevStep = () => {
     setShouldSubmit(false);
     setStep((prev) => prev - 1);
+  };
+
+  const getTagOptions = () => {
+    return tagStore.tags.map((tag) => ({
+      value: tag.id,
+      label: tag.name,
+    }));
+  };
+
+  const handleTagPicked = (selectedTags) => {
+    formikRef.current.setFieldValue(
+      "tagIds",
+      selectedTags.map((tag) => tag.value)
+    );
   };
 
   const renderSteps = (values, errors, isSubmitting) => {
@@ -71,7 +86,7 @@ const AddEventForm = ({ onReturn }) => {
           </div>
         );
       case 4:
-        setNextStepDisabled(errors.maxAttendance);
+        setNextStepDisabled(errors.maxParticipation);
         return (
           <div>
             <h3>Wybierz liczbę osób chcesz zaprosić</h3>
@@ -80,24 +95,39 @@ const AddEventForm = ({ onReturn }) => {
               <Field
                 className="fieldForm"
                 type="number"
-                name="maxAttendance"
+                name="maxParticipation"
                 min="1"
               />
               <small>
-                {errors.maxAttendance
-                  ? errors.maxAttendance
+                {errors.maxParticipation
+                  ? errors.maxParticipation
                   : "Zostaw puste jeżeli nie chcesz ustawić limitu zaproszonych osób"}
               </small>
             </div>
           </div>
         );
       case 5:
-        setNextStepDisabled(isSubmitting);
-        setShouldSubmit(true);
+        setNextStepDisabled(false);
         return (
           <div className="loginEmail">
             <label>Dodaj opis do swojego wydarzenia (opcjonalne):</label>
             <Field className="fieldForm" as="textarea" name="description" />
+          </div>
+        );
+      case 6:
+        setNextStepDisabled(
+          isSubmitting || values.tagIds.length === 0 || errors.tagIds
+        );
+        setShouldSubmit(true);
+        return (
+          <div>
+            <Select
+              className="fieldForm"
+              isMulti
+              options={getTagOptions()}
+              onChange={handleTagPicked}
+            />
+            <small>{errors.tagIds}</small>
           </div>
         );
       default:
@@ -126,6 +156,26 @@ const AddEventForm = ({ onReturn }) => {
     </Form>
   );
 
+  const VALIDATION_SCHEMA = Yup.object({
+    title: Yup.string().required("Wydarzenie musi mieć nazwę!"),
+    buildingNumber: Yup.string().required(
+      "Musisz wybrać miejsce gdzie odbędzie sie twoje wydarzenie!"
+    ),
+    startDate: Yup.date().required(
+      "Musisz wybrać kiedy ma się rozpocząć wydarzenie!"
+    ),
+    maxParticipation: Yup.number()
+      .integer("Musisz podać liczbę całkowitą")
+      .nullable(),
+    tagIds: Yup.array()
+      .of(
+        Yup.string().required(
+          "Wybierz do 3 oznaczeń, by łatwiej znaleźć twoje wydarzenie!"
+        )
+      )
+      .max(3, "Możesz wybrać do 3 oznaczeń"),
+  });
+
   return (
     <div>
       <Formik
@@ -138,7 +188,7 @@ const AddEventForm = ({ onReturn }) => {
           city: "",
           street: "",
           buildingNumber: "",
-          maxAttendance: undefined,
+          maxParticipation: undefined,
           description: "",
           tagIds: [],
         }}
@@ -153,18 +203,7 @@ const AddEventForm = ({ onReturn }) => {
             });
           onReturn();
         }}
-        validationSchema={Yup.object({
-          title: Yup.string().required("Wydarzenie musi mieć nazwę!"),
-          buildingNumber: Yup.string().required(
-            "Musisz wybrać miejsce gdzie odbędzie sie twoje wydarzenie!"
-          ),
-          startDate: Yup.date().required(
-            "Musisz wybrać kiedy ma się rozpocząć wydarzenie!"
-          ),
-          maxAttendance: Yup.number()
-            .integer("Musisz podać liczbę całkowitą")
-            .nullable(),
-        })}
+        validationSchema={VALIDATION_SCHEMA}
         validateOnChange
         validateOnMount
       >
