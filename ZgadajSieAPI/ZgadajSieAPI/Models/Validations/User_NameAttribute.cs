@@ -8,12 +8,12 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var name = value.ToString();
-
-            if (string.IsNullOrWhiteSpace(name))
+            if (value == null)
             {
                 return new ValidationResult("Name is required.");
             }
+
+            var name = value.ToString();
 
             // Legenda:
             // ^     - Początek ciągu

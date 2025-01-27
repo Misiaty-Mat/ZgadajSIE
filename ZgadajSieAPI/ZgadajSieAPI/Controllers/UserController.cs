@@ -81,11 +81,13 @@ namespace ZgadajSieAPI.Controllers
             var userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             var joinedEvents = await db.Events
-                .Where(e => e.Participants.Any(p => p.Id == userId)) 
+                .Where(e => e.Participants.Any(p => p.Id == userId))
+                .Include(e => e.EventDetails)
+                .Include(e => e.Tags)
                 .Select(e => new EventPersonalDTO(e))
                 .ToListAsync();
 
-            return Ok( new { JoinedEvents = joinedEvents });
+            return Ok(new { JoinedEvents = joinedEvents });
         }
 
 
@@ -97,6 +99,8 @@ namespace ZgadajSieAPI.Controllers
 
             var createdEvents = await db.Events
                 .Where(e => e.OrganizerId == userId)
+                .Include(e => e.EventDetails)
+                .Include(e => e.Tags)
                 .Select(e => new EventPersonalDTO(e))
                 .ToListAsync();
 

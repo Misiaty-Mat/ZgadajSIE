@@ -203,7 +203,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"title\": \"Event Title 05\",\r\n  \"startDate\": \"2025-12-30T10:00:00Z\",\r\n  \"latitude\": 51.123123,\r\n  \"longitude\": -0.321320,\r\n  \"description\": \"Test description 05.\",\r\n  \"city\": \"TestCity\",\r\n  \"street\": \"TestStreet\",\r\n  \"buildingNumber\": \"05\",\r\n  \"maxParticipation\": 6,\r\n  \"tagIds\": [\r\n    \"8857adc4-5010-4c00-bbc6-5043837fd6be\"\r\n  ]\r\n}",
+									"raw": "{\r\n  \"title\": \"Event Title 07\",\r\n  \"startDate\": \"2025-12-30T10:00:00Z\",\r\n  \"latitude\": 51.123123,\r\n  \"longitude\": -0.321320,\r\n  \"description\": \"Test description 07.\",\r\n  \"city\": \"TestCity\",\r\n  \"street\": \"TestStreet\",\r\n  \"buildingNumber\": \"07\",\r\n  \"maxAttendie\": 6,\r\n  \"tagIds\": [\r\n    \"8857adc4-5010-4c00-bbc6-5043837fd6be\"\r\n  ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -408,6 +408,38 @@
 										"event",
 										"update",
 										"78cd1d8c-6f12-4bb9-a676-149710c3c342"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete event by ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM3OTg1NDcyLCJleHAiOjE3Mzk3MTM0NzIsImlhdCI6MTczNzk4NTQ3MiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.-KmtTdRc7eNtqKn-VaqN6Grw1r6L31ZD8r8M-XD12DM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7272/api/event/delete/12ea5b15-73f6-4e50-b1e1-4193ef49bc86",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"event",
+										"delete",
+										"12ea5b15-73f6-4e50-b1e1-4193ef49bc86"
 									]
 								}
 							},

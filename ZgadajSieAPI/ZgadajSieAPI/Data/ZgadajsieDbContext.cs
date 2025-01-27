@@ -31,35 +31,62 @@ namespace ZgadajSieAPI.Data
             /* Konfiguracja relacji */
 
             // One-to-one
-            builder.Entity<User>() 
+            builder.Entity<User>()
                 .HasOne(u => u.Profile)
                 .WithOne(p => p.User)
-                .HasForeignKey<Profile>(p => p.UserId);
+                .HasForeignKey<Profile>(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade); // Usunięcie User usunie też jego profil
 
             // One-to-one
             builder.Entity<Event>()
                 .HasOne(e => e.EventDetails)
                 .WithOne(ed => ed.Event)
-                .HasForeignKey<EventDetails>(ed => ed.EventId);
+                .HasForeignKey<EventDetails>(ed => ed.EventId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // One-to-many
-            builder.Entity<Event>() 
+            builder.Entity<Event>()
                 .HasOne(e => e.Organiser)
                 .WithMany(u => u.OrganizedEvents)
                 .HasForeignKey(e => e.OrganizerId)
-                .OnDelete(DeleteBehavior.Cascade); // Usunięcie User usunie wszystkie jego Eventy
+                .OnDelete(DeleteBehavior.Cascade);
 
-            // Many-to-many
-            builder.Entity<User>()
-                .HasMany(u => u.JoinedEvents)
-                .WithMany(e => e.Participants)
-                .UsingEntity(t => t.ToTable("EventRegistrations")); // Tabela pośrednia wygeneruje się sama
+            // Many-to-many:
+            builder.Entity<Event>()
+                .HasMany(e => e.Participants)
+                .WithMany(u => u.JoinedEvents)
+                .UsingEntity<Dictionary<string, object>>(
+                    "EventRegistrations",
+                    j => j
+                        .HasOne<User>()
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                        .HasOne<Event>()
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                );
 
             // Many-to-many
             builder.Entity<Event>()
                 .HasMany(e => e.Tags)
                 .WithMany(t => t.Events)
-                .UsingEntity(t => t.ToTable("EventTags"));
+                .UsingEntity<Dictionary<string, object>>(
+                    "EventTags",
+                    j => j
+                        .HasOne<Tag>()
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                        .HasOne<Event>()
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                );
+
         }
     }
 }

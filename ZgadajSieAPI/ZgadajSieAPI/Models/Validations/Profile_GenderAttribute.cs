@@ -6,12 +6,12 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var gender = value.ToString();
-
-            if (gender == null) // nie wymagane
+            if (value == null)
             {
                 return ValidationResult.Success;
             }
+
+            var gender = value.ToString();
 
             if (gender.Equals("male", StringComparison.OrdinalIgnoreCase) ||
                 gender.Equals("female", StringComparison.OrdinalIgnoreCase))

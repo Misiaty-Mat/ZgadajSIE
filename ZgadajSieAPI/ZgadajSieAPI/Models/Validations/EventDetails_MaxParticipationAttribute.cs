@@ -7,6 +7,11 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
+            if (value == null)
+            {
+                return ValidationResult.Success;
+            }
+
             if (!int.TryParse(value.ToString(), out var maxParticipation))
             {
                 return new ValidationResult("Max participation must be a valid integer.");

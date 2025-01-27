@@ -113,6 +113,22 @@ namespace ZgadajSieAPI.Controllers
 
 
         [Authorize]
+        [HttpDelete("delete/{eventId}")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
+        public async Task<IActionResult> DeleteEvent([FromRoute] Guid eventId)
+        {
+            var @event = HttpContext.Items["Event"] as Event;
+
+            db.Events.Remove(@event);
+
+            await db.SaveChangesAsync();
+
+            return Ok(@event);
+        }
+
+
+        [Authorize]
         [HttpPost("join/{eventId}")]
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
@@ -208,5 +224,8 @@ namespace ZgadajSieAPI.Controllers
 
             return Ok(new { User = new UserParticipantDTO(user) });
         }
+
+
+        // nowy endpoint GetQRCode(req = eventId, res = qrcode) 
     }
 }
