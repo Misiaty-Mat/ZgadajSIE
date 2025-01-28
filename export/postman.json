@@ -51,7 +51,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmZTQ2MzlhOS0yZjJjLTQ0NjYtYWIxMy0xYWFjYThhNmNhZTMiLCJlbWFpbCI6InVzZXIwNUB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDcyMzMzLCJleHAiOjE3Mzk4MDAzMzMsImlhdCI6MTczODA3MjMzMywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.dHHo618wKTaD_4iaptnOVF0pYlXKRWrQ12o05aFmc6o",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJiMGFmNTA2YS03YmFmLTRkNmUtOWJhZi05NzMxNjEwNmRhNWQiLCJlbWFpbCI6InVzZXIwMUB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDc4NzkxLCJleHAiOjE3Mzk4MDY3OTEsImlhdCI6MTczODA3ODc5MSwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.p2TVvkYkijzCN3sxeaGTDShb6_2MN1erC-ngYPvN7_k",
 											"type": "string"
 										}
 									]
@@ -60,7 +60,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"code\": \"7liqK9EJ4S\"\r\n}",
+									"raw": "{\r\n    \"code\": \"VwakAToTed\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -68,7 +68,7 @@
 									}
 								},
 								"url": {
-									"raw": "https://localhost:7272/api/user/scan/0dd67d9e-e9eb-49bc-a540-28e9dec7d2fa/qr",
+									"raw": "https://localhost:7272/api/user/scan/957abfe9-5cd1-4cc0-8ef5-a28d98748c06/qr",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -78,7 +78,7 @@
 										"api",
 										"user",
 										"scan",
-										"0dd67d9e-e9eb-49bc-a540-28e9dec7d2fa",
+										"957abfe9-5cd1-4cc0-8ef5-a28d98748c06",
 										"qr"
 									]
 								}
@@ -148,6 +148,37 @@
 							"response": []
 						},
 						{
+							"name": "Read user's profile",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4MmExZGU5Yi1hODI0LTRlZmUtODI2NS1iNjg5ZTc0M2IwZDEiLCJlbWFpbCI6InVzZXIwNkB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDc3NDk2LCJleHAiOjE3Mzk4MDU0OTYsImlhdCI6MTczODA3NzQ5NiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.aWPo3HdKpC5V9zpCt97czvHspSxYaRHz6CuQUyEi-VY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7272/api/user/profile",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"user",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Update user's profile",
 							"request": {
 								"auth": {
@@ -155,7 +186,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmZTQ2MzlhOS0yZjJjLTQ0NjYtYWIxMy0xYWFjYThhNmNhZTMiLCJlbWFpbCI6InVzZXIwNUB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDcyMzMzLCJleHAiOjE3Mzk4MDAzMzMsImlhdCI6MTczODA3MjMzMywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.dHHo618wKTaD_4iaptnOVF0pYlXKRWrQ12o05aFmc6o",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4MmExZGU5Yi1hODI0LTRlZmUtODI2NS1iNjg5ZTc0M2IwZDEiLCJlbWFpbCI6InVzZXIwNkB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDc3NDk2LCJleHAiOjE3Mzk4MDU0OTYsImlhdCI6MTczODA3NzQ5NiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.aWPo3HdKpC5V9zpCt97czvHspSxYaRHz6CuQUyEi-VY",
 											"type": "string"
 										}
 									]
@@ -164,7 +195,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"New\",\r\n    \"age\": 18,\r\n    \"gender\": \"male\",\r\n    \"description\": \"Profile update 01\"\r\n}",
+									"raw": "{\r\n    \"name\": \"Newer\",\r\n    \"age\": 81,\r\n    \"gender\": \"male\",\r\n    \"description\": \"Profile update 02\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -203,7 +234,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"email\": \"user05@test.pl\",\r\n    \"password\": \"password\"\r\n}",
+									"raw": "{\r\n    \"email\": \"user02@test.pl\",\r\n    \"password\": \"password\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -236,7 +267,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"User\",\r\n    \"email\": \"user05@test.pl\",\r\n    \"password\": \"password\"\r\n}",
+									"raw": "{\r\n    \"name\": \"User\",\r\n    \"email\": \"user06@test.pl\",\r\n    \"password\": \"password\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -277,7 +308,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3NDgwNDc3LCJleHAiOjE3MzkyMDg0NzcsImlhdCI6MTczNzQ4MDQ3NywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.27WswvaQCLMWLz0OlEDW00aaouuYbqP3WtdxaPuxZQw",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4MmExZGU5Yi1hODI0LTRlZmUtODI2NS1iNjg5ZTc0M2IwZDEiLCJlbWFpbCI6InVzZXIwNkB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDc3NDk2LCJleHAiOjE3Mzk4MDU0OTYsImlhdCI6MTczODA3NzQ5NiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.aWPo3HdKpC5V9zpCt97czvHspSxYaRHz6CuQUyEi-VY",
 											"type": "string"
 										}
 									]
@@ -286,7 +317,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"title\": \"Event Title 08\",\r\n  \"startDate\": \"2025-12-30T10:00:00Z\",\r\n  \"latitude\": 51.123123,\r\n  \"longitude\": -0.321320,\r\n  \"description\": \"Test description 08.\",\r\n  \"city\": \"TestCity\",\r\n  \"street\": \"TestStreet\",\r\n  \"buildingNumber\": \"08\",\r\n  \"maxAttendie\": 6,\r\n  \"tagIds\": [\r\n  ]\r\n}",
+									"raw": "{\r\n  \"title\": \"Event Title 08\",\r\n  \"startDate\": \"2025-12-30T10:00:00Z\",\r\n  \"latitude\": 51.123123,\r\n  \"longitude\": -0.321320,\r\n  \"description\": \"Test description 08.\",\r\n  \"city\": \"TestCity\",\r\n  \"street\": \"TestStreet\",\r\n  \"buildingNumber\": \"08\",\r\n  \"maxAttendie\": 6,\r\n  \"tagIds\": [\r\n    \"5045090e-3ccd-4b48-9230-0e78da418d47\",\r\n    \"7bf16696-9453-4226-afac-90048d7d6ce6\",\r\n    \"8857adc4-5010-4c00-bbc6-5043837fd6be\"\r\n  ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -317,7 +348,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmZTQ2MzlhOS0yZjJjLTQ0NjYtYWIxMy0xYWFjYThhNmNhZTMiLCJlbWFpbCI6InVzZXIwNUB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDcyMzMzLCJleHAiOjE3Mzk4MDAzMzMsImlhdCI6MTczODA3MjMzMywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.dHHo618wKTaD_4iaptnOVF0pYlXKRWrQ12o05aFmc6o",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDc5MjA1LCJleHAiOjE3Mzk4MDcyMDUsImlhdCI6MTczODA3OTIwNSwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.rnzW0Ozd8edBkM3O0IpleRnONrMD08yEtmnAhuOfKX8",
 											"type": "string"
 										}
 									]
@@ -325,7 +356,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:7272/api/event/join/0dd67d9e-e9eb-49bc-a540-28e9dec7d2fa",
+									"raw": "https://localhost:7272/api/event/join/957abfe9-5cd1-4cc0-8ef5-a28d98748c06",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -335,7 +366,7 @@
 										"api",
 										"event",
 										"join",
-										"0dd67d9e-e9eb-49bc-a540-28e9dec7d2fa"
+										"957abfe9-5cd1-4cc0-8ef5-a28d98748c06"
 									]
 								}
 							},
@@ -349,7 +380,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3NDgwNDc3LCJleHAiOjE3MzkyMDg0NzcsImlhdCI6MTczNzQ4MDQ3NywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.27WswvaQCLMWLz0OlEDW00aaouuYbqP3WtdxaPuxZQw",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJmZTQ2MzlhOS0yZjJjLTQ0NjYtYWIxMy0xYWFjYThhNmNhZTMiLCJlbWFpbCI6InVzZXIwNUB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDcyMzMzLCJleHAiOjE3Mzk4MDAzMzMsImlhdCI6MTczODA3MjMzMywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.dHHo618wKTaD_4iaptnOVF0pYlXKRWrQ12o05aFmc6o",
 											"type": "string"
 										}
 									]
@@ -357,7 +388,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:7272/api/event/leave/43f438e8-b3b8-46ff-a1c8-a2dd86f81d9b",
+									"raw": "https://localhost:7272/api/event/leave/957abfe9-5cd1-4cc0-8ef5-a28d98748c06",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -367,80 +398,7 @@
 										"api",
 										"event",
 										"leave",
-										"43f438e8-b3b8-46ff-a1c8-a2dd86f81d9b"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update event by ID",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM3OTg1NDcyLCJleHAiOjE3Mzk3MTM0NzIsImlhdCI6MTczNzk4NTQ3MiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.-KmtTdRc7eNtqKn-VaqN6Grw1r6L31ZD8r8M-XD12DM",
-											"type": "string"
-										}
-									]
-								},
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n  \"title\": \"Edited Title 02\",\r\n  \"startDate\": \"2025-12-30T10:00:00Z\",\r\n  \"latitude\": 35.123123,\r\n  \"longitude\": -70.321320,\r\n  \"description\": \"Edited description 02.\",\r\n  \"city\": \"TestCity\",\r\n  \"street\": \"TestStreet\",\r\n  \"buildingNumber\": \"02\",\r\n  \"maxParticipation\": 1,\r\n    \"tagIds\": [\r\n    \"7bf16696-9453-4226-afac-90048d7d6ce6\",\r\n    \"5045090e-3ccd-4b48-9230-0e78da418d47\"\r\n  ]\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://localhost:7272/api/event/update/43f438e8-b3b8-46ff-a1c8-a2dd86f81d9b",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "7272",
-									"path": [
-										"api",
-										"event",
-										"update",
-										"43f438e8-b3b8-46ff-a1c8-a2dd86f81d9b"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete event by ID",
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM3OTg1NDcyLCJleHAiOjE3Mzk3MTM0NzIsImlhdCI6MTczNzk4NTQ3MiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.-KmtTdRc7eNtqKn-VaqN6Grw1r6L31ZD8r8M-XD12DM",
-											"type": "string"
-										}
-									]
-								},
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "https://localhost:7272/api/event/delete/30bb5bd1-bdaf-4045-9434-08231a0f8677",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "7272",
-									"path": [
-										"api",
-										"event",
-										"delete",
-										"30bb5bd1-bdaf-4045-9434-08231a0f8677"
+										"957abfe9-5cd1-4cc0-8ef5-a28d98748c06"
 									]
 								}
 							},
@@ -454,7 +412,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4ZTBiNzlmYi0xOGE5LTRlODEtYTQ1ZC03MmU3OGE3MTYwN2MiLCJlbWFpbCI6InVzZXIwMkB0ZXN0LnBsIiwibmJmIjoxNzM3NDgwNDc3LCJleHAiOjE3MzkyMDg0NzcsImlhdCI6MTczNzQ4MDQ3NywiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.27WswvaQCLMWLz0OlEDW00aaouuYbqP3WtdxaPuxZQw",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4MmExZGU5Yi1hODI0LTRlZmUtODI2NS1iNjg5ZTc0M2IwZDEiLCJlbWFpbCI6InVzZXIwNkB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDc3NDk2LCJleHAiOjE3Mzk4MDU0OTYsImlhdCI6MTczODA3NzQ5NiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.aWPo3HdKpC5V9zpCt97czvHspSxYaRHz6CuQUyEi-VY",
 											"type": "string"
 										}
 									]
@@ -462,7 +420,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:7272/api/event/0dd67d9e-e9eb-49bc-a540-28e9dec7d2fa/qr",
+									"raw": "https://localhost:7272/api/event/show/957abfe9-5cd1-4cc0-8ef5-a28d98748c06/qr",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -471,8 +429,82 @@
 									"path": [
 										"api",
 										"event",
-										"0dd67d9e-e9eb-49bc-a540-28e9dec7d2fa",
+										"show",
+										"957abfe9-5cd1-4cc0-8ef5-a28d98748c06",
 										"qr"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update event by ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4MmExZGU5Yi1hODI0LTRlZmUtODI2NS1iNjg5ZTc0M2IwZDEiLCJlbWFpbCI6InVzZXIwNkB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDc3NDk2LCJleHAiOjE3Mzk4MDU0OTYsImlhdCI6MTczODA3NzQ5NiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.aWPo3HdKpC5V9zpCt97czvHspSxYaRHz6CuQUyEi-VY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"Edited Title 03\",\r\n  \"startDate\": \"2025-12-30T10:00:00Z\",\r\n  \"latitude\": 35.123123,\r\n  \"longitude\": -70.321320,\r\n  \"description\": \"Edited description 03.\",\r\n  \"city\": \"TestCity\",\r\n  \"street\": \"TestStreet\",\r\n  \"buildingNumber\": \"03\",\r\n  \"maxParticipation\": 100,\r\n    \"tagIds\": [\r\n    \"7bf16696-9453-4226-afac-90048d7d6ce6\",\r\n    \"5045090e-3ccd-4b48-9230-0e78da418d47\"\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:7272/api/event/update/957abfe9-5cd1-4cc0-8ef5-a28d98748c06",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"event",
+										"update",
+										"957abfe9-5cd1-4cc0-8ef5-a28d98748c06"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete event by ID",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI4MmExZGU5Yi1hODI0LTRlZmUtODI2NS1iNjg5ZTc0M2IwZDEiLCJlbWFpbCI6InVzZXIwNkB0ZXN0LnBsIiwidW5pcXVlX25hbWUiOiJVc2VyIiwibmJmIjoxNzM4MDc3NDk2LCJleHAiOjE3Mzk4MDU0OTYsImlhdCI6MTczODA3NzQ5NiwiaXNzIjoieW91cmRvbWFpbi5jb20iLCJhdWQiOiJ5b3VyZG9tYWluLmNvbSJ9.aWPo3HdKpC5V9zpCt97czvHspSxYaRHz6CuQUyEi-VY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:7272/api/event/delete/ecd96a4e-704f-45b6-848d-2665cf24fea7",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"event",
+										"delete",
+										"ecd96a4e-704f-45b6-848d-2665cf24fea7"
 									]
 								}
 							},
@@ -483,6 +515,36 @@
 				{
 					"name": "Unauthorized",
 					"item": [
+						{
+							"name": "Read all events",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"latitude\": 51.123123,\r\n    \"longitude\": -5.321320\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:7272/api/event/all",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7272",
+									"path": [
+										"api",
+										"event",
+										"all"
+									]
+								}
+							},
+							"response": []
+						},
 						{
 							"name": "Read an event by ID",
 							"request": {
@@ -516,7 +578,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://localhost:7272/api/event/64f78534-0fa6-4694-9f6b-bc7db0b85c42/participants",
+									"raw": "https://localhost:7272/api/event/957abfe9-5cd1-4cc0-8ef5-a28d98748c06/participants",
 									"protocol": "https",
 									"host": [
 										"localhost"
@@ -525,7 +587,7 @@
 									"path": [
 										"api",
 										"event",
-										"64f78534-0fa6-4694-9f6b-bc7db0b85c42",
+										"957abfe9-5cd1-4cc0-8ef5-a28d98748c06",
 										"participants"
 									]
 								}
@@ -553,36 +615,6 @@
 										"64f78534-0fa6-4694-9f6b-bc7db0b85c42",
 										"participants",
 										"8e0b79fb-18a9-4e81-a45d-72e78a71607c"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Read all events",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"latitude\": 51.123123,\r\n    \"longitude\": -5.321320\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://localhost:7272/api/event/all",
-									"protocol": "https",
-									"host": [
-										"localhost"
-									],
-									"port": "7272",
-									"path": [
-										"api",
-										"event",
-										"all"
 									]
 								}
 							},
