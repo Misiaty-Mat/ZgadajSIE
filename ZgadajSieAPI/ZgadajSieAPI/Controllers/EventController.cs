@@ -77,7 +77,7 @@ namespace ZgadajSieAPI.Controllers
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var tags = HttpContext.Items["tags"] as List<Tag>;
+            var tags = HttpContext.Items["Tags"] as List<Tag>;
 
             var @event = e.CreateNewEvent(model, userId, tags);
 
@@ -100,11 +100,16 @@ namespace ZgadajSieAPI.Controllers
         [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
         [TypeFilter(typeof(Event_ValidateMaxParticipationFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateSentTagIdsFilterAttribute))]
         public async Task<IActionResult> UpdateEvent([FromRoute] Guid eventId, [FromBody] EventUpdateDTO model)
         {
             var @event = HttpContext.Items["Event"] as Event;
 
-            @event = e.UpdateEvent(@event, model);
+            var tags = HttpContext.Items["Tags"] as List<Tag>;
+
+            db.Entry(@event).Collection(e => e.Tags).Load();
+
+            @event = e.UpdateEvent(@event, model, tags);
 
             await db.SaveChangesAsync();
 
@@ -163,43 +168,6 @@ namespace ZgadajSieAPI.Controllers
         }
 
 
-        [Authorize]
-        [HttpPost("{eventId}/attach")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateSentTagIdsFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateTagsDuplicationFilterAttribute))]
-        public async Task<IActionResult> AttachTagsToEvent([FromRoute] Guid eventId, [FromBody] TagIdsDTO tagIds)
-        {
-            var tags = HttpContext.Items["Tags"] as List<Tag>;
-
-            var @event = HttpContext.Items["Event"] as Event;
-
-            var addedTags = await e.AttachTagsToEvent(@event, tags);
-
-            return Ok(new { Message = "Tags attached.", Tags = addedTags });
-        }
-
-
-        [Authorize]
-        [HttpPost("{eventId}/detach")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateSentTagIdsFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventsTagsFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventsTagsToRemoveFilterAttribute))]
-        public async Task<IActionResult> DetachTagsFromEvent([FromRoute] Guid eventId, [FromBody] TagIdsDTO tagIds)
-        {
-            var tags = HttpContext.Items["Tags"] as List<Tag>;
-
-            var @event = HttpContext.Items["Event"] as Event;
-
-            var deletedTags = await e.DetachTagsToEvent(@event, tags);
-
-            return Ok(new { Message = "Tags detached.", Tags = deletedTags });
-        }
-
-
         [HttpGet("{eventId}/participants")]
         [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
         public async Task<IActionResult> GetEventParticipants([FromRoute] Guid eventId)
@@ -226,6 +194,15 @@ namespace ZgadajSieAPI.Controllers
         }
 
 
-        // nowy endpoint GetQRCode(req = eventId, res = qrcode) 
+        [Authorize]
+        [HttpGet("read/{eventId}/qr")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
+        public async Task<IActionResult> GetEventsQrCode([FromRoute] Guid eventId)
+        {
+            var @event = HttpContext.Items["Event"] as Event;
+
+            return Ok(new { Code = @event.CheckInCode });
+        }
     }
 }

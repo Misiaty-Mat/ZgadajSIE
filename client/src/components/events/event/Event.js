@@ -7,7 +7,7 @@ const Event = observer(({ event }) => {
   const { eventStore } = useStores();
 
   const selectEvent = () => {
-    eventStore.setSelectedEvent(event);
+    eventStore.setSelectedEvent(event.eventId);
   };
 
   return (

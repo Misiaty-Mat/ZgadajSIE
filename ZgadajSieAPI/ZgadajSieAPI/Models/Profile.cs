@@ -16,6 +16,8 @@ namespace ZgadajSieAPI.Models
 
         public string? Description { get; set; }
 
+        public int SocialScore { get; set; }
+
         public byte[]? Avatar { get; set; }
 
 

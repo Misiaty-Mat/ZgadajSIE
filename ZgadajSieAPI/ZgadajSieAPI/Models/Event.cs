@@ -28,6 +28,10 @@ namespace ZgadajSieAPI.Models
         [Required]
         public double Longitude { get; set; }
 
+        [Required]
+        [StringLength(10)]
+        public string CheckInCode { get; set; } 
+
         public EventDetails? EventDetails { get; set; }
 
 
@@ -35,5 +39,7 @@ namespace ZgadajSieAPI.Models
         public User Organiser { get; set; }
         public List<Tag> Tags { get; set; }
         public List<User> Participants { get; set; } = new List<User>();
+        public List<CheckIn> CheckIns { get; set; } = new List<CheckIn>();
+
     }
 }

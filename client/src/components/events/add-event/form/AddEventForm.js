@@ -1,5 +1,4 @@
 import { Field, Form, Formik } from "formik";
-import * as Yup from "yup";
 import React, { useRef, useState } from "react";
 import Select from "react-select";
 import LocationStep from "../form-steps/LocationStep";
@@ -10,6 +9,7 @@ import { useStores } from "../../../../contexts/stores-context";
 import { handleError } from "../../../../api/utils";
 import useGeolocation from "../../../../hooks/useGeolocation";
 import "./AddEventForm-style.css";
+import { EVENT_VALIDATION_SCHEMA } from "../validation/schema";
 
 const AddEventForm = ({ onReturn }) => {
   const formikRef = useRef(null);
@@ -32,13 +32,6 @@ const AddEventForm = ({ onReturn }) => {
   const prevStep = () => {
     setShouldSubmit(false);
     setStep((prev) => prev - 1);
-  };
-
-  const getTagOptions = () => {
-    return tagStore.tags.map((tag) => ({
-      value: tag.id,
-      label: tag.name,
-    }));
   };
 
   const handleTagPicked = (selectedTags) => {
@@ -124,7 +117,7 @@ const AddEventForm = ({ onReturn }) => {
             <Select
               className="fieldForm"
               isMulti
-              options={getTagOptions()}
+              options={tagStore.tagInputOptions}
               onChange={handleTagPicked}
             />
             <small>{errors.tagIds}</small>
@@ -156,26 +149,6 @@ const AddEventForm = ({ onReturn }) => {
     </Form>
   );
 
-  const VALIDATION_SCHEMA = Yup.object({
-    title: Yup.string().required("Wydarzenie musi mieć nazwę!"),
-    buildingNumber: Yup.string().required(
-      "Musisz wybrać miejsce gdzie odbędzie sie twoje wydarzenie!"
-    ),
-    startDate: Yup.date().required(
-      "Musisz wybrać kiedy ma się rozpocząć wydarzenie!"
-    ),
-    maxParticipation: Yup.number()
-      .integer("Musisz podać liczbę całkowitą")
-      .nullable(),
-    tagIds: Yup.array()
-      .of(
-        Yup.string().required(
-          "Wybierz do 3 oznaczeń, by łatwiej znaleźć twoje wydarzenie!"
-        )
-      )
-      .max(3, "Możesz wybrać do 3 oznaczeń"),
-  });
-
   return (
     <div>
       <Formik
@@ -203,7 +176,7 @@ const AddEventForm = ({ onReturn }) => {
             });
           onReturn();
         }}
-        validationSchema={VALIDATION_SCHEMA}
+        validationSchema={EVENT_VALIDATION_SCHEMA}
         validateOnChange
         validateOnMount
       >

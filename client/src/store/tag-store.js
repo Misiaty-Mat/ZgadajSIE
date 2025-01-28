@@ -16,6 +16,13 @@ class TagStore {
       })
       .catch((error) => handleError(error));
   }
+
+  get tagInputOptions() {
+    return this.tags.map((tag) => ({
+      value: tag.id,
+      label: tag.name,
+    }));
+  }
 }
 
 const tagStore = new TagStore();

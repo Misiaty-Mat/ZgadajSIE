@@ -42,7 +42,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
             // dodaj tagi do httpcontexu
 
-            context.HttpContext.Items["tags"] = tags;
+            context.HttpContext.Items["Tags"] = tags;
 
             await next();
         }

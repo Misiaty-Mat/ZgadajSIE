@@ -48,7 +48,7 @@ export const UserContextProvider = ({ children }) => {
             if (response.status !== 200) throw new Error("Not authenticated");
             setUser(response.data.user);
           })
-          .catch((error) => {
+          .catch(() => {
             toast.error("Sesja wygasła. Zaloguj się jeszcze raz");
             logout();
           });

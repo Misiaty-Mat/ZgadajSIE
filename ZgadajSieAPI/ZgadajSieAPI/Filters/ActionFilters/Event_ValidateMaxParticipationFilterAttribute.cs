@@ -62,6 +62,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
 
                 return;
             }
+
             await next();
         }
     }

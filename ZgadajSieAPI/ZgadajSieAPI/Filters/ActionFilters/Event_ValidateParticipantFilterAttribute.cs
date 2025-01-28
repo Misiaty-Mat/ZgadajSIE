@@ -19,23 +19,9 @@ namespace ZgadajSieAPI.Filters.ActionFilters
         {
             var @event = context.HttpContext.Items["Event"] as Event;
 
-            // brak uczestników
+            // brak uczestnika na liście
 
             await db.Entry(@event).Collection(e => e.Participants).LoadAsync();
-
-            if (@event.Participants.Count == 0)
-            {
-                context.ModelState.AddModelError("Event", $"Event '{@event.EventId}' doesn't have any participants.");
-                var problemDetails = new ValidationProblemDetails(context.ModelState)
-                {
-                    Status = StatusCodes.Status400BadRequest
-                };
-                context.Result = new BadRequestObjectResult(problemDetails);
-
-                return;
-            }
-
-            // brak użytkownika na liście
 
             var participantId = context.ActionArguments["participantId"] as Guid?;
 
@@ -65,7 +51,7 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                 }
             }
 
-            // nie załadowano użytkownika
+            // nie załadowano uczestnika
 
             var user = await db.Users.FindAsync(participantId);
 

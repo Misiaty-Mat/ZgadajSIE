@@ -15,26 +15,12 @@ namespace ZgadajSieAPI.Filters.ActionFilters
             this.db = db;
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-        {
-            // pusty obiekt
-
-            var dto = context.ActionArguments["tagIds"] as TagIdsDTO;
-
-            if (dto == null)
-            {
-                context.ModelState.AddModelError("Tag", $"No tag id sent.");
-                var problemDetails = new ValidationProblemDetails(context.ModelState)
-                {
-                    Status = StatusCodes.Status400BadRequest
-                };
-                context.Result = new BadRequestObjectResult(problemDetails);
-
-                return;
-            }
-
+        { 
             // brak tagów
 
-            var tagIds = dto.TagIds;
+            var model = context.ActionArguments["model"] as EventUpdateDTO;
+
+            var tagIds = model.TagIds;
 
             List<Tag> tags = new List<Tag>();
 

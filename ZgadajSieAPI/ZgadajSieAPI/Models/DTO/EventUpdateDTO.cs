@@ -26,5 +26,7 @@ namespace ZgadajSieAPI.Models.DTO
 
         [EventDetails_MaxParticipation]
         public int? MaxParticipation { get; set; }
+
+        public List<Guid> TagIds { get; set; }
     }
 }

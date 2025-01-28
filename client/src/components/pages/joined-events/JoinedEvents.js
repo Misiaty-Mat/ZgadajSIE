@@ -6,6 +6,7 @@ import Event from "../../events/event/Event";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import "./joinedEvents-style.css";
+import { ToastContainer } from "react-toastify";
 
 const JoinedEvents = () => {
   const [events, setEvents] = useState([]);
@@ -34,6 +35,7 @@ const JoinedEvents = () => {
           <Event key={event.eventId} event={event} />
         ))}
       </div>
+      <ToastContainer />
     </div>
   );
 };

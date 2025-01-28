@@ -78,7 +78,7 @@ const EventModal = observer(() => {
       isLoggedIn &&
       participantIds &&
       participantIds.some((participantId) => {
-        return participantId === user.id;
+        return participantId === user?.id;
       });
 
     if (isParticipant) {

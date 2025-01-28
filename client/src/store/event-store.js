@@ -1,13 +1,14 @@
 import { makeAutoObservable } from "mobx";
 import moment from "moment";
 import { EVENTS_PER_PAGE } from "../util/constants";
-import { fetchAllEvents } from "../api/events/events";
+import { fetchAllEvents, fetchEventById } from "../api/events/events";
 import { handleError } from "../api/utils";
 
 class EventStore {
   events = [];
   filteredEvents = [];
   selectedEvent = undefined;
+  modifiedEvent = undefined;
   page = 1;
   isLastPage = false;
   eventModalOpened = false;
@@ -75,9 +76,25 @@ class EventStore {
     }
   }
 
-  setSelectedEvent = (event) => {
-    this.selectedEvent = event;
-    this.toggleEventModal();
+  setSelectedEvent = (eventId) => {
+    fetchEventById(eventId)
+      .then((response) => {
+        this.selectedEvent = response.data.event;
+        this.toggleEventModal();
+      })
+      .catch((error) => {
+        handleError(error);
+      });
+  };
+
+  setModifiedEvent = (eventId) => {
+    fetchEventById(eventId)
+      .then((response) => {
+        this.modifiedEvent = response.data.event;
+      })
+      .catch((error) => {
+        handleError(error);
+      });
   };
 
   incrementPage = () => {
