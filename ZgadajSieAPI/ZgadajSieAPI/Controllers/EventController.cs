@@ -194,9 +194,15 @@ namespace ZgadajSieAPI.Controllers
         }
 
 
-        // nowy endpoint GetQRCode(req = eventId, res = qrcode) 
+        [Authorize]
+        [HttpGet("read/{eventId}/qr")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
+        public async Task<IActionResult> GetEventsQrCode([FromRoute] Guid eventId)
+        {
+            var @event = HttpContext.Items["Event"] as Event;
 
-        // nowy endpoint ReadQRCode(req = qrcode, res = null) 
-
+            return Ok(new { Code = @event.CheckInCode });
+        }
     }
 }

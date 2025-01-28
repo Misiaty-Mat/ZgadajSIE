@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
+using ZgadajSieAPI.Models.Other;
 
 namespace ZgadajSieAPI.Controllers
 {
@@ -73,6 +74,24 @@ namespace ZgadajSieAPI.Controllers
             return Ok(new { Message = "Login succesful.", User = new UserDTO(user) });
         }
 
+        [Authorize]
+        [HttpPut("profile/update")]
+        [TypeFilter(typeof(Event_ValidateCurrentUserFilterAttribute))]
+        [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
+        public async Task<IActionResult> UpdateProfile([FromBody]ProfileUpdateDTO model)
+        {
+            var user = HttpContext.Items["User"] as User;
+
+            user.Name = model.Name;
+            user.Profile.Age = model.Age;
+            user.Profile.Gender = model.Gender;
+            user.Profile.Description = model.Description;
+
+            await db.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         [Authorize]
         [HttpGet("joined")]
@@ -105,6 +124,33 @@ namespace ZgadajSieAPI.Controllers
                 .ToListAsync();
 
             return Ok(new { CreatedEvents = createdEvents });
+        }
+
+        [Authorize]
+        [HttpPost("scan/{eventId}/qr")]
+        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(Event_ValidateCurrentUserFilterAttribute))]
+        [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(ValidateQrCodeFilterAttribute))]
+        public async Task<IActionResult> ScanEventsQrCode([FromRoute] Guid eventId, [FromBody] CodeRequest code)
+        {
+            //var @event = HttpContext.Items["Event"] as Event;
+
+            var user = HttpContext.Items["User"] as User;
+
+            var checkIn = new CheckIn
+            {
+                EventId = eventId,
+                UserId = user.Id,
+            };
+
+            db.CheckIns.Add(checkIn);
+
+            user.Profile.SocialScore++;
+
+            await db.SaveChangesAsync();
+
+            return Ok(new { Message = "Check-in successful." } );
         }
     }
 }

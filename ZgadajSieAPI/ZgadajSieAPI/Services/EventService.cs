@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models;
 using ZgadajSieAPI.Models.DTO;
@@ -45,12 +46,21 @@ namespace ZgadajSieAPI.Services
                 Tags = tags,
                 CreationDate = DateTime.UtcNow,
                 DeleteDate = DateTime.UtcNow.AddMonths(1),
-                Status = "created"
+                Status = "created",
+                CheckInCode = GenerateRandomString(10)
             };
 
             return newEvent;
         }
 
+        private string GenerateRandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            return new string(Enumerable.Range(0, length)
+                .Select(_ => chars[RandomNumberGenerator.GetInt32(chars.Length)])
+                .ToArray());
+        }
 
         public Event UpdateEvent(Event e, EventUpdateDTO model, List<Tag>? tags)
         {

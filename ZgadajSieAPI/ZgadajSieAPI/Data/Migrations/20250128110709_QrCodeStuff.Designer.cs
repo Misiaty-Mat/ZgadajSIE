@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ZgadajSieAPI.Data;
@@ -11,9 +12,11 @@ using ZgadajSieAPI.Data;
 namespace ZgadajSieAPI.Data.Migrations
 {
     [DbContext(typeof(ZgadajsieDbContext))]
-    partial class ZgadajsieDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250128110709_QrCodeStuff")]
+    partial class QrCodeStuff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,41 +55,11 @@ namespace ZgadajSieAPI.Data.Migrations
                     b.ToTable("EventTags");
                 });
 
-            modelBuilder.Entity("ZgadajSieAPI.Models.CheckIn", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ScannedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("EventId", "UserId")
-                        .IsUnique();
-
-                    b.ToTable("CheckIns");
-                });
-
             modelBuilder.Entity("ZgadajSieAPI.Models.Event", b =>
                 {
                     b.Property<Guid>("EventId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<string>("CheckInCode")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
@@ -102,6 +75,10 @@ namespace ZgadajSieAPI.Data.Migrations
 
                     b.Property<Guid>("OrganizerId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("QRCode")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
@@ -248,25 +225,6 @@ namespace ZgadajSieAPI.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ZgadajSieAPI.Models.CheckIn", b =>
-                {
-                    b.HasOne("ZgadajSieAPI.Models.Event", "Event")
-                        .WithMany("CheckIns")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ZgadajSieAPI.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ZgadajSieAPI.Models.Event", b =>
                 {
                     b.HasOne("ZgadajSieAPI.Models.User", "Organiser")
@@ -302,8 +260,6 @@ namespace ZgadajSieAPI.Data.Migrations
 
             modelBuilder.Entity("ZgadajSieAPI.Models.Event", b =>
                 {
-                    b.Navigation("CheckIns");
-
                     b.Navigation("EventDetails");
                 });
 
