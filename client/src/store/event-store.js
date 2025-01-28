@@ -8,7 +8,7 @@ class EventStore {
   events = [];
   filteredEvents = [];
   selectedEvent = undefined;
-  modifiedEvent = undefined;
+  targetEvent = undefined;
   page = 1;
   isLastPage = false;
   eventModalOpened = false;
@@ -87,10 +87,10 @@ class EventStore {
       });
   };
 
-  setModifiedEvent = (eventId) => {
+  setTargetEvent = (eventId) => {
     fetchEventById(eventId)
       .then((response) => {
-        this.modifiedEvent = response.data.event;
+        this.targetEvent = response.data.event;
       })
       .catch((error) => {
         handleError(error);

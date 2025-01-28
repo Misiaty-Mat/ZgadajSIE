@@ -25,7 +25,7 @@ const LocationStep = () => {
       <EventMap
         className="custom-event-map"
         onSelectLocation={onMapClicked}
-        onClickMarkerEnabled={true}
+        isChooseLocationMap={true}
       />
     </div>
   );

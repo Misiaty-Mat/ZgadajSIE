@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import AuthModalButton from "../auth/auth-modal-button/AuthModalButton";
 import LogoutButton from "../auth/logout-button/LogoutButton";
-import ConfirmEventArrivalButton from "../events/confirm-event-arrival/ConfirmEventArivalButton";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import "./navBar-style.css";
@@ -54,7 +53,6 @@ const NavBar = () => {
               >
                 Dołączone wydarzenia
               </button>
-              <ConfirmEventArrivalButton />
               <LogoutButton />
             </div>
           )}

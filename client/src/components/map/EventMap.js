@@ -19,7 +19,7 @@ import { useFormikContext } from "formik";
 
 const EventMap = ({
   onSelectLocation,
-  onClickMarkerEnabled = false,
+  isChooseLocationMap = false,
   className,
 }) => {
   const [selectedPlace, setSelectedPlace] = useState(null);
@@ -60,7 +60,7 @@ const EventMap = ({
   };
 
   const onMapClick = (e) => {
-    if (onClickMarkerEnabled) {
+    if (isChooseLocationMap) {
       const location = e.detail.latLng;
       getAddress(location).then(async (address) => {
         if (address) {
@@ -94,8 +94,8 @@ const EventMap = ({
           options={{ disableDefaultUI: true, clickableIcons: false }}
         >
           <AdvancedMarker ref={markerRef} position={null} />
-          <EventMarkers />
-          {!onClickMarkerEnabled && (
+          <EventMarkers onMarkerClickEnabled={!isChooseLocationMap} />
+          {!isChooseLocationMap && (
             <MapControl position={ControlPosition.TOP}>
               <div className="autocomplete-control">
                 <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
@@ -104,7 +104,7 @@ const EventMap = ({
           )}
           <MapHandler
             place={selectedPlace}
-            marker={onClickMarkerEnabled && marker}
+            marker={isChooseLocationMap && marker}
             setLocation={onSelectLocation}
           />
         </Map>

@@ -20,7 +20,7 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
   const { tagStore, eventStore } = useStores();
 
   useEffect(() => {
-    const { eventId, ...editableData } = eventStore.modifiedEvent;
+    const { eventId, ...editableData } = eventStore.targetEvent;
     setEventTags(
       tagStore.tagInputOptions.filter((tagOption) =>
         editableData.tagNames.includes(tagOption.label)
@@ -28,10 +28,10 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
     );
 
     formikRef.current?.setValues({ ...editableData });
-  }, [eventStore.modifiedEvent, tagStore.tagInputOptions]);
+  }, [eventStore.targetEvent, tagStore.tagInputOptions]);
 
   useEffect(() => {}, [
-    eventStore.modifiedEvent.tagNames,
+    eventStore.targetEvent.tagNames,
     tagStore.tagInputOptions,
   ]);
 
@@ -48,7 +48,7 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
   };
 
   const handleSubmit = (values) => {
-    editEvent(eventStore.modifiedEvent.eventId, values)
+    editEvent(eventStore.targetEvent.eventId, values)
       .then(() => {
         setIsOpened(false);
         toast.success("Pomyślnie zmieniono dane wydarzenia");
@@ -154,7 +154,7 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
       }}
     >
       <Formik
-        initialValues={{ ...eventStore.modifiedEvent }}
+        initialValues={{ ...eventStore.targetEvent }}
         innerRef={formikRef}
         validationSchema={EVENT_VALIDATION_SCHEMA}
         onSubmit={handleSubmit}

@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
+import QRCode from "react-qr-code";
 import NavBar from "../../nav-bar/NavBar";
-import { deleteEvent, fetchCreatedEvents } from "../../../api/events/events";
+import {
+  deleteEvent,
+  fetchCreatedEvents,
+  getConfirmationCode,
+} from "../../../api/events/events";
 import { handleError } from "../../../api/utils";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -11,11 +16,14 @@ import { useStores } from "../../../contexts/stores-context";
 import { toast, ToastContainer } from "react-toastify";
 import ConfirmActionModal from "../../modal/ConfirmActionModal";
 import "./createdEvents-style.css";
+import BasicModal from "../../modal/BasicModal";
 
 const CreatedEvents = observer(() => {
   const [events, setEvents] = useState([]);
+  const [codeModalOpened, setCodeModalOpened] = useState(false);
   const [editModalOpened, setEditModalOpened] = useState(false);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+  const [confirmationCode, setConfirmationCode] = useState("");
 
   const { isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
@@ -23,23 +31,25 @@ const CreatedEvents = observer(() => {
   const { eventStore } = useStores();
 
   const fetchMyEvents = useCallback(() => {
-    fetchCreatedEvents()
-      .then((response) => {
-        setEvents(
-          response.data.createdEvents.map((event) => ({
-            ...event,
-            organizerId: user?.id,
-          }))
-        );
-      })
-      .catch((error) => handleError(error));
-  }, [user?.id]);
+    if (isLoggedIn) {
+      fetchCreatedEvents()
+        .then((response) => {
+          setEvents(
+            response.data.createdEvents.map((event) => ({
+              ...event,
+              organizerId: user?.id,
+            }))
+          );
+        })
+        .catch((error) => handleError(error));
+    } else {
+      navigate("/");
+    }
+  }, [isLoggedIn, navigate, user?.id]);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      fetchMyEvents();
-    }
-  }, [fetchMyEvents, isLoggedIn, navigate, user?.id]);
+    fetchMyEvents();
+  }, [fetchMyEvents, isLoggedIn, user?.id]);
 
   useEffect(() => {
     if (!editModalOpened || !deleteModalOpened) {
@@ -47,20 +57,36 @@ const CreatedEvents = observer(() => {
     }
   }, [deleteModalOpened, editModalOpened, fetchMyEvents]);
 
-  const handleEditClick = (e, event) => {
+  const handleGetCodeClick = (e, eventId) => {
     e?.stopPropagation();
-    eventStore.setModifiedEvent(event.eventId);
+    getConfirmationCode(eventId)
+      .then((response) => {
+        setConfirmationCode(response.data.code);
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          toast.error("Nie znaleziono kodu dołączenia");
+        } else {
+          handleError(error);
+        }
+      });
+    setCodeModalOpened(true);
+  };
+
+  const handleEditClick = (e, eventId) => {
+    e?.stopPropagation();
+    eventStore.setTargetEvent(eventId);
     setEditModalOpened(true);
   };
 
   const handleDeleteClick = (e, eventId) => {
     e?.stopPropagation();
-    eventStore.setModifiedEvent(eventId);
+    eventStore.setTargetEvent(eventId);
     setDeleteModalOpened(true);
   };
 
   const handleDeleteEvent = () => {
-    deleteEvent(eventStore.modifiedEvent.eventId)
+    deleteEvent(eventStore.targetEvent.eventId)
       .then(() => {
         setDeleteModalOpened(false);
         toast.success("Pomyślnie usunięto wydarzenie");
@@ -77,12 +103,13 @@ const CreatedEvents = observer(() => {
           <MyEvent
             key={event.eventId}
             event={event}
-            onEditClick={(e) => handleEditClick(e, event)}
+            onGetCodeClick={(e) => handleGetCodeClick(e, event.eventId)}
+            onEditClick={(e) => handleEditClick(e, event.eventId)}
             onDeleteClick={(e) => handleDeleteClick(e, event.eventId)}
           />
         ))}
       </div>
-      {eventStore.modifiedEvent && (
+      {eventStore.targetEvent && (
         <>
           <EditEventModal
             isOpened={editModalOpened}
@@ -96,11 +123,32 @@ const CreatedEvents = observer(() => {
           >
             <p>
               Czy na pewno chcesz usunąć wydarzenie{" "}
-              {eventStore.modifiedEvent.title}
+              {eventStore.targetEvent.title}
             </p>
           </ConfirmActionModal>
         </>
       )}
+      <BasicModal
+        isOpen={codeModalOpened}
+        title="Kod potwierdzenia przybycia"
+        onClose={() => setCodeModalOpened(false)}
+      >
+        <p>
+          Przekaż osobie, która przybyła na twoje wydarzenie poniższy kod do
+          zeskanowania
+        </p>
+        {confirmationCode && (
+          <QRCode
+            value={confirmationCode}
+            size={150} // Size of the QR Code
+            bgColor="#ffffff" // Background color
+            fgColor="#000000" // Foreground color
+          />
+        )}
+
+        <p>Lub do ręcznego przepisania</p>
+        <p>{confirmationCode}</p>
+      </BasicModal>
       <ToastContainer />
     </div>
   );

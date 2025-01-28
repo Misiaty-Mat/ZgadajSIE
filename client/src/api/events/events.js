@@ -69,3 +69,24 @@ export const deleteEvent = async (eventId) => {
     headers: getHeadersWithAuth(),
   });
 };
+
+export const getConfirmationCode = async (eventId) => {
+  return axios.get(`${API_URL}/event/show/${eventId}/qr`, {
+    headers: getHeadersWithAuth(),
+  });
+};
+
+export const confirmEventArrival = async (eventId, code) => {
+  return axios.post(
+    `${API_URL}/user/scan/${eventId}/qr`,
+    { code },
+    { headers: getHeadersWithAuth() }
+  );
+};
+
+export const fetchEventParticipantProfile = async (eventId, participantId) => {
+  return axios.get(
+    `${API_URL}/event/${eventId}/participants/${participantId}`,
+    { headers: HEADERS }
+  );
+};

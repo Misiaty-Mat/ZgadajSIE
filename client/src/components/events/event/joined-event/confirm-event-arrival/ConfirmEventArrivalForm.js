@@ -1,10 +1,13 @@
 import { useFormik } from "formik";
 
 import * as Yup from "yup";
-import QRCodeScanner from "../../../qr-scanner/QRCodeScanner";
+import QRCodeScanner from "../../../../qr-scanner/QRCodeScanner";
 import { useState } from "react";
+import { confirmEventArrival } from "../../../../../api/events/events";
+import { toast } from "react-toastify";
+import { handleError } from "../../../../../api/utils";
 
-const ConfirmEventArrivalForm = () => {
+const ConfirmEventArrivalForm = ({ eventId, onSubmit }) => {
   const [code, setCode] = useState("");
 
   const formik = useFormik({
@@ -13,7 +16,12 @@ const ConfirmEventArrivalForm = () => {
       code: Yup.string().required("Musisz zeskanować lub wprowadzić kod"),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values));
+      confirmEventArrival(eventId, values.code)
+        .then(() => {
+          toast.success("Pomyślnie potwierdzono przybycie na wydarzenie");
+        })
+        .catch((error) => handleError(error));
+      onSubmit();
     },
     validateOnChange: true,
     validateOnMount: true,

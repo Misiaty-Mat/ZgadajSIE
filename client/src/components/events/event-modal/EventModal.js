@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import BasicModal from "../../modal/BasicModal";
 import { useAuth } from "../../../hooks/useAuth";
 import {
+  fetchEventParticipantProfile,
   fetchParticipants,
   joinEventPost,
   leaveEventPost,
@@ -15,7 +16,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useStores } from "../../../contexts/stores-context";
 
 const EventModal = observer(() => {
-  const [participantIds, setParticipantIds] = useState([]);
+  const [participants, setParticipants] = useState([]);
+  const [participantProfile, setParticipantProfile] = useState();
 
   const navigate = useNavigate();
   const { isLoggedIn, user } = useAuth();
@@ -27,11 +29,10 @@ const EventModal = observer(() => {
   const getParticipants = useCallback(async () => {
     fetchParticipants(selectedEvent.eventId)
       .then((response) => {
-        setParticipantIds(response.data.participantIds);
+        setParticipants(response.data.participants);
       })
       .catch((error) => {
         handleError(error);
-        setParticipantIds([]);
       });
   }, [selectedEvent.eventId]);
 
@@ -40,7 +41,7 @@ const EventModal = observer(() => {
   };
 
   const isFull = () => {
-    return selectedEvent.maxParticipation === participantIds.length;
+    return selectedEvent.maxParticipation === participants.length;
   };
 
   useEffect(() => {
@@ -63,7 +64,7 @@ const EventModal = observer(() => {
       .catch((error) => handleError(error));
   };
 
-  const getTooltipMessage = () => {
+  const getDisabledMessage = () => {
     if (!isLoggedIn) {
       return "Zaloguj się by dołączyć do tego wydarzenia!";
     } else if (isOrganizer()) {
@@ -76,27 +77,91 @@ const EventModal = observer(() => {
   const getEventDetailsButton = () => {
     const isParticipant =
       isLoggedIn &&
-      participantIds &&
-      participantIds.some((participantId) => {
-        return participantId === user?.id;
+      participants &&
+      participants.some((participant) => {
+        return participant.participantId === user?.id;
       });
 
     if (isParticipant) {
       return (
-        <button onClick={() => leaveEvent(selectedEvent.eventId)}>
-          Zrezygnuj
-        </button>
+        isOrganizer() && (
+          <button onClick={() => leaveEvent(selectedEvent.eventId)}>
+            Zrezygnuj
+          </button>
+        )
       );
     } else {
       return (
         <button
-          disabled={!isLoggedIn || isOrganizer()}
+          disabled={getDisabledMessage()}
           data-tooltip-id="join-tooltip"
-          data-tooltip-content={getTooltipMessage()}
+          data-tooltip-content={getDisabledMessage()}
           onClick={() => joinEvent(selectedEvent.eventId)}
         >
           Dołącz!
         </button>
+      );
+    }
+  };
+
+  const handleParticipantClick = (e, participantId) => {
+    e?.stopPropagation();
+    fetchEventParticipantProfile(selectedEvent.eventId, participantId)
+      .then((response) => {
+        setParticipantProfile(response.data.user);
+      })
+      .catch((error) => handleError(error));
+  };
+
+  const getModalContent = () => {
+    if (participantProfile) {
+      return (
+        <>
+          <p>Name: {participantProfile.name}</p>
+          <p>{participantProfile.age > 0 && participantProfile.age}</p>
+          <p>{participantProfile.gender}</p>
+          <p>{participantProfile.description}</p>
+          <button onClick={() => setParticipantProfile(null)}>Wróć</button>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <p>
+            Adres
+            {` ${selectedEvent.city} ul. ${selectedEvent.street} ${selectedEvent.buildingNumber}`}
+          </p>
+          <p>
+            Czas startu{" "}
+            {moment(selectedEvent.startDate).format("DD.MM.YYYY hh:mm")}
+          </p>
+          <p>Opis: {selectedEvent.description}</p>
+
+          <div
+            onClick={(e) =>
+              handleParticipantClick(e, selectedEvent.organizerId)
+            }
+          >
+            <p>{selectedEvent.organizerName} - organizator</p>
+          </div>
+
+          <p>
+            Uczestnicy: {participants.length}
+            {selectedEvent.maxParticipation &&
+              " / " + selectedEvent.maxParticipation}
+          </p>
+          {participants.map((participant) => (
+            <div
+              key={participant.participantId}
+              onClick={(e) =>
+                handleParticipantClick(e, participant.participantId)
+              }
+            >
+              <p>{participant.participantName}</p>
+            </div>
+          ))}
+          {getEventDetailsButton()}
+        </>
       );
     }
   };
@@ -107,21 +172,7 @@ const EventModal = observer(() => {
       title={selectedEvent.title}
       onClose={toggleEventModal}
     >
-      <p>
-        Adres
-        {` ${selectedEvent.city} ul. ${selectedEvent.street} ${selectedEvent.buildingNumber}`}
-      </p>
-      <p>
-        Czas startu {moment(selectedEvent.startDate).format("DD.MM.YYYY hh:mm")}
-      </p>
-      <p>Opis: {selectedEvent.description}</p>
-
-      <p>
-        Uczestnicy: {participantIds.length}
-        {selectedEvent.maxParticipation &&
-          " / " + selectedEvent.maxParticipation}
-      </p>
-      {getEventDetailsButton()}
+      {getModalContent()}
       <Tooltip id="join-tooltip" />
     </BasicModal>
   );
