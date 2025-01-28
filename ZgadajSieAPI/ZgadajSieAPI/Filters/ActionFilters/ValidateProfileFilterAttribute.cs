@@ -1,33 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Tracing;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class Event_ValidateEventsTagsFilterAttribute : ActionFilterAttribute
+    public class ValidateProfileFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public Event_ValidateEventsTagsFilterAttribute(ZgadajsieDbContext db)
+        public ValidateProfileFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }
+
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var @event = context.HttpContext.Items["Event"] as Event;
+            var user = context.HttpContext.Items["User"] as User;
 
-            // pobranie tagów wydarzenia (i powiązanie z EF)
+            // nie pobrano profilu użytkownika
 
-            db.Entry(@event).Collection(e => e.Tags).Load();
+            var profile = await db.Profiles.FindAsync(user.Id);
 
-            // brak tagów na wydarzeniu
-
-            if (@event.Tags == null)
+            if (profile == null)
             {
-                context.ModelState.AddModelError("Tags", $"Event with id '{@event.EventId}' does not have any tags attached.");
+                context.ModelState.AddModelError("Profile", $"Profile with id '{user.Id}' not found.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
                     Status = StatusCodes.Status404NotFound
@@ -37,9 +34,11 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                 return;
             }
 
-            // dodaj event do httpcontext
+            // dodaj usera do httpcontext
 
-            context.HttpContext.Items["Event"] = @event;
+            user.Profile = profile;
+
+            context.HttpContext.Items["User"] = user;
 
             await next();
         }

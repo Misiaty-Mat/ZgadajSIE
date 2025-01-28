@@ -7,11 +7,11 @@ using ZgadajSieAPI.Services.Interfaces;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class User_ValidateAutologinFilterAttribute : ActionFilterAttribute
+    public class ValidateAutologinFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public User_ValidateAutologinFilterAttribute(ZgadajsieDbContext db)
+        public ValidateAutologinFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }

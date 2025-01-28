@@ -57,9 +57,9 @@ namespace ZgadajSieAPI.Controllers
 
 
         [HttpGet("{eventId}")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventsTagsFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventDetailsFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventsTagsFilterAttribute))]
         public IActionResult GetEventById([FromRoute] Guid eventId)
         {
             var @event = HttpContext.Items["Event"] as Event;
@@ -72,7 +72,7 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPost("create")]
-        [TypeFilter(typeof(Event_ValidateModelDataFilterAttribute))]
+        [TypeFilter(typeof(ValidateModelDataFilterAttribute))]
         public async Task<IActionResult> CreateEvent([FromBody] EventCreateDTO model)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -96,11 +96,12 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPut("update/{eventId}")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateMaxParticipationFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateSentTagIdsFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventsOrganizerFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventsStartDate))]
+        [TypeFilter(typeof(ValidateEventDetailsFilterAttribute))]
+        [TypeFilter(typeof(ValidateMaxParticipationFilterAttribute))]
+        [TypeFilter(typeof(ValidateSentTagIdsFilterAttribute))]
         public async Task<IActionResult> UpdateEvent([FromRoute] Guid eventId, [FromBody] EventUpdateDTO model)
         {
             var @event = HttpContext.Items["Event"] as Event;
@@ -119,8 +120,8 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpDelete("delete/{eventId}")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventsOrganizerFilterAttribute))]
         public async Task<IActionResult> DeleteEvent([FromRoute] Guid eventId)
         {
             var @event = HttpContext.Items["Event"] as Event;
@@ -135,10 +136,11 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPost("join/{eventId}")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventDetailsFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateCurrentUserFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateJoinEventFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventsStartDate))]
+        [TypeFilter(typeof(ValidateEventDetailsFilterAttribute))]
+        [TypeFilter(typeof(ValidateCurrentUserFilterAttribute))]
+        [TypeFilter(typeof(ValidateJoinEventFilterAttribute))]
         public async Task<IActionResult> JoinEvent([FromRoute] Guid eventId)
         {
             var @event = HttpContext.Items["Event"] as Event;
@@ -153,9 +155,10 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPost("leave/{eventId}")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateCurrentUserFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateLeaveEventFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventsStartDate))]
+        [TypeFilter(typeof(ValidateCurrentUserFilterAttribute))]
+        [TypeFilter(typeof(ValidateLeaveEventFilterAttribute))]
         public async Task<IActionResult> LeaveEvent([FromRoute] Guid eventId)
         {
             var @event = HttpContext.Items["Event"] as Event;
@@ -169,7 +172,7 @@ namespace ZgadajSieAPI.Controllers
 
 
         [HttpGet("{eventId}/participants")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventIdFilterAttribute))]
         public async Task<IActionResult> GetEventParticipants([FromRoute] Guid eventId)
         {
             var @event = HttpContext.Items["Event"] as Event;
@@ -183,9 +186,9 @@ namespace ZgadajSieAPI.Controllers
 
 
         [HttpGet("{eventId}/participants/{participantId}")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateParticipantFilterAttribute))]
-        [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(ValidateParticipantFilterAttribute))]
+        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
         public async Task<IActionResult> GetEventParticipantById([FromRoute] Guid eventId, [FromRoute] Guid participantId)
         {
             var user = HttpContext.Items["User"] as User;
@@ -195,9 +198,9 @@ namespace ZgadajSieAPI.Controllers
 
 
         [Authorize]
-        [HttpGet("read/{eventId}/qr")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateEventsOrganizerFilterAttribute))]
+        [HttpGet("show/{eventId}/qr")]
+        [TypeFilter(typeof(ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventsOrganizerFilterAttribute))]
         public async Task<IActionResult> GetEventsQrCode([FromRoute] Guid eventId)
         {
             var @event = HttpContext.Items["Event"] as Event;

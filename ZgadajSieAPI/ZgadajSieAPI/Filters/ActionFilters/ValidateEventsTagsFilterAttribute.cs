@@ -1,30 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Tracing;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class User_ValidateProfileFilterAttribute : ActionFilterAttribute
+    public class ValidateEventsTagsFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public User_ValidateProfileFilterAttribute(ZgadajsieDbContext db)
+        public ValidateEventsTagsFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }
-
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var user = context.HttpContext.Items["User"] as User;
+            var @event = context.HttpContext.Items["Event"] as Event;
 
-            // nie pobrano profilu użytkownika
+            // pobranie tagów wydarzenia (i powiązanie z EF)
 
-            var profile = await db.Profiles.FindAsync(user.Id);
+            db.Entry(@event).Collection(e => e.Tags).Load();
 
-            if (profile == null)
+            // brak tagów na wydarzeniu
+
+            if (@event.Tags == null)
             {
-                context.ModelState.AddModelError("Profile", $"Profile with id '{user.Id}' not found.");
+                context.ModelState.AddModelError("Tags", $"Event with id '{@event.EventId}' does not have any tags attached.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
                     Status = StatusCodes.Status404NotFound
@@ -34,11 +37,9 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                 return;
             }
 
-            // dodaj usera do httpcontext
+            // dodaj event do httpcontext
 
-            user.Profile = profile;
-
-            context.HttpContext.Items["User"] = user;
+            context.HttpContext.Items["Event"] = @event;
 
             await next();
         }

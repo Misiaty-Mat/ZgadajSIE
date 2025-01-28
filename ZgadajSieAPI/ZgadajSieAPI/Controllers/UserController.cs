@@ -29,7 +29,7 @@ namespace ZgadajSieAPI.Controllers
 
 
         [HttpPost("register")]
-        [TypeFilter(typeof(User_ValidateRegisterFilterAttribute))]
+        [TypeFilter(typeof(ValidateRegisterFilterAttribute))]
         public async Task<IActionResult> Register([FromBody] UserRegistrationDTO model)
         {
             var user = new User
@@ -51,8 +51,8 @@ namespace ZgadajSieAPI.Controllers
 
 
         [HttpPost("login")]
-        [TypeFilter(typeof(User_ValidateLoginFilterAttribute))]
-        [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(ValidateLoginFilterAttribute))]
+        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
         public IActionResult Login([FromBody] UserLoginDTO model)
         {
             var user = HttpContext.Items["User"] as User;
@@ -65,8 +65,8 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPost("autologin")]
-        [TypeFilter(typeof(User_ValidateAutologinFilterAttribute))]
-        [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(ValidateAutologinFilterAttribute))]
+        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
         public IActionResult Autologin([FromHeader(Name = "Authorization")] string token)
         {
             var user = HttpContext.Items["User"] as User;
@@ -76,8 +76,8 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPut("profile/update")]
-        [TypeFilter(typeof(Event_ValidateCurrentUserFilterAttribute))]
-        [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(ValidateCurrentUserFilterAttribute))]
+        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
         public async Task<IActionResult> UpdateProfile([FromBody]ProfileUpdateDTO model)
         {
             var user = HttpContext.Items["User"] as User;
@@ -128,10 +128,12 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPost("scan/{eventId}/qr")]
-        [TypeFilter(typeof(Event_ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(Event_ValidateCurrentUserFilterAttribute))]
-        [TypeFilter(typeof(User_ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventIdFilterAttribute))]
+        [TypeFilter(typeof(ValidateCurrentUserFilterAttribute))]
+        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(ValidateEventsStartDate))]
         [TypeFilter(typeof(ValidateQrCodeFilterAttribute))]
+
         public async Task<IActionResult> ScanEventsQrCode([FromRoute] Guid eventId, [FromBody] CodeRequest code)
         {
             //var @event = HttpContext.Items["Event"] as Event;

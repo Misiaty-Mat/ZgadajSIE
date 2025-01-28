@@ -8,11 +8,11 @@ using ZgadajSieAPI.Models;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class Event_ValidateJoinEventFilterAttribute : ActionFilterAttribute
+    public class ValidateJoinEventFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public Event_ValidateJoinEventFilterAttribute(ZgadajsieDbContext db)
+        public ValidateJoinEventFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }

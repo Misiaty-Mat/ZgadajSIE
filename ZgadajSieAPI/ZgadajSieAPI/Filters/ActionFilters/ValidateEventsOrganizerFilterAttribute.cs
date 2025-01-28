@@ -6,11 +6,11 @@ using ZgadajSieAPI.Models;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class Event_ValidateEventsOrganizerFilterAttribute : ActionFilterAttribute
+    public class ValidateEventsOrganizerFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public Event_ValidateEventsOrganizerFilterAttribute(ZgadajsieDbContext db)
+        public ValidateEventsOrganizerFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }

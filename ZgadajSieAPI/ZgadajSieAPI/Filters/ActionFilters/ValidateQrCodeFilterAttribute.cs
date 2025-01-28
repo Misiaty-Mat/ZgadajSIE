@@ -21,20 +21,6 @@ namespace ZgadajSieAPI.Filters.ActionFilters
         {
             var @event = context.HttpContext.Items["Event"] as Event;
 
-            // czas eventu
-
-            if (DateTime.Now.Date > @event.StartDate.Date)
-            {
-                context.ModelState.AddModelError("Event", $"Event's QR code terminated on {@event.StartDate.Date.AddDays(1).ToString("dd-mm-yyyy")}.");
-                var problemDetails = new ValidationProblemDetails(context.ModelState)
-                {
-                    Status = StatusCodes.Status400BadRequest
-                };
-                context.Result = new BadRequestObjectResult(problemDetails);
-
-                return;
-            }
-
             // różne kody
 
             var request = context.ActionArguments["code"] as CodeRequest;
