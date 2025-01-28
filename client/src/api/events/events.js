@@ -57,3 +57,15 @@ export const fetchCreatedEvents = async () => {
     headers: getHeadersWithAuth(),
   });
 };
+
+export const editEvent = async (eventId, request) => {
+  return axios.put(`${API_URL}/event/update/${eventId}`, request, {
+    headers: getHeadersWithAuth(),
+  });
+};
+
+export const deleteEvent = async (eventId) => {
+  return axios.delete(`${API_URL}/event/delete/${eventId}`, {
+    headers: getHeadersWithAuth(),
+  });
+};

@@ -1,9 +1,6 @@
 import moment from "moment";
-import "./eventList-style.css";
-import { useStores } from "../../../contexts/stores-context";
-import { observer } from "mobx-react-lite";
-
-const Event = observer(({ event }) => {
+import { useStores } from "../../../../contexts/stores-context";
+const MyEvent = ({ event, onEditClick, onDeleteClick }) => {
   const { eventStore } = useStores();
 
   const selectEvent = () => {
@@ -28,9 +25,10 @@ const Event = observer(({ event }) => {
           </div>
         </div>
       </div>
-      <button>Szczegóły</button>
+      <button onClick={onEditClick}>Edytuj</button>
+      <button onClick={onDeleteClick}>Usuń</button>
     </div>
   );
-});
+};
 
-export default Event;
+export default MyEvent;

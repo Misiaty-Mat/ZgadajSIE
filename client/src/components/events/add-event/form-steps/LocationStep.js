@@ -22,7 +22,7 @@ const LocationStep = () => {
   return (
     <div className="">
       <h1>{getAddress()}</h1>
-      <EventMap onSelectLocation={onMapClicked} onClickMarkerEnabled={true} />
+      <EventMap onSelectLocation={onMapClicked} isChooseLocationMap={true} />
     </div>
   );
 };

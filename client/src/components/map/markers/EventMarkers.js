@@ -4,10 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
 import EventMarker from "./EventMarker";
 import { useStores } from "../../../contexts/stores-context";
-import { fetchEventById } from "../../../api/events/events";
-import { handleError } from "../../../api/utils";
 
-const EventMarkers = observer(() => {
+const EventMarkers = observer(({ onMarkerClickEnabled }) => {
   const [markers, setMarkers] = useState({});
 
   const { eventStore } = useStores();
@@ -43,14 +41,10 @@ const EventMarkers = observer(() => {
   }, []);
 
   const onMarkerClick = (event) => {
-    map.panTo({ lat: event.latitude, lng: event.longitude });
-    fetchEventById(event.eventId)
-      .then((response) => {
-        eventStore.setSelectedEvent(response.data.event);
-      })
-      .catch((error) => {
-        handleError(error);
-      });
+    if (onMarkerClickEnabled) {
+      map.panTo({ lat: event.latitude, lng: event.longitude });
+      eventStore.setSelectedEvent(event.eventId);
+    }
   };
 
   return (
