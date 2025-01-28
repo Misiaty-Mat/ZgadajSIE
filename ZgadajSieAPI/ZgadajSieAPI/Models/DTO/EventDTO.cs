@@ -7,6 +7,8 @@ namespace ZgadajSieAPI.Models.DTO
     {
         public Guid EventId { get; set; }
 
+        public Guid OrganizerId { get; set; }
+
         public string OrganizerName { get; set; }
 
         public DateTime StartDate { get; set; }
@@ -29,6 +31,7 @@ namespace ZgadajSieAPI.Models.DTO
         {
             // event
             EventId = e.EventId;
+            OrganizerId = e.OrganizerId;
             OrganizerName = organizerName;
             StartDate = e.StartDate;
             // details
