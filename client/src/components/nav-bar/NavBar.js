@@ -4,10 +4,11 @@ import LogoutButton from "../auth/logout-button/LogoutButton";
 import ConfirmEventArrivalButton from "../events/confirm-event-arrival/ConfirmEventArivalButton";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import "./navBar-style.css";
 
 const NavBar = () => {
   const [name, setName] = useState();
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { user, isLoggedIn } = useAuth();
 
@@ -18,17 +19,46 @@ const NavBar = () => {
   const getAvailableButtons = () => {
     if (isLoggedIn) {
       return (
-        <>
-          <button onClick={() => navigate("/")}>Wszystkie wydarzenia</button>
-          <button onClick={() => navigate("/created-events")}>
-            Moje wydarzenia
-          </button>
-          <button onClick={() => navigate("/joined-events")}>
-            Dołączone wydarzenia
-          </button>
-          <ConfirmEventArrivalButton />
-          <LogoutButton />
-        </>
+        <div className="nav-userLabel">
+          {/* Strzałka rozwijająca menu */}
+          <img
+            className="nav-userLabel-imgArrow"
+            src="./arrow.png"
+            alt="Arrow"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            style={{
+              cursor: "pointer",
+              transition: "transform 0.3s ease",
+              transform: isMenuOpen ? "rotate(180deg)" : "rotate(0deg)",
+            }}
+          />
+
+          {/* Rozwijana lista */}
+          {isMenuOpen && (
+            <div className="nav-userLabel-menu">
+              <button
+                className="nav-userLabel-button"
+                onClick={() => navigate("/")}
+              >
+                Wszystkie wydarzenia
+              </button>
+              <button
+                className="nav-userLabel-button"
+                onClick={() => navigate("/created-events")}
+              >
+                Moje wydarzenia
+              </button>
+              <button
+                className="nav-userLabel-button"
+                onClick={() => navigate("/joined-events")}
+              >
+                Dołączone wydarzenia
+              </button>
+              <ConfirmEventArrivalButton />
+              <LogoutButton />
+            </div>
+          )}
+        </div>
       );
     } else {
       return <AuthModalButton />;
@@ -40,7 +70,6 @@ const NavBar = () => {
       <div className="nav-userLabel">
         {getAvailableButtons()} <h2>{name}</h2>
         <img className="nav-userLabel-img" src="./user.png" alt=""></img>
-        <span className="nav-userLabel-arrow">&#129171;</span>
       </div>
     </div>
   );

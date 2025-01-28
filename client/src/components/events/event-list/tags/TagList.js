@@ -32,7 +32,7 @@ const TagList = observer(({ tagSetter }) => {
   };
 
   return (
-    <div>
+    <div className="main-page-sectionLeft-Tags">
       {tagStore.tags.map((tag) => (
         <TagButton
           key={tag.id}

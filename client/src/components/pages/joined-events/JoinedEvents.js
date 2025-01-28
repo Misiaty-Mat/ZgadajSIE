@@ -5,6 +5,7 @@ import NavBar from "../../nav-bar/NavBar";
 import Event from "../../events/event/Event";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import "./joinedEvents-style.css";
 
 const JoinedEvents = () => {
   const [events, setEvents] = useState([]);
@@ -27,8 +28,8 @@ const JoinedEvents = () => {
   return (
     <div>
       <NavBar />
-      <h1>Przyszłe wydarzenia</h1>
-      <div>
+      <div className="eventsJoined">
+        <h1>Przyszłe wydarzenia</h1>
         {events.map((event) => (
           <Event key={event.eventId} event={event} />
         ))}

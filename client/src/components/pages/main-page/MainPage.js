@@ -21,7 +21,7 @@ const MainPage = () => {
       <NavBar />
       <div className="main-page">
         <div className="main-page-sectionLeft">
-          <h1>Strona główna</h1>
+          <h1 className="main-page-sectionLeft-header">Znajdź wydarzenie</h1>
           <EventFilters />
           <EventList />
         </div>

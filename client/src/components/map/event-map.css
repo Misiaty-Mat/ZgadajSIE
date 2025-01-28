@@ -8,19 +8,16 @@
   display: block;
   position: fixed;
   right: 0px;
+  bottom: 0px;
   margin: 150px 0 0 0;
   width: 56vw;
-  height: 90vh;
-}
-
-.eventMapModal {
-  display: block;
+  height: 72vh;
 }
 
 @media (max-width: 500px) {
   .main-page-sectionRight-map {
-    position: absolute;
-    bottom: 0;
+    display: block;
+    bottom: -114px;
     height: 50vh;
     width: 100vw;
     margin-bottom: -40vh;

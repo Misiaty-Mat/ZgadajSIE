@@ -39,7 +39,6 @@
 @media (max-width: 500px) {
   .Modal-logOrRegister {
     flex-direction: column;
-    width: 450px;
     gap: 0;
   }
   .Modal-logOrRegister-Register {
@@ -49,7 +48,6 @@
     align-items: center;
     border-left: none;
     margin: 0;
-    width: 50vw;
     font-size: 10px;
     padding: 0;
   }

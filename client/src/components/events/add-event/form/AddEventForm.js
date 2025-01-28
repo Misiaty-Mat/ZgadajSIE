@@ -68,11 +68,11 @@ const AddEventForm = ({ onReturn }) => {
           )
         );
         return (
-          <div className="addEventModal ">
-            <label>Gdzie ma się odbyć?</label>
-            <div className="mapInModal">
-              <LocationStep />
-            </div>
+          <div className="addEventModal">
+            <label className="addEventModal-labelTitle">
+              Gdzie ma się odbyć?
+            </label>
+            <LocationStep />
           </div>
         );
       case 3:
@@ -80,7 +80,7 @@ const AddEventForm = ({ onReturn }) => {
           values.startDate === undefined || errors.startDate !== undefined
         );
         return (
-          <div className="loginEmail">
+          <div className="loginEmail calendarModal">
             <label>Kiedy ma się odbyć?</label>
             <DateTimeStep />
           </div>

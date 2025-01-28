@@ -22,4 +22,15 @@ button:hover {
 small {
   color: red;
   font-weight: 300;
+  font-size: 14px;
+  max-width: 100vw;
+}
+
+@media (max-width: 500px;) {
+  button {
+    cursor: pointer;
+  }
+  button:hover {
+    transform: scale(1);
+  }
 }

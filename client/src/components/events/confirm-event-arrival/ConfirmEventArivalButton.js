@@ -12,7 +12,9 @@ const ConfirmEventArrivalButton = () => {
 
   return (
     <>
-      <button onClick={toggleModal}>Potwierdź przybycie</button>
+      <button className="nav-userLabel-button" onClick={toggleModal}>
+        Potwierdź przybycie
+      </button>
       <BasicModal
         isOpen={isModalOpen}
         title="Potwierdź przybycie"

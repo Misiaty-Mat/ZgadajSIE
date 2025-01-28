@@ -20,9 +20,13 @@ const LocationStep = () => {
   };
 
   return (
-    <div className="">
-      <h1>{getAddress()}</h1>
-      <EventMap onSelectLocation={onMapClicked} onClickMarkerEnabled={true} />
+    <div className="addEventModal-locationTitle">
+      <h1 className="addEventModal-locationAddress">{getAddress()}</h1>
+      <EventMap
+        className="custom-event-map"
+        onSelectLocation={onMapClicked}
+        onClickMarkerEnabled={true}
+      />
     </div>
   );
 };

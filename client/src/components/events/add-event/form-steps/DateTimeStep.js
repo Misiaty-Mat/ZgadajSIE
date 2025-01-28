@@ -15,6 +15,7 @@ const DateTimeStep = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale="pl">
       <StaticDateTimePicker
+        className="custom-date-time-picker"
         label="Czas wydarzenia"
         onChange={onChange}
         format="DD-MM-YYYY HH:mm"

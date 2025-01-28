@@ -86,7 +86,7 @@ const EventFilters = () => {
           </label>
           <DatePicker
             name="days"
-            className="main-page-sectionLeft-inputFilters labelWidth"
+            className="main-page-sectionLeft-inputFilters main-page-sectionLeft-inputSearch labelWidth"
             selectsRange={true}
             startDate={dateRangeStart}
             endDate={dateRangeEnd}

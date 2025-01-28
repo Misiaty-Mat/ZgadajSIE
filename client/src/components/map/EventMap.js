@@ -17,7 +17,11 @@ import MapHandler from "./MapHandler";
 import PlaceAutocomplete from "./autocomplete/PlaceAutocomplete";
 import { useFormikContext } from "formik";
 
-const EventMap = ({ onSelectLocation, onClickMarkerEnabled = false }) => {
+const EventMap = ({
+  onSelectLocation,
+  onClickMarkerEnabled = false,
+  className,
+}) => {
   const [selectedPlace, setSelectedPlace] = useState(null);
   const [markerRef, marker] = useAdvancedMarkerRef();
 
@@ -74,7 +78,7 @@ const EventMap = ({ onSelectLocation, onClickMarkerEnabled = false }) => {
   };
 
   return (
-    <div className="main-page-sectionRight-map">
+    <div className={`main-page-sectionRight-map ${className || ""}`}>
       <APIProvider
         apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
         solutionChannel="GMP_devsite_samples_v3_rgmautocomplete"

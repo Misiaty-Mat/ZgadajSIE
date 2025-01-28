@@ -32,7 +32,14 @@ const EventList = observer(() => {
       ))}
       {/* Wczytanie kolejnych X wydarzeń */}
       {!eventStore.isLastPage && (
-        <button onClick={eventStore.incrementPage}>...</button>
+        <div className="moreEventsButtonDiv">
+          <button
+            className="moreEventsButton"
+            onClick={eventStore.incrementPage}
+          >
+            ...
+          </button>
+        </div>
       )}
     </>
   );

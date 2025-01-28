@@ -1,0 +1,77 @@
+.nav {
+  display: flex;
+  right: 0;
+  position: fixed;
+  margin: 10px 0;
+}
+
+.nav-userLabel {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.nav-userLabel-img {
+  margin: auto;
+  width: 40px;
+  margin: 0 5px;
+}
+
+.nav-userLabel-imgArrow {
+  width: 20px;
+}
+.nav-userLabel-button {
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+  margin: auto 5px;
+  color: #fff;
+  border-bottom: 1px #fff solid;
+  border-radius: 5px;
+  background: #0078d7;
+}
+.nav-userLabel-button:hover {
+  background: #003b6c;
+  color: #ddd;
+  transform: none;
+}
+
+.nav-userLabel-menu {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  margin: 180px 180px 0 0;
+  z-index: 0;
+  width: 220px;
+  padding: 5px;
+}
+
+@media (max-width: 500px) {
+  .nav {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 14vh;
+    background-color: #fff;
+    margin-top: -30px;
+    z-index: 110;
+  }
+  .nav-userLabel {
+    position: fixed;
+    top: -5px;
+    right: 10px;
+  }
+  .nav-userLabel-imgArrow {
+    margin: 20px -34px 0 0px;
+  }
+  .nav-userLabel-img {
+  }
+  .nav-userLabel-menu {
+    margin-top: 228px;
+    margin-right: 170px;
+    background-color: #fff;
+  }
+}

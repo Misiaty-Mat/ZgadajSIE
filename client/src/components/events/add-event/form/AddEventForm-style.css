@@ -1,8 +1,59 @@
 .addEventModal {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: 20px;
-  height: 200px;
-  width: 52.8vw;
+  position: relative;
+}
+.addEventModal-labelTitle {
+  margin: 10px 0;
+  font-size: 26px;
+}
+
+.addEventModal-locationTitle {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+.addEventModal-locationAddress {
+  margin: 0;
+  padding: 0;
+}
+
+.custom-event-map {
+  width: 1060px;
+  height: 500px;
+  top: 60px;
+}
+@media (max-width: 1100px) {
+  .custom-event-map {
+    width: 860px;
+  }
+}
+@media (max-width: 700px) {
+  .custom-event-map {
+    width: 560px;
+  }
+}
+@media (max-width: 580px) {
+  .custom-event-map {
+    margin-bottom: -400px;
+    width: 410px;
+  }
+}
+@media (max-width: 500px) {
+  .custom-event-map {
+    width: 400px;
+    margin-top: 120px;
+  }
+}
+
+.calendarModal {
+  margin-top: 150px;
+}
+@media (max-width: 500px) {
+  .calendarModal {
+    /* margin-top: 0px;
+    width: 300px; */
+  }
 }

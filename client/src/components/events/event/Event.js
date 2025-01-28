@@ -15,20 +15,23 @@ const Event = observer(({ event }) => {
       <div className="eventList-itemDiv">
         <h5 className="eventList-title">{event.title}</h5>
         <div className="eventList-itemDiv2">
-          <p className="eventList-city">
-            {event.city} {event.street} {event.buildingNumber}
-          </p>
+          <div className="eventList-city">
+            <p className="eventList-city-item">{event.city},</p>
+            <p className="eventList-city-item">
+              {event.street} {event.buildingNumber}
+            </p>
+          </div>
           <p className="eventList-Date">
             {moment(event.startDate).format("DD.MM.YYYY hh:mm")}
           </p>
-          <div>
+          <div className="eventList-Tags">
             {event.tagNames.map((tagName) => (
-              <p>#{tagName}</p>
+              <p className="eventList-Tags-items">#{tagName}</p>
             ))}
           </div>
         </div>
       </div>
-      <button onClick={selectEvent}>Szczegóły</button>
+      <p className="eventList-details">Szczegóły</p>
     </div>
   );
 });
