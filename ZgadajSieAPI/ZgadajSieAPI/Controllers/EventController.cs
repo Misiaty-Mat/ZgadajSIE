@@ -179,9 +179,14 @@ namespace ZgadajSieAPI.Controllers
 
             await db.Entry(@event).Collection(e => e.Participants).LoadAsync();
 
-            var participantIds = @event.Participants.Select(p => p.Id).ToList();
+            var participants = @event.Participants
+                .Select(p => new UserListParticipantDTO()
+                {
+                    ParticipantId = p.Id,
+                    ParticipantName = p.Name
+                }).ToList();
 
-            return Ok(new { ParticipantIds = participantIds });
+            return Ok(new { Participants = participants });
         }
 
 
