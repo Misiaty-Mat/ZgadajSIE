@@ -74,11 +74,24 @@ namespace ZgadajSieAPI.Controllers
             return Ok(new { Message = "Login succesful.", User = new UserDTO(user) });
         }
 
+
+        [Authorize]
+        [HttpGet("profile")]
+        [TypeFilter(typeof(ValidateCurrentUserFilterAttribute))]
+        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
+        public async Task<IActionResult> GetProfile()
+        {
+            var user = HttpContext.Items["User"] as User;
+
+            return Ok(new { Profile = new UserDTO(user) });
+        }
+
+
         [Authorize]
         [HttpPut("profile/update")]
         [TypeFilter(typeof(ValidateCurrentUserFilterAttribute))]
         [TypeFilter(typeof(ValidateProfileFilterAttribute))]
-        public async Task<IActionResult> UpdateProfile([FromBody]ProfileUpdateDTO model)
+        public async Task<IActionResult> UpdateProfile([FromBody] ProfileUpdateDTO model)
         {
             var user = HttpContext.Items["User"] as User;
 
@@ -152,7 +165,7 @@ namespace ZgadajSieAPI.Controllers
 
             await db.SaveChangesAsync();
 
-            return Ok(new { Message = "Check-in successful." } );
+            return Ok(new { Message = "Check-in successful." });
         }
     }
 }
