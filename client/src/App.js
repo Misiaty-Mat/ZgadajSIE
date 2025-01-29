@@ -7,6 +7,7 @@ import { useStores } from "./contexts/stores-context";
 import EventModal from "./components/events/event-modal/EventModal";
 import { observer } from "mobx-react-lite";
 import { ToastContainer } from "react-toastify";
+import UserProfile from "./components/pages/user-profile/UserProfile";
 
 const App = observer(() => {
   const { eventStore } = useStores();
@@ -17,6 +18,7 @@ const App = observer(() => {
         <Route path="/" element={<MainPage />} />
         <Route path="/created-events" element={<CreatedEvents />} />
         <Route path="/joined-events" element={<JoinedEvents />} />
+        <Route path="/my-profile" element={<UserProfile />} />
       </Routes>
 
       {eventStore.selectedEvent && <EventModal />}

@@ -37,6 +37,12 @@ const NavBar = () => {
             <div className="nav-userLabel-menu">
               <button
                 className="nav-userLabel-button"
+                onClick={() => navigate("/my-profile")}
+              >
+                Mój profil
+              </button>
+              <button
+                className="nav-userLabel-button"
                 onClick={() => navigate("/")}
               >
                 Wszystkie wydarzenia

@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { apiLogin, apiRegister, checkToken } from "../api/user/auth";
+import { apiLogin, apiRegister, checkToken } from "../api/user/user";
 import { TOKEN_NAME } from "../util/constants";
 import { toast } from "react-toastify";
 import { handleError } from "../api/utils";
@@ -40,6 +40,13 @@ export const UserContextProvider = ({ children }) => {
     setUser(null);
   };
 
+  const setUsername = (username) => {
+    setUser((prev) => ({
+      ...prev,
+      name: username,
+    }));
+  };
+
   useEffect(() => {
     const checkUserAuth = async () => {
       if (getToken()) {
@@ -59,7 +66,9 @@ export const UserContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoggedIn, login, register, logout, setUsername }}
+    >
       {children}
     </AuthContext.Provider>
   );

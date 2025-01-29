@@ -19,3 +19,15 @@ export const apiRegister = async (credentials) => {
     headers: HEADERS,
   });
 };
+
+export const getUserProfile = async () => {
+  return axios.get(`${API_URL}/user/profile`, {
+    headers: getHeadersWithAuth(),
+  });
+};
+
+export const updateUserProfile = async (request) => {
+  return axios.put(`${API_URL}/user/profile/update`, request, {
+    headers: getHeadersWithAuth(),
+  });
+};
