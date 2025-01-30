@@ -1,0 +1,59 @@
+.navBarUser {
+}
+.user-mainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+.user-mainContainer--header {
+  font-weight: 400;
+}
+.userForm {
+}
+.userForm--item {
+  width: 400px;
+}
+
+.test {
+  color: red;
+}
+
+.userInput {
+  border: none;
+  background: none;
+  border-bottom: solid 1px #000;
+  padding-bottom: 2px;
+  font-size: 18px;
+  width: 400px;
+}
+
+.navBarUser-button {
+  padding: 10px 20px;
+  border: none;
+  outline: none;
+  margin: auto 5px;
+  color: #fff;
+  border-bottom: 1px #fff solid;
+  border-radius: 15px;
+  background: #0078d7;
+  font-size: 14px;
+}
+.buttonConfirm {
+  margin-bottom: 10px;
+  margin-left: 150px;
+}
+
+@media (max-width: 450px) {
+  .userForm--item {
+    width: 300px;
+  }
+  .userInput {
+    width: 300px;
+  }
+  .buttonConfirm {
+    margin-bottom: 10px;
+    margin-left: 100px;
+  }
+}

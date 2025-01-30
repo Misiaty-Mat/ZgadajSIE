@@ -14,8 +14,18 @@ const ConfirmActionModal = ({
       onClose={() => setIsOpened(false)}
     >
       {children}
-      <button onClick={() => setIsOpened(false)}>Anuluj</button>
-      <button onClick={onConfirm}>Potwierdź</button>
+      <button
+        className="Modal-logOrRegister-button"
+        onClick={() => setIsOpened(false)}
+      >
+        Anuluj
+      </button>
+      <button
+        className="confirmButton Modal-logOrRegister-button"
+        onClick={onConfirm}
+      >
+        Potwierdź
+      </button>
     </BasicModal>
   );
 };

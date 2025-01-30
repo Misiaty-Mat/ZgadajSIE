@@ -6,6 +6,7 @@ import { useState } from "react";
 import { confirmEventArrival } from "../../../../../api/events/events";
 import { toast } from "react-toastify";
 import { handleError } from "../../../../../api/utils";
+import "./ConfirmEventArrivalForm--style.css";
 
 const ConfirmEventArrivalForm = ({ eventId, onSubmit }) => {
   const [code, setCode] = useState("");
@@ -33,10 +34,11 @@ const ConfirmEventArrivalForm = ({ eventId, onSubmit }) => {
   };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form className="eventViev" onSubmit={formik.handleSubmit}>
       {!code && <QRCodeScanner onScanned={onCodeChange} />}
-      <label>Lub wpisz kod ręcznie:</label>
+      <label className="eventViev--item">Lub wpisz kod ręcznie:</label>
       <input
+        className="userInput userInput-cofirmCode"
         name="code"
         value={formik.values.code}
         onChange={(e) => onCodeChange(e.target.value)}
@@ -44,7 +46,11 @@ const ConfirmEventArrivalForm = ({ eventId, onSubmit }) => {
 
       {formik.errors.code && <p>{formik.errors.code}</p>}
 
-      <button type="submit" disabled={!!formik.errors.code || !code}>
+      <button
+        className="navBarUser-button buttonConfirm buttonConfirmEvent"
+        type="submit"
+        disabled={!!formik.errors.code || !code}
+      >
         Potwierdź
       </button>
     </form>

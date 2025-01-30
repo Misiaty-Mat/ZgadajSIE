@@ -1,0 +1,33 @@
+.userForm--item-EditEvent {
+  font-size: 20px;
+  margin: 10px auto;
+  display: block;
+  width: 500px;
+}
+.divTitle {
+  margin-top: 200px;
+}
+.userInput-EditEvent {
+  font-size: 20px;
+  margin: 10px auto;
+  display: block;
+  width: 200px;
+}
+.editEventButton {
+  margin: 0 auto !important;
+}
+@media (max-width: 500px) {
+  .userForm--item-EditEvent {
+    width: 200px;
+  }
+  .userInput-EditEvent {
+    width: 200px;
+  }
+  .divTitle {
+    margin-top: 20px;
+  }
+}
+
+.css-13cymwt-control {
+  border: none;
+}

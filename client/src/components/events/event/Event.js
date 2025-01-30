@@ -31,7 +31,7 @@ const Event = observer(({ event }) => {
           </div>
         </div>
       </div>
-      <p className="eventList-details">Szczegóły</p>
+      <p className="eventList-details eventList-details-mainPage">Szczegóły</p>
     </div>
   );
 });

@@ -12,6 +12,10 @@ body {
 
 button {
   cursor: pointer;
+  border-radius: 15px;
+  background-color: #0067b8;
+  color: #fff;
+  border: none;
 }
 button:hover {
   box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.04);
@@ -29,6 +33,7 @@ small {
 @media (max-width: 500px;) {
   button {
     cursor: pointer;
+    border: none;
   }
   button:hover {
     transform: scale(1);

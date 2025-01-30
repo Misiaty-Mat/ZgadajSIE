@@ -61,7 +61,11 @@ const AuthModalButton = () => {
 
   return (
     <>
-      <button className="main-page-ButtonLogin" onClick={toggleModal}>
+      <button
+        className="main-page-ButtonLogin"
+        style={{ color: "#000" }}
+        onClick={toggleModal}
+      >
         Zaloguj się
       </button>
       <BasicModal isOpen={isModalOpen} title="" onClose={toggleModal}>

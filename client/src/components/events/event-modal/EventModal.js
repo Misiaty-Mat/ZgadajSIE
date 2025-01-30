@@ -14,6 +14,7 @@ import {
 import { handleError } from "../../../api/utils";
 import { useCallback, useEffect, useState } from "react";
 import { useStores } from "../../../contexts/stores-context";
+import "./eventModal-style.css";
 
 const EventModal = observer(() => {
   const [participants, setParticipants] = useState([]);
@@ -97,6 +98,7 @@ const EventModal = observer(() => {
           data-tooltip-id="join-tooltip"
           data-tooltip-content={getDisabledMessage()}
           onClick={() => joinEvent(selectedEvent.eventId)}
+          className="eventViev-button"
         >
           Dołącz!
         </button>
@@ -117,50 +119,63 @@ const EventModal = observer(() => {
     if (participantProfile) {
       return (
         <>
-          <p>Name: {participantProfile.name}</p>
-          <p>{participantProfile.age > 0 && participantProfile.age}</p>
-          <p>{participantProfile.gender}</p>
-          <p>{participantProfile.description}</p>
-          <button onClick={() => setParticipantProfile(null)}>Wróć</button>
+          <div className="eventViev">
+            <p className="eventViev--item">Name: {participantProfile.name}</p>
+            <p className="eventViev--item">
+              {participantProfile.age > 0 && participantProfile.age}
+            </p>
+            <p className="eventViev--item">{participantProfile.gender}</p>
+            <p className="eventViev--item">{participantProfile.description}</p>
+            <button
+              className="eventViev-button"
+              onClick={() => setParticipantProfile(null)}
+            >
+              Wróć
+            </button>
+          </div>
         </>
       );
     } else {
       return (
         <>
-          <p>
-            Adres
-            {` ${selectedEvent.city} ul. ${selectedEvent.street} ${selectedEvent.buildingNumber}`}
-          </p>
-          <p>
-            Czas startu{" "}
-            {moment(selectedEvent.startDate).format("DD.MM.YYYY hh:mm")}
-          </p>
-          <p>Opis: {selectedEvent.description}</p>
+          <div className="eventViev">
+            <p className="eventViev--item">
+              Adres:
+              {` ${selectedEvent.city} ul. ${selectedEvent.street} ${selectedEvent.buildingNumber}`}
+            </p>
+            <p className="eventViev--item">
+              Czas startu:{" "}
+              {moment(selectedEvent.startDate).format("DD.MM.YYYY hh:mm")}
+            </p>
+            <p className="eventViev--item">Opis: {selectedEvent.description}</p>
 
-          <div
-            onClick={(e) =>
-              handleParticipantClick(e, selectedEvent.organizerId)
-            }
-          >
-            <p>{selectedEvent.organizerName} - organizator</p>
-          </div>
-
-          <p>
-            Uczestnicy: {participants.length}
-            {selectedEvent.maxParticipation &&
-              " / " + selectedEvent.maxParticipation}
-          </p>
-          {participants.map((participant) => (
             <div
-              key={participant.participantId}
+              className="eventViev--item organizer-style"
               onClick={(e) =>
-                handleParticipantClick(e, participant.participantId)
+                handleParticipantClick(e, selectedEvent.organizerId)
               }
             >
-              <p>{participant.participantName}</p>
+              <p>{selectedEvent.organizerName} - organizator</p>
             </div>
-          ))}
-          {getEventDetailsButton()}
+
+            <p className="eventViev--item">
+              Uczestnicy: {participants.length}
+              {selectedEvent.maxParticipation &&
+                " / " + selectedEvent.maxParticipation}
+            </p>
+            {participants.map((participant) => (
+              <div
+                className="eventViev--item"
+                key={participant.participantId}
+                onClick={(e) =>
+                  handleParticipantClick(e, participant.participantId)
+                }
+              >
+                <p>{participant.participantName}</p>
+              </div>
+            ))}
+            {getEventDetailsButton()}
+          </div>
         </>
       );
     }

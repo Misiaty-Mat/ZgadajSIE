@@ -1,0 +1,42 @@
+.eventViev {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 20px;
+}
+.eventViev--item {
+  margin: 5px 0;
+}
+.eventViev-button {
+  padding: 10px 20px;
+  border: none;
+  outline: none;
+  margin: 10px auto;
+  color: #fff;
+  border-bottom: 1px #fff solid;
+  border-radius: 15px;
+  background: #0078d7;
+  font-size: 14px;
+  width: 100px;
+}
+.organizer-style {
+  background-color: #0078d7;
+  color: #fff;
+  border-radius: 15px;
+  cursor: pointer;
+  width: 200px;
+  margin: 0 auto;
+  transition: all 0.25s ease;
+  margin: 0 auto;
+}
+.organizer-style:hover {
+  scale: 1.12;
+}
+
+@media (max-width: 600px) {
+  .eventViev {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+  }
+}

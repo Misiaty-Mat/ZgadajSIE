@@ -7,6 +7,7 @@ import { getUserProfile, updateUserProfile } from "../../../api/user/user";
 import { handleError } from "../../../api/utils";
 import NavBar from "../../nav-bar/NavBar";
 import { useAuth } from "../../../hooks/useAuth";
+import "./UserProfile-style.css";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState({});
@@ -53,19 +54,25 @@ const UserProfile = () => {
   const getContent = ({ values, errors }) => {
     if (isEditing) {
       return (
-        <div>
+        <div className="user-mainContainer">
           <Form>
-            <p>
+            <p className="userForm--item">
               Nazwa użytkownika:
-              <Field name="name" value={values.name} onChange={onValueChange} />
+              <Field
+                className="userInput"
+                name="name"
+                value={values.name}
+                onChange={onValueChange}
+              />
             </p>
             <small>{errors.name}</small>
 
-            <p>Email: {profile.email}</p>
+            <p className="userForm--item">Email: {profile.email}</p>
 
-            <p>
+            <p className="userForm--item">
               Wiek:
               <Field
+                className="userInput"
                 name="age"
                 type="number"
                 value={values.age}
@@ -74,18 +81,20 @@ const UserProfile = () => {
             </p>
             <small>{errors.age}</small>
 
-            <p>
+            <p className="userForm--item">
               Płeć:{" "}
               <Field
+                className="userInput"
                 name="gender"
                 value={values.gender}
                 onChange={onValueChange}
               />
             </p>
 
-            <p>
+            <p className="userForm--item">
               Opis:
               <Field
+                className="userInput"
                 name="description"
                 as="textarea"
                 value={values.description}
@@ -93,18 +102,24 @@ const UserProfile = () => {
               />
             </p>
 
-            <button type="submit">Potwierdź</button>
+            <button className="navBarUser-button buttonConfirm" type="submit">
+              Potwierdź
+            </button>
           </Form>
         </div>
       );
     } else {
       return (
-        <div>
-          <p>Nazwa użytkownika: {profile.name}</p>
-          <p>Email: {profile.email}</p>
-          <p>Wiek: {profile.age || "Nie podano"}</p>
-          <p>Płeć: {profile.gender || "Nie podano"}</p>
-          <p>Opis: {profile.description || "Brak"}</p>
+        <div className="userForm">
+          <p className="userForm--item">Nazwa użytkownika: {profile.name}</p>
+          <p className="userForm--item">Email: {profile.email}</p>
+          <p className="userForm--item">Wiek: {profile.age || "Nie podano"}</p>
+          <p className="userForm--item">
+            Płeć: {profile.gender || "Nie podano"}
+          </p>
+          <p className="userForm--item">
+            Opis: {profile.description || "Brak"}
+          </p>
         </div>
       );
     }
@@ -121,28 +136,32 @@ const UserProfile = () => {
   };
 
   return (
-    <div>
-      <h1>Twój profil</h1>
-      <NavBar />
-      <Formik
-        innerRef={formikRef}
-        onSubmit={handleSubmit}
-        validationSchema={Yup.object({
-          name: Yup.string().required("Musisz posiadać nazwę użytkownika"),
-          age: Yup.number()
-            .integer("Musisz podać liczbę całkowitą")
-            .min(18, "Podaj poprawny wiek")
-            .max(150, "Wiek jest za dużą liczbą")
-            .nullable(),
-        })}
-        validateOnChange
-      >
-        {getContent}
-      </Formik>
-      <button onClick={toggleEditingMode}>
-        {isEditing ? "Anuluj" : "Edytuj"}
-      </button>
-    </div>
+    <>
+      <div className="navBarUser">
+        <NavBar />
+      </div>
+      <div className="user-mainContainer">
+        <h1 className="user-mainContainer--header">Twój profil</h1>
+        <Formik
+          innerRef={formikRef}
+          onSubmit={handleSubmit}
+          validationSchema={Yup.object({
+            name: Yup.string().required("Musisz posiadać nazwę użytkownika"),
+            age: Yup.number()
+              .integer("Musisz podać liczbę całkowitą")
+              .min(18, "Podaj poprawny wiek")
+              .max(150, "Wiek jest za dużą liczbą")
+              .nullable(),
+          })}
+          validateOnChange
+        >
+          {getContent}
+        </Formik>
+        <button className="navBarUser-button" onClick={toggleEditingMode}>
+          {isEditing ? "Anuluj" : "Edytuj"}
+        </button>
+      </div>
+    </>
   );
 };
 

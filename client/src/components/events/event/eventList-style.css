@@ -71,17 +71,23 @@
   margin: auto;
   background-color: #fff;
   color: #000;
-  padding: 20px 10px;
+  padding: 10px 5px;
+  margin: 4px;
   border-radius: 15px;
   cursor: pointer;
   transition: transform 0.1s linear;
+  border: none;
+  font-family: Roboto;
 }
 .eventList-details:hover {
   background-color: #cfcfcf;
   color: #000;
   transform: scale(1.12);
 }
-
+.eventList-details-delete:hover {
+  background-color: #a52422;
+  color: #fff;
+}
 @media (max-width: 500px) {
   .eventList {
     background-color: #0078d7;
@@ -139,4 +145,8 @@
     padding: 5px 10px;
     font-size: 12px;
   }
+}
+
+.eventList-details-mainPage {
+  margin-left: 15px;
 }

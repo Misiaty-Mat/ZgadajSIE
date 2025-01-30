@@ -1,5 +1,6 @@
 import moment from "moment";
 import { useStores } from "../../../../contexts/stores-context";
+import "./confirm.css";
 
 const JoinedEvent = ({ event, onConfirmArrivalClick }) => {
   const { eventStore } = useStores();
@@ -29,8 +30,15 @@ const JoinedEvent = ({ event, onConfirmArrivalClick }) => {
           </div>
         </div>
       </div>
-      <p className="eventList-details">Szczegóły</p>
-      <button onClick={onConfirmArrivalClick}>Potwierdź przybycie</button>
+      <div>
+        <p className="eventList-details">Szczegóły</p>
+        <button
+          className="eventList-details confirm-button "
+          onClick={onConfirmArrivalClick}
+        >
+          Potwierdź przybycie
+        </button>
+      </div>
     </div>
   );
 };

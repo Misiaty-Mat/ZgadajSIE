@@ -25,10 +25,25 @@ const MyEvent = ({ event, onGetCodeClick, onEditClick, onDeleteClick }) => {
           </div>
         </div>
       </div>
-      <p className="eventList-details">Szczegóły</p>
-      <button onClick={onGetCodeClick}>Kod potwierdzenia</button>
-      <button onClick={onEditClick}>Edytuj</button>
-      <button onClick={onDeleteClick}>Usuń</button>
+      <div>
+        <div>
+          <p className="eventList-details">Szczegóły</p>
+          <button className="eventList-details" onClick={onGetCodeClick}>
+            Kod potwierdzenia
+          </button>
+        </div>
+        <div>
+          <button className="eventList-details" onClick={onEditClick}>
+            Edytuj
+          </button>
+          <button
+            className="eventList-details eventList-details-delete"
+            onClick={onDeleteClick}
+          >
+            Usuń
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

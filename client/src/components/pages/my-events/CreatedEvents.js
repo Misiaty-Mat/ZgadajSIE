@@ -121,7 +121,7 @@ const CreatedEvents = observer(() => {
             isOpened={deleteModalOpened}
             setIsOpened={setDeleteModalOpened}
           >
-            <p>
+            <p style={{ fontSize: "20px" }}>
               Czy na pewno chcesz usunąć wydarzenie{" "}
               {eventStore.targetEvent.title}
             </p>
@@ -133,7 +133,7 @@ const CreatedEvents = observer(() => {
         title="Kod potwierdzenia przybycia"
         onClose={() => setCodeModalOpened(false)}
       >
-        <p>
+        <p style={{ fontSize: "20px" }}>
           Przekaż osobie, która przybyła na twoje wydarzenie poniższy kod do
           zeskanowania
         </p>
@@ -146,8 +146,8 @@ const CreatedEvents = observer(() => {
           />
         )}
 
-        <p>Lub do ręcznego przepisania</p>
-        <p>{confirmationCode}</p>
+        <p style={{ fontSize: "20px" }}>Lub do ręcznego przepisania</p>
+        <p style={{ fontSize: "20px" }}>{confirmationCode}</p>
       </BasicModal>
       <ToastContainer />
     </div>

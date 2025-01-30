@@ -11,6 +11,7 @@ import LocationStep from "../../add-event/form-steps/LocationStep";
 import { editEvent } from "../../../../api/events/events";
 import { toast } from "react-toastify";
 import { handleError } from "../../../../api/utils";
+import "./EditEventModal-style.css";
 
 const EditEventModal = observer(({ isOpened, setIsOpened }) => {
   const [page, setPage] = useState("editInputs");
@@ -61,9 +62,10 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
       case "editInputs":
         return (
           <Form>
-            <div>
-              <label>Tytuł</label>
+            <div className="divTitle">
+              <label class="userForm--item-EditEvent">Tytuł</label>
               <input
+                class="userInput userInput-EditEvent"
                 name="title"
                 value={values?.title}
                 onChange={onValueChange}
@@ -72,8 +74,11 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
             </div>
 
             <div>
-              <label>Maksymalna liczba uczestników</label>
+              <label class="userForm--item-EditEvent">
+                Maksymalna liczba uczestników
+              </label>
               <input
+                class="userInput userInput-EditEvent"
                 type="number"
                 name="maxParticipation"
                 value={values?.maxParticipation}
@@ -83,22 +88,33 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
             </div>
 
             <div>
-              <label>Miejsce</label>
-              <p>{`${values?.city} ${values?.street} ${values?.buildingNumber}`}</p>
-              <button onClick={() => setPage("editLocation")}>
+              <label class="userForm--item-EditEvent userForm--item-EditEvent-EditEvent">
+                Miejsce
+              </label>
+              <p class="userForm--item-EditEvent userForm--item-EditEvent-EditEvent ">{`${values?.city} ${values?.street} ${values?.buildingNumber}`}</p>
+              <button
+                className="navBarUser-button buttonConfirm editEventButton"
+                onClick={() => setPage("editLocation")}
+              >
                 Zmień miejsce
               </button>
             </div>
 
             <div>
-              <label>Czas</label>
+              <label class="userInput userInput-EditEvent">Czas</label>
               <p>{moment(values?.startDate).format("DD.MM.YYYY hh:mm")}</p>
-              <button onClick={() => setPage("editTime")}>Zmień czas</button>
+              <button
+                className="navBarUser-button buttonConfirm editEventButton"
+                onClick={() => setPage("editTime")}
+              >
+                Zmień czas
+              </button>
             </div>
 
             <div>
-              <label>Opis</label>
+              <label class="userForm--item-EditEvent">Opis</label>
               <textarea
+                class="userInput userInput-EditEvent"
                 name="description"
                 value={values?.description}
                 onChange={onValueChange}
@@ -116,7 +132,11 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
               <small>{errors.tagIds}</small>
             </div>
 
-            <button type="submit" disabled={!isValid}>
+            <button
+              className="navBarUser-button buttonConfirm editEventButton"
+              type="submit"
+              disabled={!isValid}
+            >
               Zapisz zmiany
             </button>
           </Form>
@@ -125,7 +145,10 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
         return (
           <>
             <DateTimeStep />
-            <button onClick={() => setPage("editInputs")}>
+            <button
+              className="navBarUser-button buttonConfirm editEventButton"
+              onClick={() => setPage("editInputs")}
+            >
               Potwierdź i wróć
             </button>
           </>
@@ -134,7 +157,10 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
         return (
           <>
             <LocationStep />
-            <button onClick={() => setPage("editInputs")}>
+            <button
+              onClick={() => setPage("editInputs")}
+              className="navBarUser-button buttonConfirm editEventButton"
+            >
               Potwierdź i wróć
             </button>
           </>

@@ -23,7 +23,7 @@
 }
 @media (max-width: 1100px) {
   .centered {
-    top: 50%;
+    top: 52%;
     left: 50%;
   }
 }
@@ -64,9 +64,11 @@
 .modal-content {
   padding: 10px;
   font-size: 14px;
+  height: 40vh;
   color: #2c3e50;
   text-align: center;
   width: 1000px;
+  overflow: auto;
 }
 
 @media (max-width: 1100px) {
@@ -77,6 +79,7 @@
 @media (max-width: 700px) {
   .modal-content {
     width: 500px;
+    height: 80vh;
   }
 }
 @media (max-width: 580px) {

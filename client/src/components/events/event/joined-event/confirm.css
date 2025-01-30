@@ -1,0 +1,12 @@
+.confirm-button {
+  font-size: 15px;
+}
+.confirm-button:hover {
+  transform: scale(1.08);
+}
+
+@media (max-width: 500px) {
+  .confirm-button {
+    font-size: 12px;
+  }
+}
