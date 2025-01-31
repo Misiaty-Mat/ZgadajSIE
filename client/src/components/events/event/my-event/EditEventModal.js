@@ -102,7 +102,7 @@ const EditEventModal = observer(({ isOpened, setIsOpened }) => {
 
             <div>
               <label class="userInput userInput-EditEvent">Czas</label>
-              <p>{moment(values?.startDate).format("DD.MM.YYYY hh:mm")}</p>
+              <p>{moment(values?.startDate).format("DD.MM.YYYY HH:mm")}</p>
               <button
                 className="navBarUser-button buttonConfirm editEventButton"
                 onClick={() => setPage("editTime")}

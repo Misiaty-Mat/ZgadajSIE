@@ -16,7 +16,7 @@ const MyEvent = ({ event, onGetCodeClick, onEditClick, onDeleteClick }) => {
             {event.city} {event.street} {event.buildingNumber}
           </p>
           <p className="eventList-Date">
-            {moment(event.startDate).format("DD.MM.YYYY hh:mm")}
+            {moment(event.startDate).format("DD.MM.YYYY HH:mm")}
           </p>
           <div>
             {event.tagNames.map((tagName) => (

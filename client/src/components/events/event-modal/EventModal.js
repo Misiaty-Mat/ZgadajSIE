@@ -145,7 +145,7 @@ const EventModal = observer(() => {
             </p>
             <p className="eventViev--item">
               Czas startu:{" "}
-              {moment(selectedEvent.startDate).format("DD.MM.YYYY hh:mm")}
+              {moment(selectedEvent.startDate).format("DD.MM.YYYY HH:mm")}
             </p>
             <p className="eventViev--item">Opis: {selectedEvent.description}</p>
 

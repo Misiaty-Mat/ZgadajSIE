@@ -18,6 +18,7 @@ const EventMarkers = observer(({ onMarkerClickEnabled }) => {
     return new MarkerClusterer({ map });
   }, [map]);
 
+  // jeżeli zmieni się stan markers -- wyczyść poprzednie klastry i dodaj nowe
   useEffect(() => {
     if (!clusterer) return;
 
@@ -25,11 +26,15 @@ const EventMarkers = observer(({ onMarkerClickEnabled }) => {
     clusterer.addMarkers(Object.values(markers));
   }, [clusterer, markers]);
 
+  // ustawienie odniesienia każdego znacznika do stanu markers
   const setMarkerRef = useCallback((marker, key) => {
     setMarkers((markers) => {
+      // jeżeli znacznik istnieje i jest w liście lub znacznik nie istnieje i nie ma go w liście znaczników -- nie zmieniaj stanu
       if ((marker && markers[key]) || (!marker && !markers[key]))
         return markers;
 
+      // jeżeli znacznik jest na mapie -- dodaj go do do stanu
+      // jeżeli znacznik nie jest na mapie -- usuń go z stanu
       if (marker) {
         return { ...markers, [key]: marker };
       } else {
@@ -40,6 +45,7 @@ const EventMarkers = observer(({ onMarkerClickEnabled }) => {
     });
   }, []);
 
+  // po kliknięciu w znacznik wyśrodkuj go na mapie i ustaw wybrane wydarzenie w globalnym stane
   const onMarkerClick = (event) => {
     if (onMarkerClickEnabled) {
       map.panTo({ lat: event.latitude, lng: event.longitude });

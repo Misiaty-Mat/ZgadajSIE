@@ -19,7 +19,6 @@ class EventStore {
 
   fetchEvents(userPosition) {
     this.page = 1;
-    this.isLastPage = false;
     fetchAllEvents(userPosition)
       .then((response) => {
         this.events = response.data.event;
@@ -29,50 +28,54 @@ class EventStore {
   }
 
   filterEvents(filters, sortBy) {
-    this.page = 1;
-    this.isLastPage = false;
+    this.page = 1; // reset paginacji strony jaką obecnie widzi użytkownik
     this.filteredEvents = this.events
       .filter(
         (event) =>
           !filters.title ||
-          event.title.toLowerCase().includes(filters.title.toLowerCase())
+          event.title.toLowerCase().includes(filters.title.toLowerCase()) // filtrowanie po tytule
       )
-      .filter((event) => !filters.range || event.distance <= filters.range)
+      .filter((event) => !filters.range || event.distance <= filters.range) // filtrowanie po dystansie od uzytkownika
       .filter(
         (event) =>
           !filters.dateRangeStart ||
-          moment(event.startDate).isAfter(moment(filters.dateRangeStart))
+          moment(event.startDate).isAfter(moment(filters.dateRangeStart)) // filtrowanie po czasie rozpoczęcia (początek zakresu)
       )
       .filter(
         (event) =>
           !filters.dateRangeEnd ||
           moment(event.startDate).isBefore(
-            moment(filters.dateRangeEnd).add(1, "d")
+            moment(filters.dateRangeEnd).add(1, "d") // filtrowanie po czasie rozpoczęcia (koniec zakresu)
           )
       )
-      .filter((event) => {
-        return (
+      .filter(
+        (event) =>
           filters.tagNames.length === 0 ||
-          event.tagNames.some((eventTag) => filters.tagNames.includes(eventTag))
+          event.tagNames.some(
+            (eventTag) => filters.tagNames.includes(eventTag) // filtrowanie po znacznikach
+          )
+      );
+
+    // logika sortowania
+    switch (sortBy) {
+      case "distance":
+        this.filteredEvents.sort((a, b) => a.distance - b.distance);
+        break;
+      case "title":
+        this.filteredEvents.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "beginDateSoon":
+        this.filteredEvents.sort((a, b) =>
+          moment(a.startDate).diff(moment(b.startDate))
         );
-      });
-
-    if (sortBy === "distance") {
-      this.filteredEvents.sort((a, b) => a.distance - b.distance);
-    } else if (sortBy === "title") {
-      this.filteredEvents.sort((a, b) => a.title.localeCompare(b.title));
-    } else if (sortBy === "beginDateSoon") {
-      this.filteredEvents.sort((a, b) =>
-        moment(a.startDate).diff(moment(b.startDate))
-      );
-    } else if (sortBy === "beginDateLate") {
-      this.filteredEvents.sort((a, b) =>
-        moment(b.startDate).diff(moment(a.startDate))
-      );
-    }
-
-    if (this.filteredEvents.length <= EVENTS_PER_PAGE) {
-      this.isLastPage = true;
+        break;
+      case "beginDateLate":
+        this.filteredEvents.sort((a, b) =>
+          moment(b.startDate).diff(moment(a.startDate))
+        );
+        break;
+      default:
+        break;
     }
   }
 
@@ -99,18 +102,14 @@ class EventStore {
 
   incrementPage = () => {
     this.page = this.page + 1;
-
-    const filteredEventAmount = this.filteredEvents.length;
-    const loadEventCount = EVENTS_PER_PAGE * this.page;
-    if (loadEventCount > filteredEventAmount) {
-      this.isLastPage = true;
-    }
   };
 
   get paginatedEvents() {
-    if (this.isLastPage) {
+    if (this.filteredEvents.length <= EVENTS_PER_PAGE * this.page) {
+      this.isLastPage = true;
       return this.filteredEvents;
     } else {
+      this.isLastPage = false;
       return this.filteredEvents.slice(0, EVENTS_PER_PAGE * this.page);
     }
   }

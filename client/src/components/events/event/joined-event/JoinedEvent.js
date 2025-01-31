@@ -21,7 +21,7 @@ const JoinedEvent = ({ event, onConfirmArrivalClick }) => {
             </p>
           </div>
           <p className="eventList-Date">
-            {moment(event.startDate).format("DD.MM.YYYY hh:mm")}
+            {moment(event.startDate).format("DD.MM.YYYY HH:mm")}
           </p>
           <div className="eventList-Tags">
             {event.tagNames.map((tagName) => (
