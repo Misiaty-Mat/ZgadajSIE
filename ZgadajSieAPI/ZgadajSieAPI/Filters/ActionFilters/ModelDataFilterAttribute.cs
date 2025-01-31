@@ -7,11 +7,11 @@ using ZgadajSieAPI.Models.DTO;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class ValidateModelDataFilterAttribute : ActionFilterAttribute
+    public class ModelDataFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public ValidateModelDataFilterAttribute(ZgadajsieDbContext db)
+        public ModelDataFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }

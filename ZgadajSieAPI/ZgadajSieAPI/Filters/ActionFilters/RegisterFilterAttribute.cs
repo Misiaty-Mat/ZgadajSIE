@@ -1,46 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models;
-
+using ZgadajSieAPI.Models.DTO;
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class ValidateEventsOrganizerFilterAttribute : ActionFilterAttribute
+    public class RegisterFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public ValidateEventsOrganizerFilterAttribute(ZgadajsieDbContext db)
+        public RegisterFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var @event = context.HttpContext.Items["Event"] as Event;
+            // pusty obiekt
 
-            // brak organizatora
+            var model = context.ActionArguments["model"] as UserRegistrationDTO;
 
-            var organizer = await db.Users.FindAsync(@event.OrganizerId);
-
-            if (organizer == null)
+            if (model == null)
             {
-                context.ModelState.AddModelError("User", $"User with id '{organizer.Id}' not found.");
+                context.ModelState.AddModelError("Register", "Model object is null.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
-                    Status = StatusCodes.Status404NotFound
+                    Status = StatusCodes.Status400BadRequest
                 };
-                context.Result = new NotFoundObjectResult(problemDetails);
+                context.Result = new BadRequestObjectResult(problemDetails);
 
                 return;
             }
 
-            // user nie jest organizatorem
+            // zajęty email
 
-            var userId = Guid.Parse(context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var existingUser = await db.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
 
-            if (organizer.Id != userId)
+            if (existingUser != null)
             {
-                context.ModelState.AddModelError("User", $"User with id '{userId}' is not the event's organizer.");
+                context.ModelState.AddModelError("Register", "Provided email already exists.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
                     Status = StatusCodes.Status400BadRequest

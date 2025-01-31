@@ -6,11 +6,11 @@ using ZgadajSieAPI.Models;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class ValidateLeaveEventFilterAttribute : ActionFilterAttribute
+    public class LeaveEventFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public ValidateLeaveEventFilterAttribute(ZgadajsieDbContext db)
+        public LeaveEventFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }

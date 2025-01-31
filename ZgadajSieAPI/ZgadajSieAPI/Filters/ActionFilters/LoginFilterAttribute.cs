@@ -4,49 +4,58 @@ using Microsoft.EntityFrameworkCore;
 using ZgadajSieAPI.Data;
 using ZgadajSieAPI.Models;
 using ZgadajSieAPI.Models.DTO;
+using ZgadajSieAPI.Services.Interfaces;
+
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class ValidateRegisterFilterAttribute : ActionFilterAttribute
+    public class LoginFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
+        private readonly IPasswordService pw;
 
-        public ValidateRegisterFilterAttribute(ZgadajsieDbContext db)
+        public LoginFilterAttribute(ZgadajsieDbContext db, IPasswordService pw)
         {
             this.db = db;
+            this.pw = pw;
         }
+
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             // pusty obiekt
 
-            var model = context.ActionArguments["model"] as UserRegistrationDTO;
+            var model = context.ActionArguments["model"] as UserLoginDTO;
 
             if (model == null)
             {
-                context.ModelState.AddModelError("Register", "Model object is null.");
+                context.ModelState.AddModelError("Login", "Model object is null.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
                     Status = StatusCodes.Status400BadRequest
                 };
                 context.Result = new BadRequestObjectResult(problemDetails);
-
+                
                 return;
             }
 
-            // zajęty email
+            // niepoprawne dane
 
-            var existingUser = await db.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
+            var user = await db.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
 
-            if (existingUser != null)
+            if (user == null || !pw.Verify(model.Password, user.PasswordHash))
             {
-                context.ModelState.AddModelError("Register", "Provided email already exists.");
+                context.ModelState.AddModelError("Login", "Wrong credentials.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
-                    Status = StatusCodes.Status400BadRequest
+                    Status = StatusCodes.Status401Unauthorized
                 };
-                context.Result = new BadRequestObjectResult(problemDetails);
+                context.Result = new UnauthorizedObjectResult(problemDetails);
 
                 return;
             }
+
+            // dodaj usera do httpcontext
+
+            context.HttpContext.Items["User"] = user;
 
             await next();
         }

@@ -1,33 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Tracing;
 using ZgadajSieAPI.Data;
+using ZgadajSieAPI.Data.Migrations;
 using ZgadajSieAPI.Models;
+using ZgadajSieAPI.Models.DTO;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class ValidateEventsTagsFilterAttribute : ActionFilterAttribute
+    public class EventDetailsFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public ValidateEventsTagsFilterAttribute(ZgadajsieDbContext db)
+        public EventDetailsFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }
+
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var @event = context.HttpContext.Items["Event"] as Event;
 
-            // pobranie tagów wydarzenia (i powiązanie z EF)
+            // nie pobrano szczegółów wydarzenia
 
-            db.Entry(@event).Collection(e => e.Tags).Load();
+            var eventDetails = await db.EventsDetails.FindAsync(@event.EventId);
 
-            // brak tagów na wydarzeniu
-
-            if (@event.Tags == null)
+            if (eventDetails == null)
             {
-                context.ModelState.AddModelError("Tags", $"Event with id '{@event.EventId}' does not have any tags attached.");
+                context.ModelState.AddModelError("EventDetails", $"Event details with id '{@event.EventId}' not found.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
                     Status = StatusCodes.Status404NotFound
@@ -38,6 +38,8 @@ namespace ZgadajSieAPI.Filters.ActionFilters
             }
 
             // dodaj event do httpcontext
+
+            @event.EventDetails = eventDetails;
 
             context.HttpContext.Items["Event"] = @event;
 

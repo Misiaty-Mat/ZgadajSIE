@@ -29,7 +29,7 @@ namespace ZgadajSieAPI.Controllers
 
 
         [HttpPost("register")]
-        [TypeFilter(typeof(ValidateRegisterFilterAttribute))]
+        [TypeFilter(typeof(RegisterFilterAttribute))]
         public async Task<IActionResult> Register([FromBody] UserRegistrationDTO model)
         {
             var user = new User
@@ -51,8 +51,8 @@ namespace ZgadajSieAPI.Controllers
 
 
         [HttpPost("login")]
-        [TypeFilter(typeof(ValidateLoginFilterAttribute))]
-        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(LoginFilterAttribute))]
+        [TypeFilter(typeof(ProfileFilterAttribute))]
         public IActionResult Login([FromBody] UserLoginDTO model)
         {
             var user = HttpContext.Items["User"] as User;
@@ -65,8 +65,8 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPost("autologin")]
-        [TypeFilter(typeof(ValidateAutologinFilterAttribute))]
-        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(AutologinFilterAttribute))]
+        [TypeFilter(typeof(ProfileFilterAttribute))]
         public IActionResult Autologin([FromHeader(Name = "Authorization")] string token)
         {
             var user = HttpContext.Items["User"] as User;
@@ -77,8 +77,8 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpGet("profile")]
-        [TypeFilter(typeof(ValidateCurrentUserFilterAttribute))]
-        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(CurrentUserFilterAttribute))]
+        [TypeFilter(typeof(ProfileFilterAttribute))]
         public async Task<IActionResult> GetProfile()
         {
             var user = HttpContext.Items["User"] as User;
@@ -89,8 +89,8 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPut("profile/update")]
-        [TypeFilter(typeof(ValidateCurrentUserFilterAttribute))]
-        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
+        [TypeFilter(typeof(CurrentUserFilterAttribute))]
+        [TypeFilter(typeof(ProfileFilterAttribute))]
         public async Task<IActionResult> UpdateProfile([FromBody] ProfileUpdateDTO model)
         {
             var user = HttpContext.Items["User"] as User;
@@ -141,11 +141,11 @@ namespace ZgadajSieAPI.Controllers
 
         [Authorize]
         [HttpPost("scan/{eventId}/qr")]
-        [TypeFilter(typeof(ValidateEventIdFilterAttribute))]
-        [TypeFilter(typeof(ValidateCurrentUserFilterAttribute))]
-        [TypeFilter(typeof(ValidateProfileFilterAttribute))]
-        [TypeFilter(typeof(ValidateEventsStartDate))]
-        [TypeFilter(typeof(ValidateQrCodeFilterAttribute))]
+        [TypeFilter(typeof(EventIdFilterAttribute))]
+        [TypeFilter(typeof(CurrentUserFilterAttribute))]
+        [TypeFilter(typeof(ProfileFilterAttribute))]
+        [TypeFilter(typeof(EventsStartDate))]
+        [TypeFilter(typeof(QrCodeFilterAttribute))]
 
         public async Task<IActionResult> ScanEventsQrCode([FromRoute] Guid eventId, [FromBody] CodeRequest code)
         {

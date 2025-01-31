@@ -5,11 +5,11 @@ using ZgadajSieAPI.Models;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class ValidateEventIdFilterAttribute : ActionFilterAttribute
+    public class EventIdFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public ValidateEventIdFilterAttribute(ZgadajsieDbContext db)
+        public EventIdFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }

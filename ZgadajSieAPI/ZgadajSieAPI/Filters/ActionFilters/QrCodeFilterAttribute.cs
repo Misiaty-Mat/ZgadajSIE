@@ -9,11 +9,11 @@ using ZgadajSieAPI.Models.Other;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class ValidateQrCodeFilterAttribute : ActionFilterAttribute
+    public class QrCodeFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public ValidateQrCodeFilterAttribute(ZgadajsieDbContext db)
+        public QrCodeFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }

@@ -7,11 +7,11 @@ using ZgadajSieAPI.Models.DTO;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class ValidateMaxParticipationFilterAttribute : ActionFilterAttribute
+    public class MaxParticipationFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public ValidateMaxParticipationFilterAttribute(ZgadajsieDbContext db)
+        public MaxParticipationFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }

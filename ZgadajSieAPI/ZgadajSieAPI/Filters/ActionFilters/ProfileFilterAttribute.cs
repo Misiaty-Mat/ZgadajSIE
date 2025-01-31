@@ -1,33 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore;
 using ZgadajSieAPI.Data;
-using ZgadajSieAPI.Data.Migrations;
 using ZgadajSieAPI.Models;
-using ZgadajSieAPI.Models.DTO;
 
 namespace ZgadajSieAPI.Filters.ActionFilters
 {
-    public class ValidateEventDetailsFilterAttribute : ActionFilterAttribute
+    public class ProfileFilterAttribute : ActionFilterAttribute
     {
         private readonly ZgadajsieDbContext db;
 
-        public ValidateEventDetailsFilterAttribute(ZgadajsieDbContext db)
+        public ProfileFilterAttribute(ZgadajsieDbContext db)
         {
             this.db = db;
         }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var @event = context.HttpContext.Items["Event"] as Event;
+            var user = context.HttpContext.Items["User"] as User;
 
-            // nie pobrano szczegółów wydarzenia
+            // nie pobrano profilu użytkownika
 
-            var eventDetails = await db.EventsDetails.FindAsync(@event.EventId);
+            var profile = await db.Profiles.FindAsync(user.Id);
 
-            if (eventDetails == null)
+            if (profile == null)
             {
-                context.ModelState.AddModelError("EventDetails", $"Event details with id '{@event.EventId}' not found.");
+                context.ModelState.AddModelError("Profile", $"Profile with id '{user.Id}' not found.");
                 var problemDetails = new ValidationProblemDetails(context.ModelState)
                 {
                     Status = StatusCodes.Status404NotFound
@@ -37,11 +34,11 @@ namespace ZgadajSieAPI.Filters.ActionFilters
                 return;
             }
 
-            // dodaj event do httpcontext
+            // dodaj usera do httpcontext
 
-            @event.EventDetails = eventDetails;
+            user.Profile = profile;
 
-            context.HttpContext.Items["Event"] = @event;
+            context.HttpContext.Items["User"] = user;
 
             await next();
         }
