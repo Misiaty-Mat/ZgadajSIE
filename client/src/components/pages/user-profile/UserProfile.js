@@ -15,7 +15,7 @@ const UserProfile = () => {
   const formikRef = useRef();
 
   const navigate = useNavigate();
-  const { setUsername } = useAuth();
+  const { setUsername, isLoggedIn } = useAuth();
 
   const fetchProfile = useCallback(() => {
     getUserProfile()
@@ -29,8 +29,12 @@ const UserProfile = () => {
   }, [navigate]);
 
   useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
+    if (isLoggedIn) {
+      fetchProfile();
+    } else {
+      navigate("/");
+    }
+  }, [fetchProfile, isLoggedIn, navigate]);
 
   useEffect(() => {
     setUsername(profile.name);
@@ -49,6 +53,16 @@ const UserProfile = () => {
 
   const onValueChange = (e) => {
     formikRef.current.setFieldValue(e.target.name, e.target.value);
+  };
+
+  const mapGender = (gender) => {
+    if (gender === "male") {
+      return "Mężczyzna";
+    } else if (gender === "female") {
+      return "Kobieta";
+    } else {
+      return "";
+    }
   };
 
   const getContent = ({ values, errors }) => {
@@ -84,11 +98,16 @@ const UserProfile = () => {
             <p className="userForm--item">
               Płeć:{" "}
               <Field
-                className="userInput"
+                as="select"
                 name="gender"
+                className="userInput"
                 value={values.gender}
                 onChange={onValueChange}
-              />
+              >
+                <option value="" label="nie podawaj" />
+                <option value="male" label="mężczyzna" />
+                <option value="female" label="kobieta" />
+              </Field>
             </p>
 
             <p className="userForm--item">
@@ -115,7 +134,7 @@ const UserProfile = () => {
           <p className="userForm--item">Email: {profile.email}</p>
           <p className="userForm--item">Wiek: {profile.age || "Nie podano"}</p>
           <p className="userForm--item">
-            Płeć: {profile.gender || "Nie podano"}
+            Płeć: {mapGender(profile.gender) || "Nie podano"}
           </p>
           <p className="userForm--item">
             Opis: {profile.description || "Brak"}

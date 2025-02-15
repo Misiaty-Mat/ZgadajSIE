@@ -85,11 +85,12 @@ const EventModal = observer(() => {
 
     if (isParticipant) {
       return (
-        isOrganizer() && (
-          <button onClick={() => leaveEvent(selectedEvent.eventId)}>
-            Zrezygnuj
-          </button>
-        )
+        <button
+          className="eventViev-button"
+          onClick={() => leaveEvent(selectedEvent.eventId)}
+        >
+          Zrezygnuj
+        </button>
       );
     } else {
       return (
@@ -115,16 +116,28 @@ const EventModal = observer(() => {
       .catch((error) => handleError(error));
   };
 
+  const mapGender = (gender) => {
+    if (gender === "male") {
+      return "Mężczyzna";
+    } else if (gender === "female") {
+      return "Kobieta";
+    } else {
+      return "Nie podano płci";
+    }
+  };
+
   const getModalContent = () => {
     if (participantProfile) {
       return (
         <>
           <div className="eventViev">
-            <p className="eventViev--item">Name: {participantProfile.name}</p>
+            <p className="eventViev--item">{participantProfile.name}</p>
             <p className="eventViev--item">
-              {participantProfile.age > 0 && participantProfile.age}
+              {participantProfile.age > 0 && participantProfile.age} lat
             </p>
-            <p className="eventViev--item">{participantProfile.gender}</p>
+            <p className="eventViev--item">
+              {mapGender(participantProfile.gender)}
+            </p>
             <p className="eventViev--item">{participantProfile.description}</p>
             <button
               className="eventViev-button"
