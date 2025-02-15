@@ -6,7 +6,7 @@ namespace ZgadajSieAPI.Models.Validations
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if (value == null)
+            if (value == null || value == string.Empty)
             {
                 return ValidationResult.Success;
             }
